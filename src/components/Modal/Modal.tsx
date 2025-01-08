@@ -16,13 +16,14 @@ interface ModalProps {
 const modalRoot = document.getElementById('modals');
 
 export default function Modal({ title, onClose, children } : ModalProps) {
-  const handleEscClose = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onClose();
-    }
-  };
-
+  
   useEffect(() => {
+    const handleEscClose = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+  
     document.addEventListener('keydown', handleEscClose);
     return () => {
       document.removeEventListener('keydown', handleEscClose);
