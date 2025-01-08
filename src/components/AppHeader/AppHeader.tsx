@@ -28,7 +28,7 @@ function AppHeader() {
 
   return (
     <header className={classNames(s.header, 'text', 'text_type_main-default')}>
-      <div className="container">
+      <div className={s.container}>
         <nav className={classNames(s.header__container, 'pb-4', 'pt-4')}>
           <ul className={s.header__menu}>
             <NavItem id={1} IconComponent={BurgerIcon} label="Конструктор" activeId={activeId} setActiveId={setActiveId} />
