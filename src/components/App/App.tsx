@@ -14,9 +14,21 @@ function App() {
 
   useEffect(() => {
     const fetchIngredients = async () => {
-      const response = await fetch(url);
-      const data = await response.json();
-      setIngredients(data.data);
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        if (data?.data) {
+          setIngredients(data.data);
+        } else {
+          throw new Error("Неверный формат данных");
+        }
+      } catch (error) {
+        console.error("Ошибка при загрузке ингредиентов:", error.message);
+        setIngredients([]);
+      }
     };
 
     fetchIngredients();
