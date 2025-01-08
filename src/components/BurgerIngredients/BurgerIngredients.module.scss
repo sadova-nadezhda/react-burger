@@ -1,0 +1,20 @@
+.ingredients {
+  &__articles {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-height: 664px;
+    padding-left: 16px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  &__nav {
+    display: flex;
+  }
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
