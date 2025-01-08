@@ -11,11 +11,8 @@
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.04);
   box-shadow: 0px 16px 24px 0px rgba(0, 0, 0, 0.04);
   box-shadow: 0px 24px 32px 0px rgba(0, 0, 0, 0.04);
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+  &__title {
+    max-width: calc(100% - 40px);
   }
   &__close {
     position: absolute;

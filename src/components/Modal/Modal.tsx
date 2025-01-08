@@ -37,9 +37,7 @@ export default function Modal({ title, onClose, children } : ModalProps) {
             <CloseIcon type="primary" />
           </button>
           {title && (
-            <header className={classNames(s.modal__header, 'mb-5')}>
-              <h2 className="text text_type_main-large">{title}</h2>
-            </header>
+            <h2 className={classNames(s.modal__title, 'mb-5 text text_type_main-large')}>{title}</h2>
           )}
           <div className={classNames(s.modal__body, 'text text_type_main-default')}>{children}</div>
         </div>

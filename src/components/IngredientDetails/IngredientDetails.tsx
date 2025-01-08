@@ -19,7 +19,7 @@ interface IngredientDetails {
 export default function IngredientDetails({data}:IngredientDetails) {
   return (
     <div className={s.card}>
-      <div className={classNames(s.card__img, "mb-4")}><img src={data.image} alt="" /></div>
+      <div className={classNames(s.card__img, "mb-4")}><img src={data.image} alt="Ingredient Image" /></div>
       <h4 className={classNames(s.card__title, "mb-8 text_type_main-medium")}>{data.name}</h4>
       <div className={classNames(s.card__desc, "text_color_inactive")}>
         <div className='calories'>

@@ -16,7 +16,7 @@ export default function IngredientsCard({img, price, name, onClick}: Ingredients
   return (
     <div className={s.card} onClick={onClick} >
       <Counter count={0} size="default" extraClass="m-1" />
-      <div className={classNames(s.card__img)}><img src={img} alt="" /></div>
+      <div className={classNames(s.card__img)}><img src={img} alt="Ingredient Image" /></div>
       <div className={classNames(s.card__price, 'text text_type_digits-default')}>
         {price}
         <CurrencyIcon type="primary" />

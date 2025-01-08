@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import AppHeader from './components/AppHeader';
-import BurgerIngredients from './components/BurgerIngredients';
-import BurgerConstructor from './components/BurgerConstructor';
+import AppHeader from '../AppHeader';
+import BurgerIngredients from '../BurgerIngredients';
+import BurgerConstructor from '../BurgerConstructor';
 
-import './styles/main.scss';
+import '../../styles/main.scss';
 
 const url = 'https://norma.nomoreparties.space/api/ingredients';
 
