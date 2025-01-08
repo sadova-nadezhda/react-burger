@@ -1,0 +1,42 @@
+.constructor {
+  &__wrap {
+    padding-left: 16px;
+  }
+  &__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  &__top, &__bottom {
+    padding-right: 16px;
+  }
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 464px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  &__card {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+  }
+  &__total {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 40px;
+  }
+  &__price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    svg {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
