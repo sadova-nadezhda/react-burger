@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import classNames from 'classnames';
 
 import AppHeader from '../AppHeader';
 import BurgerIngredients from '../BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor';
 
-import '../../styles/main.scss';
+import s from  './App.module.scss';
 
 const url = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -38,11 +39,11 @@ function App() {
     <>
       <AppHeader />
       <main>
-        <section className='constructor pt-10 pb-10'>
-          <div className="container">
-            <div className="constructor__container">
+        <section className={classNames(s.constructor,'pt-10 pb-10')}>
+          <div className={s.container}>
+            <div className={s.constructor__container}>
               <h1 className='mb-5 text text_type_main-large'>Соберите бургер</h1>
-              <div className="constructor__wrap">
+              <div className={s.constructor__wrap}>
                 <BurgerIngredients data={ingredients} />
                 <BurgerConstructor data={ingredients} />
               </div>
