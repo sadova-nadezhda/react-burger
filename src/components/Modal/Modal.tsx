@@ -30,9 +30,13 @@ export default function Modal({ title, onClose, children } : ModalProps) {
     };
   }, [onClose]);
 
+  const handleModalClick = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return ReactDOM.createPortal(
     <ModalOverlay onClick={onClose} >
-      <div className={classNames(s.modal, 'p-10')}>
+      <div className={classNames(s.modal, 'p-10')} onClick={handleModalClick}>
         <div className={s.modal__content}>
           <button className={s.modal__close} onClick={onClose}>
             <CloseIcon type="primary" />
