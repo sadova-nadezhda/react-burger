@@ -3,14 +3,7 @@ import classNames from 'classnames';
 
 import s from './IngredientDetails.module.scss';
 
-interface Ingredient {
-  image: string;
-  name: string;
-  calories: string;
-  proteins: string;
-  fat: string;
-  carbohydrates: string;
-}
+import { Ingredient } from '../../utils/types';
 
 interface IngredientDetails {
   data: Ingredient[];

@@ -4,19 +4,14 @@ import classNames from 'classnames';
 
 import ConstructorCard from './parts/ConstructorCard';
 import OrderDetails from '../OrderDetails';
+import { useModal } from '../../hooks/useModal';
 
 import s from './BurgerConstructor.module.scss';
 import Modal from '../Modal';
 
 const img = "https://code.s3.yandex.net/react/code/bun-02.png";
 
-interface Ingredient {
-  _id: string;
-  type: string;
-  image: string;
-  name: string;
-  price: number;
-}
+import { Ingredient } from '../../utils/types';
 
 interface BurgerConstructorProps {
   data: Ingredient[];
@@ -24,10 +19,7 @@ interface BurgerConstructorProps {
 
 export default function BurgerConstructor({data}:BurgerConstructorProps) {
   const total = 10000;
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const { isModalOpen, openModal, closeModal } = useModal<null>();
   return (
     <>
       {isModalOpen && (

@@ -5,20 +5,11 @@ import classNames from 'classnames';
 import IngredientsCard from './parts/IngredientsCard';
 import Modal from '../Modal';
 import IngredientDetails from '../IngredientDetails';
+import { useModal } from '../../hooks/useModal';
 
 import s from './BurgerIngredients.module.scss';
 
-interface Ingredient {
-  _id: string;
-  type: string;
-  image: string;
-  name: string;
-  price: number;
-  calories: string;
-  proteins: string;
-  fat: string;
-  carbohydrates: string;
-}
+import { Ingredient } from '../../utils/types';
 
 interface BurgerIngredientsProps {
   data: Ingredient[];
@@ -26,23 +17,12 @@ interface BurgerIngredientsProps {
 
 export default function BurgerIngredients({ data }: BurgerIngredientsProps) {
   const [current, setCurrent] = useState('bun');
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState(null);
+  const { isModalOpen, selectedItem, openModal, closeModal } = useModal<Ingredient>();
 
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
   const containerRef = useRef(null);
-
-  const openModal = (ingredient: Ingredient) => {
-    setSelectedIngredient(ingredient);
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    setSelectedIngredient(null);
-  };
 
   const handleTabClick = (value: string) => {
     setCurrent(value);
@@ -89,9 +69,9 @@ export default function BurgerIngredients({ data }: BurgerIngredientsProps) {
 
   return (
     <>
-      {isModalOpen && selectedIngredient && (
+      {isModalOpen && selectedItem && (
         <Modal onClose={closeModal} title='Детали ингредиента'>
-          <IngredientDetails data={selectedIngredient} />
+          <IngredientDetails data={selectedItem} />
         </Modal>
       )}
       <div className={s.ingredients__wrap}>
