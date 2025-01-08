@@ -7,13 +7,11 @@ import BurgerConstructor from '../BurgerConstructor';
 
 import s from  './App.module.scss';
 
-const url = 'https://norma.nomoreparties.space/api/ingredients';
-
-
 function App() {
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
+    const url = 'https://norma.nomoreparties.space/api/ingredients';
     const fetchIngredients = async () => {
       try {
         const response = await fetch(url);
