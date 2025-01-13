@@ -1,24 +1,21 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 import AppHeader from '../AppHeader';
 import BurgerIngredients from '../BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor';
 
-import { fetchIngredients } from '../../services/ingredients/slice'; 
+import { fetchIngredients } from '../../services/ingredients/actions'; 
 import s from './App.module.scss';
 
 function App() {
   const dispatch = useDispatch();
   const ingredients = useSelector((state) => state.ingredients.allIngredients);
-  const status = useSelector((state) => state.ingredients.status);
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchIngredients());
-    }
-  }, [dispatch, status]);
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   return (
     <>

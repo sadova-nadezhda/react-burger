@@ -1,33 +1,24 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchIngredientsData } from './actions';
+// services/ingredients/slice.js
+import { createSlice } from '@reduxjs/toolkit';
 
-export const fetchIngredients = createAsyncThunk(
-  'ingredients/fetchIngredients',
-  fetchIngredientsData 
-);
+const initialState = {
+  allIngredients: [],
+  currentIngredient: null,  
+};
 
 const ingredientsSlice = createSlice({
   name: 'ingredients',
-  initialState: {
-    allIngredients: [],
-    status: 'idle',
-    error: null
+  initialState,
+  reducers: {
+    setAllIngredients: (state, action) => {
+      state.allIngredients = action.payload;
+    },
+    setCurrentIngredient: (state, action) => {
+      state.currentIngredient = action.payload;
+    },
   },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchIngredients.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.allIngredients = action.payload;
-      })
-      .addCase(fetchIngredients.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
-  }
 });
+
+export const { setAllIngredients, setCurrentIngredient } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

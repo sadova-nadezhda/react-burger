@@ -1,22 +1,23 @@
+// services/order/slice.js
 import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+  orderDetails: null,
+};
 
 const orderSlice = createSlice({
   name: 'order',
-  initialState: {
-    orderDetails: null,
-    status: 'idle',
-    error: null
-  },
+  initialState,
   reducers: {
-    setOrderDetails(state, action) {
+    setOrderDetails: (state, action) => {
       state.orderDetails = action.payload;
     },
-    resetOrder(state) {
+    resetOrderDetails: (state) => {
       state.orderDetails = null;
-    }
-  }
+    },
+  },
 });
 
-export const { setOrderDetails, resetOrder } = orderSlice.actions;
+export const { setOrderDetails, resetOrderDetails } = orderSlice.actions;
 
 export default orderSlice.reducer;

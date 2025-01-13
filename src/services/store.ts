@@ -1,15 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import ingredientsReducer from './ingredients/slice';
-import orderReducer from './order/slice';
 import burgerConstructorReducer from './burger-constructor/slice';
+import orderReducer from './order/slice';
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     ingredients: ingredientsReducer,
+    burgerConstructor: burgerConstructorReducer,
     order: orderReducer,
-    burgerConstructor: burgerConstructorReducer
   },
-  devTools: process.env.NODE_ENV !== 'production' 
 });
 
 export default store;

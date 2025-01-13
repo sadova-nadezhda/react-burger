@@ -1,6 +1,13 @@
-export const fetchIngredientsData = async () => {
-  const url = 'https://norma.nomoreparties.space/api/ingredients';
-  const response = await fetch(url);
-  const data = await response.json();
-  return data.data;
+import { setAllIngredients } from './slice';
+
+const url = 'https://norma.nomoreparties.space/api/ingredients';
+
+export const fetchIngredients = () => async (dispatch) => {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    dispatch(setAllIngredients(data.data));
+  } catch (error) {
+    console.error('Failed to fetch ingredients:', error);
+  }
 };
