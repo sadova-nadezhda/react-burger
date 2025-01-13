@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 
@@ -13,6 +14,8 @@ const img = "https://code.s3.yandex.net/react/code/bun-02.png";
 
 
 export default function BurgerConstructor() {
+  const dispatch = useDispatch();
+  const ingredients = useSelector((state) => state.burgerConstructor.constructorIngredients);
   const total = 10000;
   const { isModalOpen, openModal, closeModal } = useModal<null>();
   return (
@@ -36,9 +39,9 @@ export default function BurgerConstructor() {
             </div>
           </div>
           <div className={classNames(s.constructor__main, 'custom-scroll')}>
-              {/* {data.filter((element) => element.type!=='bun').map((element)=> (
+              {ingredients.filter((element) => element.type!=='bun').map((element)=> (
               <ConstructorCard key={element._id} img={element.image} name={element.name} price={element.price} />
-              ))} */}
+              ))}
           </div>
           <div className={s.constructor__bottom}>
             <div className={s.constructor__card}>

@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Ingredient } from '../../utils/types';
 
-const initialState = {
+interface ConstructorState {
+  constructorIngredients: Ingredient[]; 
+}
+
+const initialState: ConstructorState = {
   constructorIngredients: [],
 };
 
@@ -23,6 +28,7 @@ const burgerConstructorSlice = createSlice({
 });
 
 export const {
+  setConstructorIngredients,
   addIngredientToConstructor,
   removeIngredientFromConstructor,
   resetConstructor,
