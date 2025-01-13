@@ -12,19 +12,20 @@ import s from './BurgerIngredients.module.scss';
 
 import { fetchIngredients } from '../../services/ingredients/actions'; 
 import { setCurrentIngredient, clearCurrentIngredient } from '../../services/ingredients/slice'; 
+import { setCurrentTab } from '../../services/tabs/slice';
 import { Ingredient } from '../../utils/types'; 
 
 export default function BurgerIngredients() {
   const dispatch = useDispatch();
   const ingredients = useSelector((state) => state.ingredients.allIngredients);
   const selectedIngredient = useSelector((state) => state.ingredients.currentIngredient);
+  const currentTab = useSelector((state) => state.tabs.currentTab);
 
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
 
-  const [current, setCurrent] = useState<'bun' | 'sauce' | 'main'>('bun');
-  const { isModalOpen, selectedItem, openModal, closeModal } = useModal<Ingredient>();
+  const { isModalOpen, openModal, closeModal } = useModal<Ingredient>();
 
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
@@ -32,7 +33,7 @@ export default function BurgerIngredients() {
   const containerRef = useRef(null);
 
   const handleTabClick = (value: string) => {
-    setCurrent(value);
+    dispatch(setCurrentTab(value));
     if (value === 'bun' && bunRef.current) {
       bunRef.current.scrollIntoView({ behavior: 'smooth' });
     } else if (value === 'sauce' && sauceRef.current) {
@@ -45,34 +46,39 @@ export default function BurgerIngredients() {
   const handleScroll = () => {
     const container = containerRef.current;
     if (!container) return;
-
+  
     const bunTop = bunRef.current?.getBoundingClientRect().top || 0;
     const sauceTop = sauceRef.current?.getBoundingClientRect().top || 0;
     const mainTop = mainRef.current?.getBoundingClientRect().top || 0;
     const containerTop = container.getBoundingClientRect().top;
-
+  
     const offsets = {
       bun: Math.abs(bunTop - containerTop),
       sauce: Math.abs(sauceTop - containerTop),
       main: Math.abs(mainTop - containerTop),
     };
-
+  
     const closest = Object.entries(offsets).reduce((a, b) => (a[1] < b[1] ? a : b))[0];
-    setCurrent(closest);
+    
+    // Обновляем состояние вкладки через Redux
+    if (closest !== currentTab) {
+      dispatch(setCurrentTab(closest));  
+    }
   };
-
+  
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
     }
-
+  
     return () => {
       if (container) {
         container.removeEventListener('scroll', handleScroll);
       }
     };
-  }, []);
+  }, [currentTab, dispatch]);
+  
 
   const handleIngredientClick = (ingredient: Ingredient) => {
     dispatch(setCurrentIngredient(ingredient));
@@ -88,13 +94,13 @@ export default function BurgerIngredients() {
       )}
       <div className={s.ingredients__wrap}>
         <nav className={classNames(s.ingredients__nav, 'mb-10')}>
-          <Tab value="bun" active={current === 'bun'} onClick={() => handleTabClick('bun')}>
+          <Tab value="bun" active={currentTab === 'bun'} onClick={() => handleTabClick('bun')}>
             Булки
           </Tab>
-          <Tab value="sauce" active={current === 'sauce'} onClick={() => handleTabClick('sauce')}>
+          <Tab value="sauce" active={currentTab === 'sauce'} onClick={() => handleTabClick('sauce')}>
             Соусы
           </Tab>
-          <Tab value="main" active={current === 'main'} onClick={() => handleTabClick('main')}>
+          <Tab value="main" active={currentTab === 'main'} onClick={() => handleTabClick('main')}>
             Начинки
           </Tab>
         </nav>
