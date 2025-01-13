@@ -8,7 +8,6 @@ import BurgerConstructor from '../BurgerConstructor';
 import s from './App.module.scss';
 
 function App() {
-
   return (
     <>
       <AppHeader />
