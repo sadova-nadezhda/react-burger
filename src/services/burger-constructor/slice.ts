@@ -1,30 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  ingredients: [],
+};
+
 const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
-  initialState: {
-    constructorItems: [],
-    currentIngredient: null
-  },
+  initialState,
   reducers: {
-    addIngredientToConstructor(state, action) {
-      state.constructorItems.push(action.payload);
+    addIngredient: (state, action) => {
+      state.ingredients.push(action.payload);
     },
-    removeIngredientFromConstructor(state, action) {
-      state.constructorItems = state.constructorItems.filter(
-        ingredient => ingredient.id !== action.payload
+    removeIngredient: (state, action) => {
+      state.ingredients = state.ingredients.filter(
+        (ingredient) => ingredient.id !== action.payload
       );
     },
-    setCurrentIngredient(state, action) {
-      state.currentIngredient = action.payload;
-    }
-  }
+  },
 });
 
-export const {
-  addIngredientToConstructor,
-  removeIngredientFromConstructor,
-  setCurrentIngredient
-} = burgerConstructorSlice.actions;
-
+export const { addIngredient, removeIngredient } = burgerConstructorSlice.actions;
 export default burgerConstructorSlice.reducer;

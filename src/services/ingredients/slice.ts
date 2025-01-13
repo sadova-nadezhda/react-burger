@@ -6,28 +6,39 @@ export const fetchIngredients = createAsyncThunk(
   fetchIngredientsData 
 );
 
+const initialState = {
+  ingredients: [],
+  selectedIngredient: null,
+  ingredientsLoading: false,
+  error: null,
+};
+
 const ingredientsSlice = createSlice({
   name: 'ingredients',
-  initialState: {
-    allIngredients: [],
-    status: 'idle',
-    error: null
+  initialState,
+  reducers: {
+    selectIngredient: (state, action) => {
+      state.selectedIngredient = action.payload;
+    },
+    deselectIngredient: (state) => {
+      state.selectedIngredient = null;
+    },
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
-        state.status = 'loading';
+        state.ingredientsLoading = true;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.allIngredients = action.payload;
+        state.ingredientsLoading = false;
+        state.ingredients = action.payload;
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
-        state.status = 'failed';
+        state.ingredientsLoading = false;
         state.error = action.error.message;
       });
   }
 });
 
+export const { selectIngredient, deselectIngredient } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;
