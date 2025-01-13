@@ -11,17 +11,19 @@ import { useModal } from '../../hooks/useModal';
 import s from './BurgerIngredients.module.scss';
 
 import { fetchIngredients } from '../../services/ingredients/actions'; 
-
+import { setCurrentIngredient, clearCurrentIngredient } from '../../services/ingredients/slice'; 
+import { Ingredient } from '../../utils/types'; 
 
 export default function BurgerIngredients() {
   const dispatch = useDispatch();
   const ingredients = useSelector((state) => state.ingredients.allIngredients);
+  const selectedIngredient = useSelector((state) => state.ingredients.currentIngredient);
 
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
 
-  const [current, setCurrent] = useState('bun');
+  const [current, setCurrent] = useState<'bun' | 'sauce' | 'main'>('bun');
   const { isModalOpen, selectedItem, openModal, closeModal } = useModal<Ingredient>();
 
   const bunRef = useRef(null);
@@ -72,11 +74,16 @@ export default function BurgerIngredients() {
     };
   }, []);
 
+  const handleIngredientClick = (ingredient: Ingredient) => {
+    dispatch(setCurrentIngredient(ingredient));
+    openModal();
+  };
+
   return (
     <>
-      {isModalOpen && selectedItem && (
-        <Modal onClose={closeModal} title='Детали ингредиента'>
-          <IngredientDetails data={selectedItem} />
+      {isModalOpen && selectedIngredient && (
+        <Modal onClose={() => { closeModal(); dispatch(clearCurrentIngredient()); }} title='Детали ингредиента'>
+          <IngredientDetails data={selectedIngredient} />
         </Modal>
       )}
       <div className={s.ingredients__wrap}>
@@ -101,7 +108,7 @@ export default function BurgerIngredients() {
                   img={element.image}
                   name={element.name}
                   price={element.price}
-                  onClick={() => openModal(element)}
+                  onClick={() => handleIngredientClick(element)}
                 />
               ))}
             </div>
@@ -115,7 +122,7 @@ export default function BurgerIngredients() {
                   img={element.image}
                   name={element.name}
                   price={element.price}
-                  onClick={() => openModal(element)}
+                  onClick={() => handleIngredientClick(element)}
                 />
               ))}
             </div>
@@ -129,7 +136,7 @@ export default function BurgerIngredients() {
                   img={element.image}
                   name={element.name}
                   price={element.price}
-                  onClick={() => openModal(element)}
+                  onClick={() => handleIngredientClick(element)}
                 />
               ))}
             </div>
