@@ -1,0 +1,35 @@
+.header {
+  background: var(--background);
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-inactive-color);
+    transition: color 0.3s ease-out;
+    path {
+      transition: fill 0.3s ease-out;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__logo {
+    margin: 0 auto;
+  }
+}
+
+.active {
+  color: var(--text-primary-color);
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1312px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
