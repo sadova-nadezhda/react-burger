@@ -83,7 +83,7 @@ export default function BurgerIngredients() {
     <>
       {isModalOpen && selectedIngredient && (
         <Modal onClose={() => { closeModal(); dispatch(clearCurrentIngredient()); }} title='Детали ингредиента'>
-          <IngredientDetails data={selectedIngredient} />
+          <IngredientDetails />
         </Modal>
       )}
       <div className={s.ingredients__wrap}>
