@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
+
+import { setOrderDetails } from '../../services/order/slice';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+
 import done from '../../images/done.svg';
 
 import s from './OrderDetails.module.scss';
 
-import { setOrderDetails } from '../../services/order/slice';
-
 export default function OrderDetails() {
-  const orderDetails = useSelector((state) => state.order.orderDetails);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const orderDetails = useAppSelector((state) => state.order.orderDetails);
 
   useEffect(() => {
     if (!orderDetails) {

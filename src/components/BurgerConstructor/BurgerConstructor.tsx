@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import React from 'react';
+import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 
 import ConstructorCard from './parts/ConstructorCard';
 import OrderDetails from '../OrderDetails';
+import Modal from '../Modal';
 import { useModal } from '../../hooks/useModal';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
 import s from './BurgerConstructor.module.scss';
-import Modal from '../Modal';
 
 const img = "https://code.s3.yandex.net/react/code/bun-02.png";
 
-
 export default function BurgerConstructor() {
-  const dispatch = useDispatch();
-  const ingredients = useSelector((state) => state.burgerConstructor.constructorIngredients);
+  const dispatch = useAppDispatch();
+  const ingredients = useAppSelector((state) => state.burgerConstructor.constructorIngredients);
   const total = 10000;
   const { isModalOpen, openModal, closeModal } = useModal<null>();
   return (

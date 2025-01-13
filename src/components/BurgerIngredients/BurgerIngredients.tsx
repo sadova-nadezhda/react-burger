@@ -1,25 +1,25 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useRef, useEffect } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 
 import IngredientsCard from './parts/IngredientsCard';
 import Modal from '../Modal';
 import IngredientDetails from '../IngredientDetails';
+
 import { useModal } from '../../hooks/useModal';
-
-import s from './BurgerIngredients.module.scss';
-
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { fetchIngredients } from '../../services/ingredients/actions'; 
 import { setCurrentIngredient, clearCurrentIngredient } from '../../services/ingredients/slice'; 
 import { setCurrentTab } from '../../services/tabs/slice';
-import { Ingredient } from '../../utils/types'; 
+import { Ingredient } from '../../types/IngredientTypes'; 
+
+import s from './BurgerIngredients.module.scss';
 
 export default function BurgerIngredients() {
-  const dispatch = useDispatch();
-  const ingredients = useSelector((state) => state.ingredients.allIngredients);
-  const selectedIngredient = useSelector((state) => state.ingredients.currentIngredient);
-  const currentTab = useSelector((state) => state.tabs.currentTab);
+  const dispatch = useAppDispatch();
+  const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
+  const selectedIngredient = useAppSelector((state) => state.ingredients.currentIngredient);
+  const currentTab = useAppSelector((state) => state.tabs.currentTab);
 
   useEffect(() => {
     dispatch(fetchIngredients());
@@ -27,10 +27,10 @@ export default function BurgerIngredients() {
 
   const { isModalOpen, openModal, closeModal } = useModal<Ingredient>();
 
-  const bunRef = useRef(null);
-  const sauceRef = useRef(null);
-  const mainRef = useRef(null);
-  const containerRef = useRef(null);
+  const bunRef = useRef<HTMLElement>(null);
+  const sauceRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleTabClick = (value: string) => {
     dispatch(setCurrentTab(value));
@@ -42,31 +42,31 @@ export default function BurgerIngredients() {
       mainRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  const handleScroll = () => {
-    const container = containerRef.current;
-    if (!container) return;
-  
-    const bunTop = bunRef.current?.getBoundingClientRect().top || 0;
-    const sauceTop = sauceRef.current?.getBoundingClientRect().top || 0;
-    const mainTop = mainRef.current?.getBoundingClientRect().top || 0;
-    const containerTop = container.getBoundingClientRect().top;
-  
-    const offsets = {
-      bun: Math.abs(bunTop - containerTop),
-      sauce: Math.abs(sauceTop - containerTop),
-      main: Math.abs(mainTop - containerTop),
-    };
-  
-    const closest = Object.entries(offsets).reduce((a, b) => (a[1] < b[1] ? a : b))[0];
-    
-    // Обновляем состояние вкладки через Redux
-    if (closest !== currentTab) {
-      dispatch(setCurrentTab(closest));  
-    }
-  };
   
   useEffect(() => {
+    const handleScroll = () => {
+      const container = containerRef.current;
+      if (!container) return;
+    
+      const bunTop = bunRef.current?.getBoundingClientRect().top || 0;
+      const sauceTop = sauceRef.current?.getBoundingClientRect().top || 0;
+      const mainTop = mainRef.current?.getBoundingClientRect().top || 0;
+      const containerTop = container.getBoundingClientRect().top;
+    
+      const offsets = {
+        bun: Math.abs(bunTop - containerTop),
+        sauce: Math.abs(sauceTop - containerTop),
+        main: Math.abs(mainTop - containerTop),
+      };
+    
+      const closest = Object.entries(offsets).reduce((a, b) => (a[1] < b[1] ? a : b))[0];
+      
+      // Обновляем состояние вкладки через Redux
+      if (closest !== currentTab) {
+        dispatch(setCurrentTab(closest));  
+      }
+    };
+
     const container = containerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
@@ -82,7 +82,7 @@ export default function BurgerIngredients() {
 
   const handleIngredientClick = (ingredient: Ingredient) => {
     dispatch(setCurrentIngredient(ingredient));
-    openModal();
+    openModal(ingredient);
   };
 
   return (

@@ -1,11 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import classNames from 'classnames';
+
+import { useAppSelector } from '../../hooks/store';
 
 import s from './IngredientDetails.module.scss';
 
 export default function IngredientDetails() {
-  const selectedIngredient = useSelector((state) => state.ingredients.currentIngredient);
+  const selectedIngredient = useAppSelector((state) => state.ingredients.currentIngredient);
 
   if (!selectedIngredient) {
     return null; 
