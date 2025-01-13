@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchIngredientsData } from './actions'; // Импортируем функцию
+import { fetchIngredientsData } from './actions';
 
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
-  fetchIngredientsData  // Передаем саму функцию как асинхронную логику
+  fetchIngredientsData 
 );
 
 const ingredientsSlice = createSlice({
