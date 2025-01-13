@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 
@@ -9,13 +10,17 @@ import { useModal } from '../../hooks/useModal';
 
 import s from './BurgerIngredients.module.scss';
 
-import { Ingredient } from '../../utils/types';
+import { fetchIngredients } from '../../services/ingredients/actions'; 
 
-interface BurgerIngredientsProps {
-  data: Ingredient[];
-}
 
-export default function BurgerIngredients({ data }: BurgerIngredientsProps) {
+export default function BurgerIngredients() {
+  const dispatch = useDispatch();
+  const ingredients = useSelector((state) => state.ingredients.allIngredients);
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
+
   const [current, setCurrent] = useState('bun');
   const { isModalOpen, selectedItem, openModal, closeModal } = useModal<Ingredient>();
 
@@ -90,7 +95,7 @@ export default function BurgerIngredients({ data }: BurgerIngredientsProps) {
           <article id='bun' ref={bunRef}>
             <h2 className='mb-6 text text_type_main-medium'>Булки</h2>
             <div className={s.cards}>
-              {data.filter((element) => element.type === 'bun').map((element) => (
+              {ingredients.filter((element) => element.type === 'bun').map((element) => (
                 <IngredientsCard
                   key={element._id}
                   img={element.image}
@@ -104,7 +109,7 @@ export default function BurgerIngredients({ data }: BurgerIngredientsProps) {
           <article id='sauce' ref={sauceRef}>
             <h2 className='mb-6 text text_type_main-medium'>Соусы</h2>
             <div className={s.cards}>
-              {data.filter((element) => element.type === 'sauce').map((element) => (
+              {ingredients.filter((element) => element.type === 'sauce').map((element) => (
                 <IngredientsCard
                   key={element._id}
                   img={element.image}
@@ -118,7 +123,7 @@ export default function BurgerIngredients({ data }: BurgerIngredientsProps) {
           <article id='main' ref={mainRef}>
             <h2 className='mb-6 text text_type_main-medium'>Начинки</h2>
             <div className={s.cards}>
-              {data.filter((element) => element.type === 'main').map((element) => (
+              {ingredients.filter((element) => element.type === 'main').map((element) => (
                 <IngredientsCard
                   key={element._id}
                   img={element.image}

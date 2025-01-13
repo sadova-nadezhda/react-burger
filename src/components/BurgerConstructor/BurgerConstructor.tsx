@@ -11,13 +11,8 @@ import Modal from '../Modal';
 
 const img = "https://code.s3.yandex.net/react/code/bun-02.png";
 
-import { Ingredient } from '../../utils/types';
 
-interface BurgerConstructorProps {
-  data: Ingredient[];
-}
-
-export default function BurgerConstructor({data}:BurgerConstructorProps) {
+export default function BurgerConstructor() {
   const total = 10000;
   const { isModalOpen, openModal, closeModal } = useModal<null>();
   return (
@@ -41,9 +36,9 @@ export default function BurgerConstructor({data}:BurgerConstructorProps) {
             </div>
           </div>
           <div className={classNames(s.constructor__main, 'custom-scroll')}>
-              {data.filter((element) => element.type!=='bun').map((element)=> (
-                <ConstructorCard key={element._id} img={element.image} name={element.name} price={element.price} />
-              ))}
+              {/* {data.filter((element) => element.type!=='bun').map((element)=> (
+              <ConstructorCard key={element._id} img={element.image} name={element.name} price={element.price} />
+              ))} */}
           </div>
           <div className={s.constructor__bottom}>
             <div className={s.constructor__card}>
