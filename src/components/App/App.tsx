@@ -1,4 +1,6 @@
 import React from "react";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import classNames from 'classnames';
 
 import AppHeader from '../AppHeader';
@@ -9,7 +11,7 @@ import s from './App.module.scss';
 
 function App() {
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <AppHeader />
       <main>
         <section className={classNames(s.constructor, 'pt-10 pb-10')}>
@@ -24,7 +26,7 @@ function App() {
           </div>
         </section>
       </main>
-    </>
+    </DndProvider>
   );
 }
 

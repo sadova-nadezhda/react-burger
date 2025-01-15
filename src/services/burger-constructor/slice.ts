@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Ingredient } from '../../types/IngredientTypes';
 
 interface ConstructorState {
-  constructorIngredients: Ingredient[]; 
+  constructorIngredients: Ingredient[];
 }
 
 const initialState: ConstructorState = {
@@ -14,11 +14,19 @@ const burgerConstructorSlice = createSlice({
   initialState,
   reducers: {
     addIngredientToConstructor: (state, action) => {
-      state.constructorIngredients.push(action.payload);
+      const ingredient = action.payload;
+      if (ingredient.type === 'bun') {
+        state.constructorIngredients = [
+          ...state.constructorIngredients.filter((item) => item.type !== 'bun'),
+          ingredient,
+        ];
+      } else {
+        state.constructorIngredients.push(ingredient);
+      }
     },
     removeIngredientFromConstructor: (state, action) => {
       state.constructorIngredients = state.constructorIngredients.filter(
-        (ingredient) => ingredient.id !== action.payload.id
+        (ingredient) => ingredient._id !== action.payload
       );
     },
     resetConstructor: (state) => {
@@ -28,7 +36,6 @@ const burgerConstructorSlice = createSlice({
 });
 
 export const {
-  setConstructorIngredients,
   addIngredientToConstructor,
   removeIngredientFromConstructor,
   resetConstructor,
