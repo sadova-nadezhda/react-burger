@@ -24,6 +24,9 @@ const burgerConstructorSlice = createSlice({
         state.constructorIngredients.push(ingredient);
       }
     },
+    updateIngredientOrder(state, action: PayloadAction<Ingredient[]>) {
+      state.constructorIngredients = action.payload;
+    },
     removeIngredientFromConstructor: (state, action: PayloadAction<string>) => {
       const index = state.constructorIngredients.findIndex(
         (ingredient) => ingredient._id === action.payload
@@ -41,6 +44,7 @@ const burgerConstructorSlice = createSlice({
 
 export const {
   addIngredientToConstructor,
+  updateIngredientOrder,
   removeIngredientFromConstructor,
   resetConstructor,
 } = burgerConstructorSlice.actions;
