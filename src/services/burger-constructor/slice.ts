@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Ingredient } from '../../types/IngredientTypes';
 
 interface ConstructorState {
@@ -13,7 +13,7 @@ const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredientToConstructor: (state, action) => {
+    addIngredientToConstructor: (state, action: PayloadAction<Ingredient>) => {
       const ingredient = action.payload;
       if (ingredient.type === 'bun') {
         state.constructorIngredients = [
@@ -24,10 +24,14 @@ const burgerConstructorSlice = createSlice({
         state.constructorIngredients.push(ingredient);
       }
     },
-    removeIngredientFromConstructor: (state, action) => {
-      state.constructorIngredients = state.constructorIngredients.filter(
-        (ingredient) => ingredient._id !== action.payload
+    removeIngredientFromConstructor: (state, action: PayloadAction<string>) => {
+      const index = state.constructorIngredients.findIndex(
+        (ingredient) => ingredient._id === action.payload
       );
+    
+      if (index !== -1) {
+        state.constructorIngredients.splice(index, 1); 
+      }
     },
     resetConstructor: (state) => {
       state.constructorIngredients = [];

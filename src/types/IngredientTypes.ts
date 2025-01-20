@@ -8,4 +8,5 @@ export interface Ingredient {
   carbohydrates: string;
   price: number;
   image: string;
+  count: number;
 }

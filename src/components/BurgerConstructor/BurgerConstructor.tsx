@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
@@ -6,21 +6,37 @@ import classNames from 'classnames';
 import ConstructorCard from './parts/ConstructorCard';
 import OrderDetails from '../OrderDetails';
 import Modal from '../Modal';
+
 import { useModal } from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { addIngredientToConstructor, removeIngredientFromConstructor } from '../../services/burger-constructor/slice';
+import { incrementIngredientCount, decrementIngredientCount } from '../../services/ingredients/slice';
+
+import { Ingredient } from '../../types/IngredientTypes';
 
 import s from './BurgerConstructor.module.scss';
 
 export default function BurgerConstructor() {
   const dispatch = useAppDispatch();
   const ingredients = useAppSelector((state) => state.burgerConstructor.constructorIngredients);
-  const total = 10000;
   const { isModalOpen, openModal, closeModal } = useModal<null>();
 
   const [{ isOver }, dropRef] = useDrop({
     accept: ['bun', 'ingredient'],
-    drop: (item) => dispatch(addIngredientToConstructor(item)),
+    drop: (ingredient: Ingredient) => {
+      if (ingredient.type === 'bun') {
+        const existingBun = ingredients.find((item) => item.type === 'bun');
+        if (existingBun) {
+          dispatch(decrementIngredientCount({ id: existingBun._id, amount: 2 }));
+          dispatch(removeIngredientFromConstructor(existingBun._id));
+        }
+        dispatch(addIngredientToConstructor(ingredient));
+        dispatch(incrementIngredientCount({ id: ingredient._id, amount: 2 }));
+      } else {
+        dispatch(addIngredientToConstructor(ingredient));
+        dispatch(incrementIngredientCount({ id: ingredient._id, amount: 1 }));
+      }
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
@@ -28,6 +44,21 @@ export default function BurgerConstructor() {
 
   const bunIngredient = ingredients.find((ingredient) => ingredient.type === 'bun');
   const mainIngredients = ingredients.filter((ingredient) => ingredient.type !== 'bun');
+
+  const handleRemove = (ingredient: Ingredient) => {
+    dispatch(removeIngredientFromConstructor(ingredient._id));
+  
+    const amount = ingredient.type === 'bun' ? 2 : 1;
+    dispatch(decrementIngredientCount({ id: ingredient._id, amount }));
+  };
+
+  const total = useMemo(() => {
+    const bunPrice = ingredients.find((ingredient) => ingredient.type === 'bun')?.price || 0;
+    const mainIngredientsPrice = ingredients
+      .filter((ingredient) => ingredient.type !== 'bun')
+      .reduce((sum, ingredient) => sum + ingredient.price, 0);
+    return bunPrice * 2 + mainIngredientsPrice;
+  }, [ingredients]);
 
   return (
     <>
@@ -52,11 +83,11 @@ export default function BurgerConstructor() {
             )}
           </div>
           <div className={classNames(s.constructor__main, 'custom-scroll')}>
-            {mainIngredients.map((ingredient) => (
+            {mainIngredients.map((ingredient, index) => (
               <ConstructorCard 
-              key={ingredient._id}
+              key={`${ingredient._id}-${index}`}
               ingredient={ingredient}
-              handleClose={() => dispatch(removeIngredientFromConstructor(ingredient._id))}
+              handleClose={() => handleRemove(ingredient)}
               />
             ))}
           </div>
