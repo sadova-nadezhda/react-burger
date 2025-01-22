@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
-import { setOrderDetails, fetchOrder } from '../../services/order/slice'; // Добавляем fetchOrder
+import { setOrderDetails } from '../../services/order/slice'; 
+import { fetchOrder } from '../../services/order/actions'; 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
 import done from '../../images/done.svg';
