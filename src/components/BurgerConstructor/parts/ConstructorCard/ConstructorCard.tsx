@@ -21,7 +21,6 @@ export default function ConstructorCard({
 }: ConstructorCardProps) {
   const ref = React.useRef<HTMLDivElement>(null);
 
-  // Drag source
   const [{ isDragging }, drag] = useDrag({
     type: 'constructor-ingredient',
     item: { index },
@@ -30,25 +29,23 @@ export default function ConstructorCard({
     }),
   });
 
-  // Drop target
   const [, drop] = useDrop({
     accept: 'constructor-ingredient',
     hover: (item: { index: number }) => {
       if (item.index !== index) {
         moveIngredient(item.index, index);
-        item.index = index; // Update the index after moving
+        item.index = index; 
       }
     },
   });
 
-  // Connect drag and drop
   drag(drop(ref));
 
   return (
     <div
       ref={ref}
       className={s.constructor__card}
-      style={{ opacity: isDragging ? 0.5 : 1 }} // Visual feedback while dragging
+      style={{ opacity: isDragging ? 0.5 : 1 }} 
     >
       <DragIcon type="primary" />
       <ConstructorElement
