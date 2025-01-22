@@ -60,11 +60,21 @@ export default function BurgerConstructor() {
     return bunPrice * 2 + mainIngredientsPrice;
   }, [ingredients]);
 
+  const selectedIngredients = useMemo(() => {
+    const bun = ingredients.find((ingredient) => ingredient.type === 'bun');
+    const mains = ingredients.filter((ingredient) => ingredient.type !== 'bun');
+    
+    // Если есть булка, добавляем её дважды (верх и низ)
+    const allIngredients = bun ? [bun, ...mains, bun] : mains;
+  
+    return allIngredients;
+  }, [ingredients]);
+
   return (
     <>
       {isModalOpen && (
         <Modal onClose={closeModal}>
-          <OrderDetails />
+          <OrderDetails ingredients={selectedIngredients.map((item) => item._id)} />
         </Modal>
       )}
       <div className={classNames(s.constructor__wrap, 'pb-10')}>
