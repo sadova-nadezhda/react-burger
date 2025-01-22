@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
@@ -9,7 +9,7 @@ import Modal from '../Modal';
 
 import { useModal } from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { addIngredientToConstructor, removeIngredientFromConstructor } from '../../services/burger-constructor/slice';
+import { addIngredientToConstructor, removeIngredientFromConstructor, reorderIngredients } from '../../services/burger-constructor/slice';
 import { incrementIngredientCount, decrementIngredientCount } from '../../services/ingredients/slice';
 
 import { Ingredient } from '../../types/IngredientTypes';
@@ -47,10 +47,22 @@ export default function BurgerConstructor() {
 
   const handleRemove = (ingredient: Ingredient) => {
     dispatch(removeIngredientFromConstructor(ingredient._id));
-  
     const amount = ingredient.type === 'bun' ? 2 : 1;
     dispatch(decrementIngredientCount({ id: ingredient._id, amount }));
   };
+
+  const handleReorder = useCallback((dragIndex: number, hoverIndex: number) => {
+    const updatedMainIngredients = [...mainIngredients];
+    const [draggedItem] = updatedMainIngredients.splice(dragIndex, 1);
+    updatedMainIngredients.splice(hoverIndex, 0, draggedItem);
+  
+    const updatedIngredients = [
+      ...updatedMainIngredients,
+      bunIngredient ? { ...bunIngredient, type: 'bun' } : null
+    ].filter(Boolean); 
+  
+    dispatch(reorderIngredients(updatedIngredients));
+  }, [dispatch, mainIngredients, bunIngredient]);
 
   const total = useMemo(() => {
     const bunPrice = ingredients.find((ingredient) => ingredient.type === 'bun')?.price || 0;
@@ -60,27 +72,21 @@ export default function BurgerConstructor() {
     return bunPrice * 2 + mainIngredientsPrice;
   }, [ingredients]);
 
-  const selectedIngredients = useMemo(() => {
-    const bun = ingredients.find((ingredient) => ingredient.type === 'bun');
-    const mains = ingredients.filter((ingredient) => ingredient.type !== 'bun');
-    
-    // Если есть булка, добавляем её дважды (верх и низ)
-    const allIngredients = bun ? [bun, ...mains, bun] : mains;
-  
-    return allIngredients;
-  }, [ingredients]);
-
   return (
     <>
       {isModalOpen && (
         <Modal onClose={closeModal}>
-          <OrderDetails ingredients={selectedIngredients.map((item) => item._id)} />
+          <OrderDetails ingredients={ingredients.map((item) => item._id)} />
         </Modal>
       )}
       <div className={classNames(s.constructor__wrap, 'pb-10')}>
-        <div className={classNames(s.constructor__cards, 'mb-10', { [s.over]: isOver })}  ref={dropRef}>
+        <div className={classNames(s.constructor__cards, 'mb-10', { [s.over]: isOver })} ref={dropRef}>
           <div className={s.constructor__top}>
-            {bunIngredient && (
+            {!bunIngredient ? (
+              <div className={s.constructor__card}>
+                <p className="text_type_main-default constructor-element">Выберите булку</p>
+              </div>
+            ) : (
               <div className={s.constructor__card}>
                 <ConstructorElement
                   type="top"
@@ -93,16 +99,28 @@ export default function BurgerConstructor() {
             )}
           </div>
           <div className={classNames(s.constructor__main, 'custom-scroll')}>
-            {mainIngredients.map((ingredient, index) => (
-              <ConstructorCard 
-              key={`${ingredient._id}-${index}`}
-              ingredient={ingredient}
-              handleClose={() => handleRemove(ingredient)}
-              />
-            ))}
+            {mainIngredients.length === 0 ? (
+              <div className={s.constructor__card}>
+                <p className="text_type_main-default constructor-element">Добавьте ингредиенты</p>
+              </div>
+            ) : (
+              mainIngredients.map((ingredient, index) => (
+                <ConstructorCard
+                  key={ingredient._id}
+                  ingredient={ingredient}
+                  index={index}
+                  moveIngredient={handleReorder}
+                  handleClose={() => handleRemove(ingredient)}
+                />
+              ))
+            )}
           </div>
           <div className={s.constructor__bottom}>
-            {bunIngredient && (
+            {!bunIngredient ? (
+              <div className={s.constructor__card}>
+                <p className="text_type_main-default constructor-element">Выберите булку для низа</p>
+              </div>
+            ) : (
               <div className={s.constructor__card}>
                 <ConstructorElement
                   type="bottom"
@@ -116,7 +134,7 @@ export default function BurgerConstructor() {
           </div>
         </div>
         <div className={s.constructor__total}>
-          <div className={classNames(s.constructor__price, "text text_type_digits-medium")}>
+          <div className={classNames(s.constructor__price, 'text text_type_digits-medium')}>
             {total}
             <CurrencyIcon type="primary" />
           </div>
@@ -126,5 +144,5 @@ export default function BurgerConstructor() {
         </div>
       </div>
     </>
-  )
+  );
 }
