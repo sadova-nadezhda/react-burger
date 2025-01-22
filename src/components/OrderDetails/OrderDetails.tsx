@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
-import { setOrderDetails } from '../../services/order/slice'; 
 import { fetchOrder } from '../../services/order/actions'; 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { resetConstructor } from '../../services/burger-constructor/slice';
 
 import done from '../../images/done.svg';
 
@@ -12,11 +12,13 @@ import s from './OrderDetails.module.scss';
 export default function OrderDetails({ ingredients }) {
   const dispatch = useAppDispatch();
   const orderDetails = useAppSelector((state) => state.order.orderDetails);
-  const orderError = useAppSelector((state) => state.order.error); // Отслеживаем ошибки
+  const orderError = useAppSelector((state) => state.order.error);
 
   useEffect(() => {
     if (ingredients && ingredients.length > 0) {
-      dispatch(fetchOrder({ ingredients }));
+      dispatch(fetchOrder({ ingredients })).then(() => {
+        dispatch(resetConstructor());
+      });
     }
   }, [dispatch, ingredients]);
 

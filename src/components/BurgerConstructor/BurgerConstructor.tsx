@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
+
 import { useDrop } from 'react-dnd';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
@@ -84,7 +85,7 @@ export default function BurgerConstructor() {
           <div className={s.constructor__top}>
             {!bunIngredient ? (
               <div className={s.constructor__card}>
-                <p className="text_type_main-default constructor-element">Выберите булку</p>
+                <p className={classNames(s.constructor__tmp, 'text_type_main-default constructor-element')}>Выберите булку</p>
               </div>
             ) : (
               <div className={s.constructor__card}>
@@ -101,12 +102,12 @@ export default function BurgerConstructor() {
           <div className={classNames(s.constructor__main, 'custom-scroll')}>
             {mainIngredients.length === 0 ? (
               <div className={s.constructor__card}>
-                <p className="text_type_main-default constructor-element">Добавьте ингредиенты</p>
+                <p className={classNames(s.constructor__tmp, 'text_type_main-default constructor-element')}>Добавьте ингредиенты</p>
               </div>
             ) : (
               mainIngredients.map((ingredient, index) => (
                 <ConstructorCard
-                  key={ingredient._id}
+                  key={ingredient.uuid}
                   ingredient={ingredient}
                   index={index}
                   moveIngredient={handleReorder}
@@ -118,7 +119,7 @@ export default function BurgerConstructor() {
           <div className={s.constructor__bottom}>
             {!bunIngredient ? (
               <div className={s.constructor__card}>
-                <p className="text_type_main-default constructor-element">Выберите булку для низа</p>
+                <p className={classNames(s.constructor__tmp, 'text_type_main-default constructor-element')}>Выберите булку</p>
               </div>
             ) : (
               <div className={s.constructor__card}>
