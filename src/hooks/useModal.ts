@@ -5,7 +5,6 @@ export function useModal<T>() {
   const [selectedItem, setSelectedItem] = useState<T | null>(null);
 
   const openModal = (item: T) => {
-    setSelectedItem(item);
     setModalOpen(true);
   };
 
