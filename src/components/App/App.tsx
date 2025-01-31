@@ -1,32 +1,18 @@
 import React from "react";
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import classNames from 'classnames';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AppHeader from "../AppHeader";
+import { ConstructorPage } from '../../pages';
 
-import AppHeader from '../AppHeader';
-import BurgerIngredients from '../BurgerIngredients';
-import BurgerConstructor from '../BurgerConstructor';
-
-import s from './App.module.scss';
+import './App.module.scss';
 
 function App() {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <Router>
       <AppHeader />
-      <main>
-        <section className={classNames(s.constructor, 'pt-10 pb-10')}>
-          <div className={s.container}>
-            <div className={s.constructor__container}>
-              <h1 className='mb-5 text text_type_main-large'>Соберите бургер</h1>
-              <div className={s.constructor__wrap}>
-                <BurgerIngredients />
-                <BurgerConstructor />
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </DndProvider>
+      <Routes>
+        <Route path="/" element={<ConstructorPage />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -6,11 +6,3 @@
   margin: 0 auto;
   padding: 0 16px;
 }
-
-.constructor {
-  &__wrap {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
-  }
-}
