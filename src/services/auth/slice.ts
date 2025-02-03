@@ -3,12 +3,16 @@ import { User, AuthError } from '../../types/UserTypes';
 
 interface AuthState {
   user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   loading: boolean;
   error: AuthError;
 }
 
 const initialState: AuthState = {
   user: null,
+  accessToken: null,
+  refreshToken: null,
   loading: false,
   error: null,
 };

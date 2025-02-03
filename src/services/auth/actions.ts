@@ -29,7 +29,7 @@ const apiRequest = async (url: string, method: string, body?: object, dispatch?:
     const data: ApiResponse = await response.json();
 
     if (response.status === 401 && dispatch) {
-      await dispatch(refreshToken());
+      await dispatch(refreshToken());  // Обработка ситуации с истекшим токеном
       return apiRequest(url, method, body, dispatch);
     }
 
@@ -40,9 +40,8 @@ const apiRequest = async (url: string, method: string, body?: object, dispatch?:
   }
 };
 
-export const registerUser = createAsyncThunk(
-  'auth/registerUser',
-  async ({ email, password, name }: { email: string, password: string, name: string }, { dispatch }) => {
+export const registerUser = (email: string, password: string, name: string) => {
+  return async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
 
@@ -56,25 +55,23 @@ export const registerUser = createAsyncThunk(
         }));
         console.log('Пользователь успешно зарегистрирован');
       } else {
-        throw new Error(data.message || 'Регистрация не удалась');
+        dispatch(setError(data.message || 'Регистрация не удалась'));
       }
     } catch (error) {
-      dispatch(setError(error.message || 'Ошибка при регистрации'));
+      dispatch(setError('Ошибка при регистрации'));
       console.error('Ошибка регистрации:', error);
-      throw error; 
     } finally {
       dispatch(setLoading(false));
     }
-  }
-);
+  };
+};
 
-export const loginUser = createAsyncThunk(
-  'auth/loginUser',
-  async ({ email, password }: { email: string, password: string }, { dispatch }) => {
+export const loginUser = (email: string, password: string) => {
+  return async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
 
-      const data = await apiRequest(`${BASE_URL}/auth/login`, 'POST', { email, password });
+      const data = await apiRequest(`${BASE_URL}/auth/login`, 'POST', { email, password }, dispatch);
 
       if (data.success) {
         dispatch(setUser({
@@ -83,23 +80,21 @@ export const loginUser = createAsyncThunk(
           refreshToken: data.refreshToken!,
         }));
         
-        window.location.href = '/profile'; 
+        window.location.href = '/profile';
       } else {
-        throw new Error(data.message || 'Ошибка входа');
+        dispatch(setError(data.message || 'Ошибка входа'));
       }
     } catch (error) {
-      dispatch(setError(error.message || 'Ошибка при входе в систему'));
+      dispatch(setError('Ошибка при входе в систему'));
       console.error('Ошибка входа:', error);
-      throw error;
     } finally {
       dispatch(setLoading(false));
     }
-  }
-);
+  };
+};
 
-export const logoutUser = createAsyncThunk(
-  'auth/logoutUser',
-  async (_, { dispatch }) => {
+export const logoutUser = () => {
+  return async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
 
@@ -109,31 +104,29 @@ export const logoutUser = createAsyncThunk(
         dispatch(logout());
         console.log('Пользователь успешно вышел из системы');
       } else {
-        throw new Error(data.message || 'Выход не удался');
+        dispatch(setError(data.message || 'Выход не удался'));
       }
     } catch (error) {
-      dispatch(setError(error.message || 'Ошибка при выходе из системы'));
+      dispatch(setError('Ошибка при выходе из системы'));
       console.error('Ошибка выхода из системы:', error);
-      throw error;
     } finally {
       dispatch(setLoading(false));
     }
-  }
-);
+  };
+};
 
-export const refreshToken = createAsyncThunk(
-  'auth/refreshToken',
-  async (_, { dispatch }) => {
+export const refreshToken = () => {
+  return async (dispatch: AppDispatch) => {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
       dispatch(setError('Токен обновления не найден'));
-      throw new Error('Токен обновления не найден');
+      return;
     }
 
     try {
       dispatch(setLoading(true));
 
-      const data = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken });
+      const data = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken }, dispatch);
 
       if (data.success) {
         dispatch(setUser({
@@ -143,24 +136,21 @@ export const refreshToken = createAsyncThunk(
         }));
       } else {
         dispatch(setError(data.message || 'Не удалось обновить токен'));
-        throw new Error(data.message || 'Не удалось обновить токен');
       }
     } catch (error) {
-      dispatch(setError(error.message || 'Ошибка при обновлении токена'));
+      dispatch(setError('Ошибка при обновлении токена'));
       console.error('Token refresh error:', error);
-      throw error;
     } finally {
       dispatch(setLoading(false));
     }
-  }
-);
+  };
+};
 
-export const forgotPassword = createAsyncThunk(
-  'auth/forgotPassword',
-  async ({ email, navigate }: { email: string, navigate: (path: string) => void }, { dispatch }) => {
+export const forgotPassword = (email: string, navigate: (path: string) => void) => {
+  return async (dispatch: AppDispatch) => {
     if (!email.trim()) {
       dispatch(setError('Введите e-mail'));
-      throw new Error('Введите e-mail');
+      return;
     }
 
     try {
@@ -178,27 +168,31 @@ export const forgotPassword = createAsyncThunk(
         navigate('/reset-password');
       } else {
         dispatch(setError(data.message || 'Ошибка восстановления пароля'));
-        throw new Error(data.message || 'Ошибка восстановления пароля');
       }
     } catch (error) {
       dispatch(setError('Ошибка сети, попробуйте позже'));
-      console.error('Error in forgotPassword:', error);
-      throw error;
     } finally {
       dispatch(setLoading(false));
     }
-  }
-);
+  };
+};
 
-export const resetPassword = createAsyncThunk(
+export const resetPassword = createAsyncThunk<
+  void,
+  { password: string; token: string },
+  { rejectValue: string }
+>(
   'auth/resetPassword',
-  async ({ password, token } : { password: string, token: string }, { rejectWithValue }) => {
+  async ({ password, token }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${BASE_URL}/password-reset/reset`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password, token }),
-      });
+      const response = await fetch(
+        `${BASE_URL}/password-reset/reset`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password, token }),
+        }
+      );
 
       const data = await response.json();
 
@@ -210,3 +204,55 @@ export const resetPassword = createAsyncThunk(
     }
   }
 );
+
+export const getUserData = () => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      dispatch(setLoading(true));
+
+      const data = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
+
+      if (data.success) {
+        dispatch(setUser({
+          user: data.user!,
+          accessToken: localStorage.getItem('accessToken')!,
+          refreshToken: localStorage.getItem('refreshToken')!,
+        }));
+        console.log('Данные пользователя успешно получены');
+      } else {
+        dispatch(setError(data.message || 'Ошибка при получении данных пользователя'));
+      }
+    } catch (error) {
+      dispatch(setError('Ошибка при получении данных пользователя'));
+      console.error('Ошибка получения данных:', error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+};
+
+export const updateUserData = (name: string, email: string, password: string) => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      dispatch(setLoading(true));
+
+      const data = await apiRequest(`${BASE_URL}/auth/user`, 'PATCH', { name, email, password }, dispatch);
+
+      if (data.success) {
+        dispatch(setUser({
+          user: data.user!,
+          accessToken: localStorage.getItem('accessToken')!,
+          refreshToken: localStorage.getItem('refreshToken')!,
+        }));
+        console.log('Данные пользователя успешно обновлены');
+      } else {
+        dispatch(setError(data.message || 'Ошибка при обновлении данных пользователя'));
+      }
+    } catch (error) {
+      dispatch(setError('Ошибка при обновлении данных пользователя'));
+      console.error('Ошибка обновления данных:', error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+};
