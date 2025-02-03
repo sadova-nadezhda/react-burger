@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export default function RegisterForm() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const onEmailChange = (e) => {
+  const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const onPasswordChange = (e) => {
+  const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const onNameChange = (e) => {
+  const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
   
     fetch(`https://norma.nomoreparties.space/api/auth/check-email?email=${email}`)
       .then(response => response.json())
-      .then(data => {
+      .then((data: { exists: boolean }) => {
         if (data.exists) {
           alert('This email is already registered.');
         } else {
@@ -37,7 +37,7 @@ export default function RegisterForm() {
             }),
           })
           .then((response) => response.json())
-          .then((data) => {
+          .then((data: { success: boolean; message?: string }) => {
             if (data.success) {
               console.log('User successfully registered');
             } else {

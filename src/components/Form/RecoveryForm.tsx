@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export default function RecoveryForm() {
-  const [password, setPassword] = useState('');
-  const [token, setToken] = useState('');
+  const [password, setPassword] = useState<string>('');
+  const [token, setToken] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     fetch('https://norma.nomoreparties.space/api/password-reset/reset', {
       method: 'POST',
@@ -15,14 +15,14 @@ export default function RecoveryForm() {
       body: JSON.stringify({ password, token })
     })
     .then((response) => response.json())
-    .then((data) => {
+    .then((data: { success: boolean; message: string }) => {
       if (data.success) {
         navigate('/login');
       } else {
         console.error(data.message);
       }
     })
-    .catch((error) => console.error('Error:', error));
+    .catch((error: Error) => console.error('Error:', error));
   };
 
   return (

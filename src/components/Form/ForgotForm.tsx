@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
+interface ErrorData {
+  message: string;
+}
+
 export default function ForgotForm() {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -19,15 +23,15 @@ export default function ForgotForm() {
       body: JSON.stringify({ email })
     })
     .then((response) => response.json())
-    .then((data) => {
+    .then((data: { success: boolean, message: string }) => {
       if (data.success) {
         navigate('/reset-password');
       } else {
         setError(data.message);
       }
     })
-    .catch((error) => {
-      setError('Ошибка сети, попробуйте позже');
+    .catch((error: ErrorData) => {
+      setError(error.message || 'Ошибка сети, попробуйте позже');
     })
     .finally(() => {
       setLoading(false);
