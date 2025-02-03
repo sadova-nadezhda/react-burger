@@ -58,9 +58,8 @@ export default function RegisterForm() {
         value={name}
         name="name"
         error={false}
-        errorText="Ошибка"
+        errorText="Ошибка имя"
         size="default"
-        extraClass="ml-1"
         autoComplete="name"
       />
       <EmailInput
@@ -74,7 +73,6 @@ export default function RegisterForm() {
         onChange={onPasswordChange}
         value={password}
         name="password"
-        extraClass="mb-2"
         autoComplete="new-password"
       />
       <Button htmlType="submit" type="primary" size="medium">

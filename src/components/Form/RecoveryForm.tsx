@@ -31,7 +31,6 @@ export default function RecoveryForm() {
         onChange={(e) => setPassword(e.target.value)}
         value={password}
         name={'password'}
-        extraClass="mb-2"
         placeholder={'Введите новый пароль'}
         autoComplete="password"
       />
@@ -42,9 +41,8 @@ export default function RecoveryForm() {
         value={token} 
         name={'token'}
         error={false}
-        errorText={'Ошибка'}
+        errorText={'Ошибка кода'}
         size={'default'}
-        extraClass="ml-1"
         autoComplete="token"
       />
       <Button htmlType="submit" type="primary" size="medium">

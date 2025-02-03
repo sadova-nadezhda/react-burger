@@ -26,7 +26,6 @@ export default function LoginForm() {
         onChange={onPasswordChange}
         value={password}
         name={'password'}
-        extraClass="mb-2"
         autoComplete="password"
       />
       <Button htmlType="submit" type="primary" size="medium">
