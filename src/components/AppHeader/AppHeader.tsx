@@ -40,7 +40,7 @@ function AppHeader() {
             <li id="3" className={s.header__logo}>
               <Logo />
             </li>
-            <NavItem id={4} IconComponent={ProfileIcon} label="Личный кабинет" activeId={activeId} setActiveId={setActiveId} to="/profile" />
+            <NavItem id={4} IconComponent={ProfileIcon} label="Личный кабинет" activeId={activeId} setActiveId={setActiveId} to="/login" />
           </ul>
         </nav>
       </div>
