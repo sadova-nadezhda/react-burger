@@ -1,19 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-
+import classNames from 'classnames';
 import RecoveryForm from '../../components/Form/RecoveryForm';
-
 import s from './LoginPage.module.scss';
 
-export default function RecoveryPage() {
+export default function ResetPasswordPage() {
   return (
     <main>
       <section className={classNames(s.login, 'pt-10 pb-10')}>
         <div className={s.container}>
           <div className={s.login__container}>
-            <h1 className={classNames(s.login__title, 'mb-6 text text_type_main-medium')}>Восстановление пароля</h1>
+            <h1 className={classNames(s.login__title, 'mb-6 text text_type_main-medium')}>Сброс пароля</h1>
             <div className={s.login__wrap}>
               <RecoveryForm />
               <div className={s.login__bottom}>
@@ -31,5 +29,5 @@ export default function RecoveryPage() {
         </div>
       </section>
     </main>
-  )
+  );
 }

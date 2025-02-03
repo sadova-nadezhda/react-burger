@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AppHeader from "../AppHeader";
-import { ConstructorPage, ProfilePage, IngredientPage, LoginPage, RegisterPage, ForgotPage, RecoveryPage } from '../../pages';
+import { ConstructorPage, ProfilePage, IngredientPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage } from '../../pages';
 
 import './App.module.scss';
 
@@ -14,8 +14,8 @@ function App() {
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPage />} />
-        <Route path="/reset-password" element={<RecoveryPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         <Route path="/profile" element={<ProfilePage />} />
 

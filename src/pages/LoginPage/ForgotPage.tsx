@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-
+import classNames from 'classnames';
 import ForgotForm from '../../components/Form/ForgotForm';
-
 import s from './LoginPage.module.scss';
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
+
   return (
     <main>
       <section className={classNames(s.login, 'pt-10 pb-10')}>
@@ -31,5 +30,5 @@ export default function LoginPage() {
         </div>
       </section>
     </main>
-  )
+  );
 }

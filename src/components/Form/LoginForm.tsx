@@ -3,15 +3,15 @@ import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
+  const [password, setPassword] = useState('');
 
   const onEmailChange = e => {
     setEmail(e.target.value)
   }
 
-  const onPassChange = e => {
-    setPass(e.target.value)
-  }
+  const onPasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
   
   return (
     <form action="" className='mb-20'>
@@ -20,14 +20,16 @@ export default function LoginForm() {
         value={email}
         name={'email'}
         isIcon={false}
+        autoComplete="email"
       />
       <PasswordInput
-        onChange={onPassChange}
-        value={pass}
+        onChange={onPasswordChange}
+        value={password}
         name={'password'}
         extraClass="mb-2"
+        autoComplete="password"
       />
-      <Button htmlType="button" type="primary" size="medium">
+      <Button htmlType="submit" type="primary" size="medium">
         Войти
       </Button>
     </form>
