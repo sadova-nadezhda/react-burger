@@ -1,36 +1,48 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { loginUser } from '../../services/auth/actions'; 
+import { RootState } from '../../services/store'; 
 
 export default function LoginForm() {
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state: RootState) => state.auth);
+
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-  }
+  };
 
   const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    dispatch(loginUser(email, password));
+  };
+
   return (
-    <form action="" className='mb-20'>
+    <form onSubmit={onSubmit} className="mb-20">
       <EmailInput
         onChange={onEmailChange}
         value={email}
-        name={'email'}
+        name="email"
         isIcon={false}
         autoComplete="email"
       />
       <PasswordInput
         onChange={onPasswordChange}
         value={password}
-        name={'password'}
+        name="password"
         autoComplete="password"
       />
-      <Button htmlType="submit" type="primary" size="medium">
-        Войти
+      {error && <p className="error-message">{error}</p>} 
+      <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
+        {loading ? 'Загрузка...' : 'Войти'}
       </Button>
     </form>
-  )
+  );
 }

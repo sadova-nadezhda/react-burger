@@ -1,52 +1,48 @@
 import React, { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { resetPassword } from '../../services/auth/actions';
+import { RootState } from '../../services/store';
+
 
 export default function RecoveryForm() {
-  const [password, setPassword] = useState<string>('');
-  const [token, setToken] = useState<string>('');
+  const [password, setPassword] = useState('');
+  const [token, setToken] = useState('');
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { loading, error } = useAppSelector((state: RootState) => state.auth);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    fetch('https://norma.nomoreparties.space/api/password-reset/reset', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password, token })
-    })
-    .then((response) => response.json())
-    .then((data: { success: boolean; message: string }) => {
-      if (data.success) {
-        navigate('/login');
-      } else {
-        console.error(data.message);
-      }
-    })
-    .catch((error: Error) => console.error('Error:', error));
+    dispatch(resetPassword({ password, token }))
+      .unwrap()
+      .then(() => navigate('/login'))
+      .catch((err) => console.error('Reset password error:', err));
   };
 
   return (
-    <form onSubmit={handleSubmit} className='mb-20'>
+    <form onSubmit={handleSubmit} className="mb-20">
       <PasswordInput
         onChange={(e) => setPassword(e.target.value)}
         value={password}
-        name={'password'}
-        placeholder={'Введите новый пароль'}
-        autoComplete="password"
+        name="password"
+        placeholder="Введите новый пароль"
+        autoComplete="new-password"
       />
       <Input
-        type={'text'}
-        placeholder={'Введите код из письма'}
+        type="text"
+        placeholder="Введите код из письма"
         onChange={(e) => setToken(e.target.value)}
-        value={token} 
-        name={'token'}
-        error={false}
-        errorText={'Ошибка кода'}
-        size={'default'}
-        autoComplete="token"
+        value={token}
+        name="token"
+        error={!!error}
+        errorText={error || 'Ошибка кода'}
+        size="default"
+        autoComplete="one-time-code"
       />
-      <Button htmlType="submit" type="primary" size="medium">
-        Сохранить
+      <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
+        {loading ? 'Сохранение...' : 'Сохранить'}
       </Button>
     </form>
   );

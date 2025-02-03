@@ -1,10 +1,13 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { registerUser } from '../../services/auth/actions';  
+import { useAppDispatch } from '../../hooks/store';
 
 export default function RegisterForm() {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const dispatch = useAppDispatch();  
 
   const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -20,33 +23,7 @@ export default function RegisterForm() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-  
-    fetch(`https://norma.nomoreparties.space/api/auth/check-email?email=${email}`)
-      .then(response => response.json())
-      .then((data: { exists: boolean }) => {
-        if (data.exists) {
-          alert('This email is already registered.');
-        } else {
-          fetch('https://norma.nomoreparties.space/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email,
-              password,
-              name,
-            }),
-          })
-          .then((response) => response.json())
-          .then((data: { success: boolean; message?: string }) => {
-            if (data.success) {
-              console.log('User successfully registered');
-            } else {
-              console.error('Registration failed:', data.message);
-            }
-          })
-          .catch((error) => console.error('Error during registration:', error));
-        }
-      });
+    dispatch(registerUser(email, password, name));
   };
 
   return (
