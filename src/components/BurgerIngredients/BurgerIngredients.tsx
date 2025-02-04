@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 
@@ -17,6 +18,7 @@ import { Ingredient } from '../../types/IngredientTypes';
 import s from './BurgerIngredients.module.scss';
 
 export default function BurgerIngredients(): JSX.Element {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
   const selectedIngredient = useAppSelector((state) => state.ingredients.currentIngredient);
@@ -74,7 +76,8 @@ export default function BurgerIngredients(): JSX.Element {
   const handleIngredientClick = useCallback(
     (ingredient: Ingredient) => {
       dispatch(setCurrentIngredient(ingredient));
-      openModal(ingredient);
+      // openModal(ingredient);
+      navigate(`/ingredients/${ingredient._id}`);
     },
     [dispatch, openModal]
   );

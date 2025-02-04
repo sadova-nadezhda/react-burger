@@ -29,7 +29,7 @@ const apiRequest = async (url: string, method: string, body?: object, dispatch?:
     const data: ApiResponse = await response.json();
 
     if (response.status === 401 && dispatch) {
-      await dispatch(refreshToken());  // Обработка ситуации с истекшим токеном
+      await dispatch(refreshToken()); 
       return apiRequest(url, method, body, dispatch);
     }
 

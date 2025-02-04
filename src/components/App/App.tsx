@@ -20,6 +20,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
 
         <Route path="/ingredients" element={<IngredientPage />} />
+        <Route path="/ingredients/:id" element={<IngredientPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

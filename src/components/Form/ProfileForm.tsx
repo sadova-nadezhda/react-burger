@@ -9,57 +9,81 @@ export default function ProfileForm() {
   const loading = useAppSelector((state: RootState) => state.auth.loading);
   const dispatch = useAppDispatch();
 
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
     if (!user) {
       dispatch(getUserData());
-    } else {
+    }
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    if (user) {
       setName(user.name);
       setEmail(user.email);
     }
-  }, [user, dispatch]); 
+  }, [user]);
+
+  const handleChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+      setIsChanged(true);
+    };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(updateUserData(name, email, password));
+    setIsChanged(false);
+    setPassword('');
   };
 
-  if (loading) {
-    return <div>Загрузка...</div>;
-  }
+  const handleCancel = () => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+    }
+    setPassword('');
+    setIsChanged(false);
+  };
 
-  if (!user) {
-    return <div>Пользователь не найден. Пожалуйста, войдите в систему.</div>;
-  }
+  if (loading) return <div>Загрузка...</div>;
+  if (!user) return <div>Пользователь не найден. Пожалуйста, войдите в систему.</div>;
 
   return (
     <form onSubmit={handleSubmit}>
       <Input
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={handleChange(setName)}
         placeholder="Имя"
         name="name"
         icon="EditIcon"
       />
       <EmailInput
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleChange(setEmail)}
         name="email"
-        placeholder="Логин"
+        placeholder="E-mail"
         isIcon={true}
       />
       <PasswordInput
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handleChange(setPassword)}
         name="password"
         icon="EditIcon"
       />
-      <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
-        Сохранить
-      </Button>
+      {isChanged && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+          <Button htmlType="button" type="secondary" size="medium" onClick={handleCancel}>
+            Отмена
+          </Button>
+          <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
+            Сохранить
+          </Button>
+        </div>
+      )}
     </form>
   );
 }

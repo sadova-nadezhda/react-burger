@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-
 import ProfileForm from '../../components/Form/ProfileForm';
 
 import s from './ProfilePage.module.scss';
