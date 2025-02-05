@@ -65,7 +65,7 @@ export const registerUser = (email: string, password: string, name: string) => {
   };
 };
 
-export const loginUser = (email: string, password: string) => {
+export const loginUser = (email: string, password: string, navigate: (path: string) => void ) => {
   return async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
@@ -78,6 +78,7 @@ export const loginUser = (email: string, password: string) => {
           accessToken: data.accessToken!.replace('Bearer ', ''),
           refreshToken: data.refreshToken!,
         }));
+        navigate('/profile');
       } else {
         dispatch(setError(data.message || 'Ошибка входа'));
       }

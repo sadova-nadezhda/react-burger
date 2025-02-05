@@ -17,7 +17,7 @@ const ProtectedRouteElement = ({ children, fallBackRoute }: ProtectedRouteElemen
     }
   }, [isAuthenticated, navigate, fallBackRoute]);
 
-  return isAuthenticated ? <>{children}</> : null;
+  return <>{children}</>;
 }
 
 export default ProtectedRouteElement;

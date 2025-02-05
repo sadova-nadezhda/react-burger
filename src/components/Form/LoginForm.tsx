@@ -22,8 +22,7 @@ export default function LoginForm() {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(loginUser(email, password));
-    navigate('/profile');
+    dispatch(loginUser(email, password, navigate));
   };
 
   return (
