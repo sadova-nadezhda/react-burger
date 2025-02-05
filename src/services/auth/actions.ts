@@ -1,10 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { useNavigate } from 'react-router-dom';
 import { setLoading, setError, setUser, logout } from './slice';
 import { AppDispatch } from '../store';
 import { BASE_URL } from '../../utils/constants';
 import { UserData } from '../../types/UserTypes';
-
 
 type ApiResponse = {
   success: boolean;

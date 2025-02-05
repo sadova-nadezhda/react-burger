@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
+
 import ProfileForm from '../../components/Form/ProfileForm';
 import { logoutUser } from '../../services/auth/actions';
 import { useAppDispatch } from '../../hooks/store';
@@ -9,11 +10,9 @@ import s from './ProfilePage.module.scss';
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    navigate('/');
   };
   return (
     <main>

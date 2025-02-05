@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector, useAppDispatch } from '../../hooks/store';
-import { RootState } from '../../services/store';
 import { updateUserData, getUserData } from '../../services/auth/actions';
 
 export default function ProfileForm() {
-  const user = useAppSelector((state: RootState) => state.auth.user);
-  const loading = useAppSelector((state: RootState) => state.auth.loading);
+  const user = useAppSelector((state) => state.auth.user);
+  const loading = useAppSelector((state) => state.auth.loading);
   const dispatch = useAppDispatch();
 
   const [name, setName] = useState('');

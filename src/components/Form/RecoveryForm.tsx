@@ -1,24 +1,18 @@
 import React, { useState, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { resetPassword } from '../../services/auth/actions';
-import { RootState } from '../../services/store';
 
 
 export default function RecoveryForm() {
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { loading, error } = useAppSelector((state: RootState) => state.auth);
+  const { loading, error } = useAppSelector((state) => state.auth);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(resetPassword({ password, token }))
-      .unwrap()
-      .then(() => navigate('/login'))
-      .catch((err) => console.error('Reset password error:', err));
+    dispatch(resetPassword({ password, token }));
   };
 
   return (

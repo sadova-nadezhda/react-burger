@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import RecoveryForm from '../../components/Form/RecoveryForm';
+
 import s from './LoginPage.module.scss';
 
 export default function ResetPasswordPage() {

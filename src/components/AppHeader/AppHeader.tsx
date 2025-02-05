@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector } from '../../hooks/store';
-import { RootState } from '../../services/store';
 
 import s from './AppHeader.module.scss';
 
@@ -30,7 +29,7 @@ const NavItem = ({ id, IconComponent, label, activeId, setActiveId, to }: NavIte
 
 function AppHeader() {
   const [activeId, setActiveId] = useState(1);
-  const isAuthenticated = useAppSelector((state: RootState) => !!state.auth.user);
+  const isAuthenticated = useAppSelector((state) => !!state.auth.user);
   const location = useLocation();
 
   useEffect(() => {
