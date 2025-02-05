@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; 
 import classNames from 'classnames';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useAppSelector } from '../../hooks/store';
+import { RootState } from '../../services/store';
 
 import s from './AppHeader.module.scss';
 
@@ -28,6 +30,7 @@ const NavItem = ({ id, IconComponent, label, activeId, setActiveId, to }: NavIte
 
 function AppHeader() {
   const [activeId, setActiveId] = useState(1);
+  const isAuthenticated = useAppSelector((state: RootState) => !!state.auth.user);
 
   return (
     <header className={classNames(s.header, 'text', 'text_type_main-default')}>
@@ -59,7 +62,7 @@ function AppHeader() {
               label="Личный кабинет" 
               activeId={activeId} 
               setActiveId={setActiveId} 
-              to="/login"
+              to={isAuthenticated ? "/profile" :"/login" }
             />
           </ul>
         </nav>
