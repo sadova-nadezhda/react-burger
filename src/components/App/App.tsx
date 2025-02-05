@@ -1,14 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AppHeader from "../AppHeader";
 import { ConstructorPage, ProfilePage, IngredientPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, NotFoundPage } from '../../pages';
 import ProtectedRouteElement from "./ProtectedRouteElement";
+import Modal from '../Modal';
+import IngredientDetails from '../IngredientDetails';
 
 import './App.module.scss';
 
 function App() {
+  const location = useLocation();
+  const background = location.state?.background;
   return (
-    <Router>
+    <>
       <AppHeader />
       <Routes>
         <Route path="/" element={<ConstructorPage />} />
@@ -44,12 +48,24 @@ function App() {
           }
         />
 
-        <Route path="/ingredients" element={<IngredientPage />} />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </Router>
+
+      {background && (
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+    </>
   );
 }
 

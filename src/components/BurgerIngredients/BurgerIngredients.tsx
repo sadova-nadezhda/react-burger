@@ -79,7 +79,7 @@ export default function BurgerIngredients(): JSX.Element {
       // openModal(ingredient);
       navigate(`/ingredients/${ingredient._id}`);
     },
-    [dispatch, openModal]
+    [dispatch, navigate]
   );
 
   const ingredientTypes = [
