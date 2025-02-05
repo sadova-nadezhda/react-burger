@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { loginUser } from '../../services/auth/actions'; 
@@ -6,6 +7,7 @@ import { RootState } from '../../services/store';
 
 export default function LoginForm() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { loading, error } = useAppSelector((state: RootState) => state.auth);
 
   const [email, setEmail] = useState<string>('');
@@ -22,6 +24,7 @@ export default function LoginForm() {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     dispatch(loginUser(email, password));
+    navigate('/profile');
   };
 
   return (

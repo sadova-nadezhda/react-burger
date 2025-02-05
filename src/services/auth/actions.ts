@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { useNavigate } from 'react-router-dom';
 import { setLoading, setError, setUser, logout } from './slice';
 import { AppDispatch } from '../store';
 import { BASE_URL } from '../../utils/constants';
@@ -79,8 +80,6 @@ export const loginUser = (email: string, password: string) => {
           accessToken: data.accessToken!.replace('Bearer ', ''),
           refreshToken: data.refreshToken!,
         }));
-        
-        window.location.href = '/profile';
       } else {
         dispatch(setError(data.message || 'Ошибка входа'));
       }
