@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { fetchOrder } from '../../services/order/actions'; 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { resetConstructor } from '../../services/burger-constructor/slice';
+import { resetAllIngredientCounts } from '../../services/ingredients/slice';
 
 import done from '../../images/done.svg';
 
@@ -18,6 +19,7 @@ export default function OrderDetails({ ingredients }) {
     if (ingredients && ingredients.length > 0) {
       dispatch(fetchOrder({ ingredients })).then(() => {
         dispatch(resetConstructor());
+        dispatch(resetAllIngredientCounts());
       });
     }
   }, [dispatch, ingredients]);
