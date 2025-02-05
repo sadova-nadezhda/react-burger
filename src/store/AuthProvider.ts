@@ -28,7 +28,7 @@ export function ProvideAuth({ children }: ProvideAuthProps) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within a ProvideAuth');
+    throw new Error('useAuth необходимо использовать внутри ProvideAuth');
   }
   return context;
 }
