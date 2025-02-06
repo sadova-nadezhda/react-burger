@@ -1,16 +1,22 @@
 import React from "react";
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { useAppDispatch } from "../../hooks/store";
 import AppHeader from "../AppHeader";
 import { ConstructorPage, ProfilePage, IngredientPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, NotFoundPage } from '../../pages';
 import ProtectedRouteElement from "./ProtectedRouteElement";
 import Modal from '../Modal';
+import { useModal } from "../../hooks/useModal";
 import IngredientDetails from '../IngredientDetails';
+import { clearCurrentIngredient } from "../../services/ingredients/slice";
 
 import './App.module.scss';
 
+
 function App() {
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const background = location.state?.background;
+  const { closeModal } = useModal();
   return (
     <>
       <AppHeader />
@@ -58,7 +64,13 @@ function App() {
           <Route
             path="/ingredients/:id"
             element={
-              <Modal>
+              <Modal
+                onClose={() => {
+                  closeModal();
+                  dispatch(clearCurrentIngredient());
+                }}
+                title="Детали ингредиента"
+              >
                 <IngredientDetails />
               </Modal>
             }
