@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
 import ProfileForm from '../../components/Form/ProfileForm';
@@ -10,10 +10,13 @@ import s from './ProfilePage.module.scss';
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    navigate('/login'); // Переход после выхода
   };
+
   return (
     <main>
       <section className={classNames(s.profile, 'pt-30 pb-30 text text_type_main-default')}>
@@ -21,18 +24,35 @@ export default function ProfilePage() {
           <div className={s.profile__container}>
             <aside className={classNames(s.profile__aside)}>
               <ul className={classNames(s.profile__list, 'mb-20 text_type_main-medium text_color_inactive')}>
-                <li className={s.active}>Профиль</li>
-                <li>История заказов</li>
-                <li onClick={handleLogout}>Выход</li> 
+                <li>
+                  <NavLink
+                    to="/profile"
+                    className={({ isActive }) => classNames({ [s.active]: isActive })}
+                    end
+                  >
+                    Профиль
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/profile/orders"
+                    className={({ isActive }) => classNames({ [s.active]: isActive })}
+                  >
+                    История заказов
+                  </NavLink>
+                </li>
+                <li onClick={handleLogout} className={s.logout}>Выход</li>
               </ul>
-              <div className={classNames(s.profile__txt, 'mb-20 text_color_inactive')}>В этом разделе вы можете <br/> изменить свои персональные данные</div>
+              <div className={classNames(s.profile__txt, 'mb-20 text_color_inactive')}>
+                В этом разделе вы можете <br /> изменить свои персональные данные
+              </div>
             </aside>
             <div className={s.profile__content}>
-              <ProfileForm />
+              <Outlet /> 
             </div>
           </div>
         </div>
       </section>
     </main>
-  )
+  );
 }

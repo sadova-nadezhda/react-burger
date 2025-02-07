@@ -11,6 +11,8 @@ import {
   ResetPasswordPage,
   NotFoundPage,
 } from "../../pages";
+import ProfileForm from "../Form/ProfileForm";
+import OrdersHistory from "../OrdersHistory";
 import ProtectedRouteElement from "./ProtectedRouteElement";
 import IngredientModal from "../Modal/IngredientModal";
 
@@ -46,7 +48,10 @@ function App() {
               <ProfilePage />
             </ProtectedRouteElement>
           }
-        />
+        >
+          <Route index element={<ProfileForm />} /> 
+          <Route path="orders" element={<OrdersHistory />} /> 
+        </Route>
         <Route
           path="/profile/*"
           element={

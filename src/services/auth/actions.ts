@@ -96,22 +96,29 @@ export const logoutUser = () => {
     try {
       dispatch(setLoading(true));
 
-      const data = await apiRequest(`${BASE_URL}/auth/logout`, 'POST');
+      const refreshToken = localStorage.getItem('refreshToken'); 
+      if (!refreshToken) {
+        dispatch(setError('Токен отсутствует'));
+        return;
+      }
+
+      const data = await apiRequest(`${BASE_URL}/auth/logout`, 'POST', { token: refreshToken });
 
       if (data.success) {
         dispatch(logout());
-        console.log('Пользователь успешно вышел из системы');
+        console.log('Пользователь успешно вышел');
       } else {
         dispatch(setError(data.message || 'Выход не удался'));
       }
     } catch (error) {
-      dispatch(setError('Ошибка при выходе из системы'));
-      console.error('Ошибка выхода из системы:', error);
+      dispatch(setError('Ошибка при выходе'));
+      console.error('Ошибка выхода:', error);
     } finally {
       dispatch(setLoading(false));
     }
   };
 };
+
 
 export const refreshToken = () => {
   return async (dispatch: AppDispatch) => {
