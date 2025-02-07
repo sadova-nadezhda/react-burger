@@ -4,6 +4,7 @@ import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-comp
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { forgotPassword } from '../../services/auth/actions';
 
+import s from './Form.module.scss';
 
 export default function ForgotForm() {
   const [email, setEmail] = useState<string>('');
@@ -26,7 +27,7 @@ export default function ForgotForm() {
         placeholder="Укажите e-mail"
         autoComplete="email"
       />
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className={s.error_message}>{error}</p>}
       <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
         {loading ? 'Загрузка...' : 'Восстановить'}
       </Button>

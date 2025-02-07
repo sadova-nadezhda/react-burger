@@ -4,6 +4,8 @@ import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { loginUser } from '../../services/auth/actions'; 
 
+import s from './Form.module.scss';
+
 export default function LoginForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ export default function LoginForm() {
         name="password"
         autoComplete="password"
       />
-      {error && <p className="error-message">{error}</p>} 
+      {error && <p className={s.error_message}>{error}</p>} 
       <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
         {loading ? 'Загрузка...' : 'Войти'}
       </Button>
