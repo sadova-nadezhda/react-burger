@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
+import classNames from 'classnames';
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import ModalOverlay from '../ModalOverlay';
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useOrderModal } from '../../hooks/useOrderModal';
 
 import s from './Modal.module.scss';
 
@@ -18,6 +19,7 @@ const modalRoot = document.getElementById('modals');
 
 export default function Modal({ title, onClose, children }: ModalProps) {
   const location = useLocation();
+    const { isModalOpen } = useOrderModal();
 
   useEffect(() => {
     const handleEscClose = (e: KeyboardEvent) => {
@@ -33,10 +35,10 @@ export default function Modal({ title, onClose, children }: ModalProps) {
   }, [onClose]);
 
   useEffect(() => {
-    if (!location.state?.background) {
+    if (!location.state?.background && isModalOpen) {
       onClose();
     }
-  }, [location, onClose]);
+  }, [location, onClose, isModalOpen]);
 
   return ReactDOM.createPortal(
     <ModalOverlay onClick={onClose}>

@@ -68,7 +68,6 @@ export default function BurgerIngredients(): JSX.Element {
   }, [currentTab, dispatch]);
 
   const handleIngredientClick = (ingredient: Ingredient) => {
-    console.log('Selected Ingredient:', ingredient);
     dispatch(setCurrentIngredient(ingredient));
     navigate(`/ingredients/${ingredient._id}`, { state: { background: location } });
   };

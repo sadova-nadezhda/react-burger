@@ -62,7 +62,9 @@ function App() {
       </Routes>
 
       {background && (
-        <IngredientModal />
+        <Routes>
+          <Route path="/ingredients/:id" element={<IngredientModal />} />
+        </Routes>
       )}
     </>
   );
