@@ -9,7 +9,6 @@ export default function IngredientDetails() {
   const selectedIngredient = useAppSelector((state) => state.ingredients.currentIngredient);
 
   if (!selectedIngredient) {
-    console.log(selectedIngredient);
     return null; 
   }
 
