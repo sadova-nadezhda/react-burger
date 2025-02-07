@@ -14,9 +14,6 @@ export default function IngredientModal() {
   const { closeModal } = useModal();
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
-  console.log(ingredients)
-  console.log(id)
-
   useEffect(() => {
       if (!ingredients.length) {
         dispatch(fetchIngredients());
