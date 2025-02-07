@@ -12,7 +12,11 @@ type ApiResponse = {
   user?: UserData; 
 };
 
-const apiRequest = async (url: string, method: string, body?: object, dispatch?: AppDispatch): Promise<ApiResponse> => {
+const apiRequest = async (url: string, method: string, body?: object, dispatch?: AppDispatch, retryCount = 0): Promise<ApiResponse> => {
+  if (retryCount > 1) {
+    throw new Error('Ошибка авторизации: повторные попытки не удались');
+  }
+
   const accessToken = localStorage.getItem('accessToken');
 
   try {
@@ -29,7 +33,7 @@ const apiRequest = async (url: string, method: string, body?: object, dispatch?:
 
     if (response.status === 401 && dispatch) {
       await dispatch(refreshToken()); 
-      return apiRequest(url, method, body, dispatch);
+      return apiRequest(url, method, body, dispatch, retryCount + 1);
     }
 
     return data;
@@ -119,12 +123,12 @@ export const logoutUser = () => {
   };
 };
 
-
 export const refreshToken = () => {
   return async (dispatch: AppDispatch) => {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
       dispatch(setError('Токен обновления не найден'));
+      dispatch(logout());
       return;
     }
 
@@ -140,11 +144,13 @@ export const refreshToken = () => {
           refreshToken: data.refreshToken!,
         }));
       } else {
-        dispatch(setError(data.message || 'Не удалось обновить токен'));
+        dispatch(setError('Не удалось обновить токен'));
+        dispatch(logout());  // Выход из аккаунта при неудаче
       }
     } catch (error) {
       dispatch(setError('Ошибка при обновлении токена'));
       console.error('Token refresh error:', error);
+      dispatch(logout());  // Выход из аккаунта при ошибке
     } finally {
       dispatch(setLoading(false));
     }
