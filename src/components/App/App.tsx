@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import AppHeader from "../AppHeader";
 import {
@@ -15,12 +15,19 @@ import ProfileForm from "../Form/ProfileForm";
 import OrdersHistory from "../OrdersHistory";
 import ProtectedRouteElement from "./ProtectedRouteElement";
 import IngredientModal from "../Modal/IngredientModal";
+import { useAppDispatch, useAppSelector } from "../../hooks/store";
+import { checkAuth } from "../../services/auth/actions";
 
 import "./App.module.scss";
 
 function App() {
   const location = useLocation();
   const background = location.state?.background;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
 
   return (
     <>

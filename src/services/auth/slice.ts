@@ -7,6 +7,7 @@ interface AuthState {
   refreshToken: string | null;
   loading: boolean;
   error: AuthError;
+  isAuthChecked: boolean;
 }
 
 const initialState: AuthState = {
@@ -15,10 +16,11 @@ const initialState: AuthState = {
   refreshToken: null,
   loading: false,
   error: null,
-};
+  isAuthChecked: false,
+}
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setLoading(state, action: PayloadAction<boolean>) {
@@ -32,20 +34,25 @@ const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
 
-      localStorage.setItem('accessToken', action.payload.accessToken);
-      localStorage.setItem('refreshToken', action.payload.refreshToken);
+      localStorage.setItem("accessToken", action.payload.accessToken);
+      localStorage.setItem("refreshToken", action.payload.refreshToken);
+      state.isAuthChecked = true;
     },
     logout(state) {
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
+      state.isAuthChecked = true;
 
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    },
+    setAuthChecked(state, action: PayloadAction<boolean>) {
+      state.isAuthChecked = action.payload;
     },
   },
 });
 
-export const { setLoading, setError, setUser, logout } = authSlice.actions;
+export const { setLoading, setError, setUser, logout, setAuthChecked } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -9,14 +9,19 @@ interface ProtectedRouteElementProps {
 
 const ProtectedRouteElement = ({ children, fallBackRoute }: ProtectedRouteElementProps) => {
   const isAuthenticated = useAppSelector((state) => !!state.auth.user);
+  const isAuthChecked = useAppSelector((state) => state.auth.isAuthChecked);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isAuthChecked && !isAuthenticated) {
       navigate(fallBackRoute, { state: { from: location } });
     }
-  }, [isAuthenticated, navigate, fallBackRoute, location]);
+  }, [isAuthenticated, isAuthChecked, navigate, fallBackRoute, location]);
+
+  if (!isAuthChecked) {
+    return null;
+  }
 
   return isAuthenticated ? <>{children}</> : null;
 };
