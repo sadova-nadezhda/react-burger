@@ -1,57 +1,30 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { FormEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { loginUser } from '../../services/auth/actions'; 
-
-import s from './Form.module.scss';
+import { loginUser } from '../../services/auth/actions';
+import { useForm } from '../../hooks/useForm';
 
 export default function LoginForm() {
+  const { values, handleChange } = useForm({ email: '', password: '' });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const { loading, error } = useAppSelector((state) => state.auth);
 
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-
-  const from = location.state?.from?.pathname || "/profile";
-
-  const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
+  const from = location.state?.from?.pathname || '/profile';
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
-    try {
-      await dispatch(loginUser(email, password));
-      navigate(from, { replace: true });
-    } catch (error) {
-      console.error('Ошибка входа:', error);
-    }
+    await dispatch(loginUser(values.email, values.password));
+    navigate(from, { replace: true });
   };
 
   return (
     <form onSubmit={onSubmit} className="mb-20">
-      <EmailInput
-        onChange={onEmailChange}
-        value={email}
-        name="email"
-        isIcon={false}
-        autoComplete="email"
-      />
-      <PasswordInput
-        onChange={onPasswordChange}
-        value={password}
-        name="password"
-        autoComplete="password"
-      />
-      {error && <p className={s.error_message}>{error}</p>} 
+      <EmailInput onChange={handleChange} value={values.email} name="email" autoComplete="email" />
+      <PasswordInput onChange={handleChange} value={values.password} name="password" autoComplete="password" />
+      {error && <p>{error}</p>}
       <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
         {loading ? 'Загрузка...' : 'Войти'}
       </Button>

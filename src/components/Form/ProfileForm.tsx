@@ -8,43 +8,37 @@ export default function ProfileForm() {
   const loading = useAppSelector((state) => state.auth.loading);
   const dispatch = useAppDispatch();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !loading) {
       dispatch(getUserData());
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, loading]);
 
   useEffect(() => {
     if (user) {
-      setName(user.name);
-      setEmail(user.email);
+      setForm({ name: user.name, email: user.email, password: '' });
     }
   }, [user]);
 
-  const handleChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setter(e.target.value);
-      setIsChanged(true);
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setIsChanged(true);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(updateUserData(name, email, password));
+    dispatch(updateUserData(form.name, form.email, form.password));
     setIsChanged(false);
-    setPassword('');
+    setForm((prev) => ({ ...prev, password: '' }));
   };
 
   const handleCancel = () => {
     if (user) {
-      setName(user.name);
-      setEmail(user.email);
+      setForm({ name: user.name, email: user.email, password: '' });
     }
-    setPassword('');
     setIsChanged(false);
   };
 
@@ -54,22 +48,22 @@ export default function ProfileForm() {
   return (
     <form onSubmit={handleSubmit}>
       <Input
-        value={name}
-        onChange={handleChange(setName)}
+        value={form.name}
+        onChange={handleChange}
         placeholder="Имя"
         name="name"
         icon="EditIcon"
       />
       <EmailInput
-        value={email}
-        onChange={handleChange(setEmail)}
+        value={form.email}
+        onChange={handleChange}
         name="email"
         placeholder="E-mail"
         isIcon={true}
       />
       <PasswordInput
-        value={password}
-        onChange={handleChange(setPassword)}
+        value={form.password}
+        onChange={handleChange}
         name="password"
         icon="EditIcon"
       />
