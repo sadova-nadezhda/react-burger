@@ -14,14 +14,14 @@ export default function LoginForm() {
 
   const from = location.state?.from?.pathname || '/profile';
 
-  const onSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await dispatch(loginUser(values.email, values.password));
     navigate(from, { replace: true });
   };
 
   return (
-    <form onSubmit={onSubmit} className="mb-20">
+    <form onSubmit={handleSubmit} className="mb-20">
       <EmailInput onChange={handleChange} value={values.email} name="email" autoComplete="email" />
       <PasswordInput onChange={handleChange} value={values.password} name="password" autoComplete="password" />
       {error && <p>{error}</p>}
