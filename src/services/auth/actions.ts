@@ -69,7 +69,7 @@ export const registerUser = (email: string, password: string, name: string) => {
   };
 };
 
-export const loginUser = (email: string, password: string, navigate: (path: string) => void ) => {
+export const loginUser = (email: string, password: string) => {
   return async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
@@ -82,13 +82,15 @@ export const loginUser = (email: string, password: string, navigate: (path: stri
           accessToken: data.accessToken!.replace('Bearer ', ''),
           refreshToken: data.refreshToken!,
         }));
-        navigate('/profile');
+        return Promise.resolve(true);
       } else {
         dispatch(setError(data.message || 'Ошибка входа'));
+        return Promise.reject(data.message || 'Ошибка входа');
       }
     } catch (error) {
       dispatch(setError('Ошибка при входе в систему'));
       console.error('Ошибка входа:', error);
+      return Promise.reject('Ошибка при входе в систему');
     } finally {
       dispatch(setLoading(false));
     }

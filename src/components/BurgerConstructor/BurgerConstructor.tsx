@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
@@ -19,6 +19,7 @@ import s from './BurgerConstructor.module.scss';
 
 export default function BurgerConstructor() {
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
   const ingredients = useAppSelector((state) => state.burgerConstructor.constructorIngredients);
   const isAuthenticated = useAppSelector((state) => !!state.auth.user);
@@ -145,7 +146,7 @@ export default function BurgerConstructor() {
             htmlType="button" 
             type="primary" 
             size="medium" 
-            onClick={isAuthenticated ? openModal : () => navigate('/login')}
+            onClick={isAuthenticated ? openModal : () => navigate('/login', { state: { from: location } })}
             // disabled={!isAuthenticated}
           >
             Оформить заказ

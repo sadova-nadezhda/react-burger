@@ -1,6 +1,6 @@
-import React, { ReactNode, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/store';
+import React, { ReactNode, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAppSelector } from "../../hooks/store";
 
 interface ProtectedRouteElementProps {
   children: ReactNode;
@@ -10,14 +10,15 @@ interface ProtectedRouteElementProps {
 const ProtectedRouteElement = ({ children, fallBackRoute }: ProtectedRouteElementProps) => {
   const isAuthenticated = useAppSelector((state) => !!state.auth.user);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate(fallBackRoute);
+      navigate(fallBackRoute, { state: { from: location } });
     }
-  }, [isAuthenticated, navigate, fallBackRoute]);
+  }, [isAuthenticated, navigate, fallBackRoute, location]);
 
-  return <>{children}</>;
-}
+  return isAuthenticated ? <>{children}</> : null;
+};
 
 export default ProtectedRouteElement;
