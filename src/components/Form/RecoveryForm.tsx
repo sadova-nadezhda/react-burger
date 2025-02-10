@@ -1,16 +1,22 @@
-import React, { FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { FormEvent, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { resetPassword } from '../../services/auth/actions';
 import { useForm } from '../../hooks/useForm';
 
-
 export default function RecoveryForm() {
   const { values, handleChange } = useForm({ password: '', token: '' });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { loading, error } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!location.state?.emailEntered) {
+      navigate('/forgot-password', { replace: true });
+    }
+  }, [location, navigate]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

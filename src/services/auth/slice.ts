@@ -8,6 +8,7 @@ interface AuthState {
   loading: boolean;
   error: AuthError;
   isAuthChecked: boolean;
+  success: boolean;
 }
 
 const initialState: AuthState = {
@@ -17,6 +18,7 @@ const initialState: AuthState = {
   loading: false,
   error: null,
   isAuthChecked: false,
+  success: false,
 }
 
 const authSlice = createSlice({
@@ -50,9 +52,12 @@ const authSlice = createSlice({
     setAuthChecked(state, action: PayloadAction<boolean>) {
       state.isAuthChecked = action.payload;
     },
+    setSuccess(state, action: PayloadAction<boolean>) { 
+      state.success = action.payload;
+    },
   },
 });
 
-export const { setLoading, setError, setUser, logout, setAuthChecked } = authSlice.actions;
+export const { setLoading, setError, setUser, logout, setAuthChecked, setSuccess } = authSlice.actions;
 
 export default authSlice.reducer;

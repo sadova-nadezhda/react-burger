@@ -14,6 +14,7 @@ import {
 import ProfileForm from "../Form/ProfileForm";
 import OrdersHistory from "../OrdersHistory";
 import ProtectedRoute from "./ProtectedRoute";
+import ResetPasswordRoute from "./ResetPasswordRoute";
 import IngredientModal from "../Modal/IngredientModal";
 import { useAppDispatch } from "../../hooks/store";
 import { checkAuth } from "../../services/auth/actions";
@@ -40,7 +41,13 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+        <Route
+          path="/reset-password"
+          element={
+            <ResetPasswordRoute />
+          }
+        />
 
         <Route
           path="/profile/*"

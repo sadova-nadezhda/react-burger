@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
@@ -11,12 +11,18 @@ export default function ForgotForm() {
   const { values, handleChange } = useForm({ email: '' });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.auth);
+  const { loading, error, success } = useAppSelector((state) => state.auth);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    dispatch(forgotPassword(values.email, navigate));
+    dispatch(forgotPassword(values.email));
   };
+
+  useEffect(() => {
+    if (success) {
+      navigate('/reset-password', { state: { emailEntered: true } });
+    }
+  }, [success, navigate]);
 
   return (
     <form onSubmit={handleSubmit} className="mb-20">

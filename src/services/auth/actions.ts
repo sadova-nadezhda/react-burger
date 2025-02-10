@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setLoading, setError, setUser, logout, setAuthChecked } from './slice';
+import { setLoading, setError, setUser, logout, setAuthChecked, setSuccess } from './slice';
 import { AppDispatch } from '../store';
 import { BASE_URL } from '../../utils/constants';
 import { UserData } from '../../types/UserTypes';
@@ -132,7 +132,7 @@ export const refreshToken = () => async (dispatch: AppDispatch) => {
   }
 };
 
-export const forgotPassword = (email: string, navigate: (path: string) => void) => async (dispatch: AppDispatch) => {
+export const forgotPassword = (email: string) => async (dispatch: AppDispatch) => {
   if (!email.trim()) return dispatch(setError('Введите e-mail'));
 
   dispatch(setLoading(true));
@@ -144,10 +144,15 @@ export const forgotPassword = (email: string, navigate: (path: string) => void) 
     });
 
     const data = await response.json();
-    if (data.success) navigate('/reset-password');
-    else dispatch(setError(data.message || 'Ошибка восстановления пароля'));
+    if (data.success) {
+      dispatch(setSuccess(true));
+    } else {
+      dispatch(setError(data.message || 'Ошибка восстановления пароля'));
+      dispatch(setSuccess(false));
+    }
   } catch {
     dispatch(setError('Ошибка сети, попробуйте позже'));
+    dispatch(setSuccess(false));
   } finally {
     dispatch(setLoading(false));
   }
