@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import AppHeader from "../AppHeader";
 import {
@@ -13,7 +13,7 @@ import {
 } from "../../pages";
 import ProfileForm from "../Form/ProfileForm";
 import OrdersHistory from "../OrdersHistory";
-import ProtectedRouteElement from "./ProtectedRouteElement";
+import ProtectedRoute from "./ProtectedRoute";
 import IngredientModal from "../Modal/IngredientModal";
 import { useAppDispatch } from "../../hooks/store";
 import { checkAuth } from "../../services/auth/actions";
@@ -21,9 +21,9 @@ import { fetchIngredients } from "../../services/ingredients/actions";
 
 import "./App.module.scss";
 
-function App() {
+const App = () => {
   const location = useLocation();
-  const background = location.state?.background;
+  const background = useMemo(() => location.state?.background, [location]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -36,44 +36,36 @@ function App() {
       <AppHeader />
       <Routes location={background || location}>
         <Route path="/" element={<ConstructorPage />} />
-  
+
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-  
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRouteElement fallBackRoute="/login">
-              <ProfilePage />
-            </ProtectedRouteElement>
-          }
-        >
-          <Route index element={<ProfileForm />} /> 
-          <Route path="orders" element={<OrdersHistory />} /> 
-        </Route>
+
         <Route
           path="/profile/*"
           element={
-            <ProtectedRouteElement fallBackRoute="/login">
+            <ProtectedRoute>
               <ProfilePage />
-            </ProtectedRouteElement>
+            </ProtectedRoute>
           }
-        />
-  
+        >
+          <Route index element={<ProfileForm />} />
+          <Route path="orders" element={<OrdersHistory />} />
+        </Route>
+
         <Route path="/ingredients/:id" element={<IngredientPage />} />
-  
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-  
+
       {background && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
         </Routes>
       )}
     </>
-  );  
-}
+  );
+};
 
 export default App;
