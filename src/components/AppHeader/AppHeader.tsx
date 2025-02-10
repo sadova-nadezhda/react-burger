@@ -79,7 +79,9 @@ function AppHeader() {
               to="/orders"
             />
             <li className={s.header__logo}>
-              <Logo />
+              <Link to="/" className={s.header__link}>
+                <Logo />
+              </Link>
             </li>
             <NavItem
               id={4}
