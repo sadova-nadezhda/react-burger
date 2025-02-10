@@ -79,7 +79,7 @@ export default function BurgerConstructor() {
   return (
     <>
       {isModalOpen && (
-        <Modal onClose={closeModal}>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
           <OrderDetails ingredients={ingredients.map((item) => item._id)} />
         </Modal>
       )}

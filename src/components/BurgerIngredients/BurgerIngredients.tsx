@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 
@@ -8,15 +7,14 @@ import { Ingredient } from '../../types/IngredientTypes';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { fetchIngredients } from '../../services/ingredients/actions';
-import { setCurrentIngredient } from '../../services/ingredients/slice';
 import { setCurrentTab } from '../../services/tabs/slice';
+import { useModal } from '../../hooks/useModal';
 
 import s from './BurgerIngredients.module.scss';
 
 export default function BurgerIngredients(): JSX.Element {
-  const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useAppDispatch();
+  const { openModal } = useModal();
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
   const currentTab = useAppSelector((state) => state.tabs.currentTab);
 
@@ -68,9 +66,8 @@ export default function BurgerIngredients(): JSX.Element {
   }, [currentTab, dispatch]);
 
   const handleIngredientClick = (ingredient: Ingredient) => {
-    dispatch(setCurrentIngredient(ingredient));
-    navigate(`/ingredients/${ingredient._id}`, { state: { background: location } });
-  };
+    openModal(ingredient);
+  };  
 
   const ingredientTypes = [
     { id: 'bun', title: 'Булки' },

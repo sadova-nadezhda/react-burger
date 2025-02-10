@@ -7,25 +7,27 @@ import { useModal } from '../../hooks/useModal';
 import IngredientDetails from '../IngredientDetails';
 import { fetchIngredients } from '../../services/ingredients/actions';
 
-
 export default function IngredientModal() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { closeModal } = useModal();
+  const { closeModal, isModalOpen } = useModal();
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
   useEffect(() => {
-      if (!ingredients.length) {
-        dispatch(fetchIngredients());
-      }
-    }, [dispatch]);
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients.length]);
 
-  useEffect(()=>{
-    if(!ingredients) return
+  useEffect(() => {
+    if (!ingredients.length) return;
     const ingredient = ingredients.find((item) => item._id === id);
-    if(!ingredient) return 
-    dispatch(setCurrentIngredient(ingredient));
-  }, [ingredients])
+    if (ingredient) {
+      dispatch(setCurrentIngredient(ingredient));
+    }
+  }, [ingredients, id, dispatch]);
+
+  if (!isModalOpen && !id) return null;
 
   return (
     <Modal
@@ -34,8 +36,9 @@ export default function IngredientModal() {
         dispatch(clearCurrentIngredient());
       }}
       title="Детали ингредиента"
+      isOpen={isModalOpen || !!id} 
     >
       <IngredientDetails />
     </Modal>
-  )
+  );
 }

@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import ModalOverlay from '../ModalOverlay';
-import { useOrderModal } from '../../hooks/useOrderModal';
 
 import s from './Modal.module.scss';
 
@@ -13,15 +11,16 @@ interface ModalProps {
   title?: string;
   onClose: () => void;
   children: React.ReactNode;
+  isOpen: boolean;
 }
 
 const modalRoot = document.getElementById('modals');
 
-export default function Modal({ title, onClose, children }: ModalProps) {
-  const location = useLocation();
-    const { isModalOpen } = useOrderModal();
+export default function Modal({ title, onClose, children, isOpen }: ModalProps) {
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleEscClose = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
@@ -32,13 +31,9 @@ export default function Modal({ title, onClose, children }: ModalProps) {
     return () => {
       document.removeEventListener('keydown', handleEscClose);
     };
-  }, [onClose]);
+  }, [onClose, isOpen]);
 
-  useEffect(() => {
-    if (!location.state?.background && isModalOpen) {
-      onClose();
-    }
-  }, [location, onClose, isModalOpen]);
+  if (!isOpen) return null;
 
   return ReactDOM.createPortal(
     <ModalOverlay onClick={onClose}>

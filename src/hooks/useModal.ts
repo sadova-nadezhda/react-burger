@@ -1,34 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Ingredient } from '../types/IngredientTypes';
 
-export function useModal<T>() {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<T | null>(null);
+export function useModal() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isModalOpen, setModalOpen] = useState(false);
 
-  const openModal = (item: T) => {
-    setSelectedItem(item);
+  const openModal = (ingredient: Ingredient) => {
     setModalOpen(true);
-    navigate(`/ingredients/${(item as any)._id}`, { state: { background: location } });
+    navigate(`/ingredients/${ingredient._id}`, { state: { background: location } });
   };
 
   const closeModal = () => {
     setModalOpen(false);
-    setSelectedItem(null);
-    navigate(-1);
+    navigate("/", { replace: true });
   };
-
-  useEffect(() => {
-    if (!location.state?.background) {
-      setModalOpen(false);
-      setSelectedItem(null);
-    }
-  }, [location]);
 
   return {
     isModalOpen,
-    selectedItem,
     openModal,
     closeModal,
   };

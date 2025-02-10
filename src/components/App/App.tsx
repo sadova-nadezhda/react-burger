@@ -15,7 +15,7 @@ import ProfileForm from "../Form/ProfileForm";
 import OrdersHistory from "../OrdersHistory";
 import ProtectedRouteElement from "./ProtectedRouteElement";
 import IngredientModal from "../Modal/IngredientModal";
-import { useAppDispatch, useAppSelector } from "../../hooks/store";
+import { useAppDispatch } from "../../hooks/store";
 import { checkAuth } from "../../services/auth/actions";
 
 import "./App.module.scss";
@@ -34,11 +34,11 @@ function App() {
       <AppHeader />
       <Routes location={background || location}>
         <Route path="/" element={<ConstructorPage />} />
-
+  
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-
+  
         <Route
           path="/reset-password"
           element={
@@ -47,7 +47,7 @@ function App() {
             </ProtectedRouteElement>
           }
         />
-
+  
         <Route
           path="/profile"
           element={
@@ -67,19 +67,19 @@ function App() {
             </ProtectedRouteElement>
           }
         />
-
+  
         <Route path="/ingredients/:id" element={<IngredientPage />} />
-
+  
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-
+  
       {background && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
         </Routes>
       )}
     </>
-  );
+  );  
 }
 
 export default App;
