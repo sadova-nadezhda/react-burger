@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { clearCurrentIngredient, setCurrentIngredient } from '../../services/ingredients/slice';
 import { useModal } from '../../hooks/useModal';
 import IngredientDetails from '../IngredientDetails';
-import { fetchIngredients } from '../../services/ingredients/actions';
 
 export default function IngredientModal() {
   const { id } = useParams();

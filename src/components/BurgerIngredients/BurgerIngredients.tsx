@@ -6,7 +6,6 @@ import IngredientsCard from './parts/IngredientsCard';
 import { Ingredient } from '../../types/IngredientTypes';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { fetchIngredients } from '../../services/ingredients/actions';
 import { setCurrentTab } from '../../services/tabs/slice';
 import { useModal } from '../../hooks/useModal';
 
@@ -22,10 +21,6 @@ export default function BurgerIngredients(): JSX.Element {
   const sauceRef = useRef<HTMLElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
 
   const handleTabClick = useCallback(
     (value: string) => {

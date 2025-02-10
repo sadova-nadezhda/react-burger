@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import IngredientDetails from '../../components/IngredientDetails';
-import { fetchIngredients } from '../../services/ingredients/actions';
 import { setCurrentIngredient } from '../../services/ingredients/slice';
 
 import s from './IngredientPage.module.scss';
