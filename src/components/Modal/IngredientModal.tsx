@@ -14,12 +14,6 @@ export default function IngredientModal() {
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
   useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(fetchIngredients());
-    }
-  }, [dispatch, ingredients.length]);
-
-  useEffect(() => {
     if (!ingredients.length) return;
     const ingredient = ingredients.find((item) => item._id === id);
     if (ingredient) {

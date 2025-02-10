@@ -17,6 +17,7 @@ import ProtectedRouteElement from "./ProtectedRouteElement";
 import IngredientModal from "../Modal/IngredientModal";
 import { useAppDispatch } from "../../hooks/store";
 import { checkAuth } from "../../services/auth/actions";
+import { fetchIngredients } from "../../services/ingredients/actions";
 
 import "./App.module.scss";
 
@@ -27,6 +28,7 @@ function App() {
 
   useEffect(() => {
     dispatch(checkAuth());
+    dispatch(fetchIngredients());
   }, [dispatch]);
 
   return (

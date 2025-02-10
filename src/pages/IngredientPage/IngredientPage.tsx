@@ -14,12 +14,6 @@ export default function IngredientPage() {
   const dispatch = useAppDispatch();
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
-  useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(fetchIngredients());
-    }
-  }, [dispatch]);
-
   useEffect(()=>{
     if(!ingredients) return
     const ingredient = ingredients.find((item) => item._id === id);
