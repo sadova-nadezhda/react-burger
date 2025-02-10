@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import classNames from 'classnames';
 
-import ProfileForm from '../../components/Form/ProfileForm';
 import { logoutUser } from '../../services/auth/actions';
 import { useAppDispatch } from '../../hooks/store';
 

@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { resetPassword } from '../../services/auth/actions';
 import { useForm } from '../../hooks/useForm';
 
+import s from './Form.module.scss';
+
 export default function RecoveryForm() {
   const { values, handleChange } = useForm({ password: '', token: '' });
   const dispatch = useAppDispatch();
@@ -47,6 +49,7 @@ export default function RecoveryForm() {
         size="default"
         autoComplete="one-time-code"
       />
+      {error && <p className={s.error_message}>{error}</p>}
       <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
         {loading ? 'Сохранение...' : 'Сохранить'}
       </Button>

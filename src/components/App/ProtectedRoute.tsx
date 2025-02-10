@@ -9,9 +9,15 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children, anonymous = false, redirectTo = "/login" }: ProtectedRouteProps) => {
-  const isAuthenticated = useAppSelector((state) => !!state.auth.user);
+  const { user, isAuthChecked } = useAppSelector((state) => state.auth);
+  const isAuthenticated = !!user;
   const location = useLocation();
   const from = location.state?.from || "/";
+
+
+  if (!isAuthChecked) {
+    return <p>Загрузка...</p>;
+  }
 
   if (anonymous && isAuthenticated) {
     return <Navigate to={from} />;

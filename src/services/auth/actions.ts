@@ -71,9 +71,14 @@ export const registerUser = (email: string, password: string, name: string) => a
   dispatch(setLoading(true));
   try {
     const data = await apiRequest(`${BASE_URL}/auth/register`, 'POST', { email, password, name });
-    handleAuthResponse(data, dispatch);
+    const success = handleAuthResponse(data, dispatch);
+
+    dispatch(setSuccess(success));
+
+    return data;
   } catch {
     dispatch(setError('Ошибка при регистрации'));
+    return { success: false };
   } finally {
     dispatch(setLoading(false));
   }
@@ -208,32 +213,35 @@ export const updateUserData = (name: string, email: string, password: string) =>
 
 export const checkAuth = () => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true));
-  
+
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
-  
+
   if (!refreshToken) {
     dispatch(logout());
     dispatch(setAuthChecked(true));
     dispatch(setLoading(false));
     return;
   }
-  
+
   try {
-    if (!accessToken) {
-      const data = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken }, dispatch);
-      if (handleAuthResponse(data, dispatch)) {
-        dispatch(setAuthChecked(true));
-        return;
-      }
-    } else {
+    if (accessToken) {
       const data = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
       if (data.success) {
         dispatch(setUser({ user: data.user!, accessToken, refreshToken }));
-      } else {
-        dispatch(setError("Ошибка получения данных пользователя"));
-        dispatch(logout());
+        dispatch(setAuthChecked(true));
+        return;
       }
+    } 
+
+    const tokenData = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken }, dispatch);
+    if (handleAuthResponse(tokenData, dispatch)) {
+      const userData = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
+      if (userData.success) {
+        dispatch(setUser({ user: userData.user!, accessToken: tokenData.accessToken, refreshToken }));
+      }
+    } else {
+      dispatch(logout());
     }
   } catch (error) {
     dispatch(setError("Ошибка при проверке авторизации"));

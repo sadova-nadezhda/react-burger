@@ -4,8 +4,7 @@ import { useAppSelector, useAppDispatch } from '../../hooks/store';
 import { updateUserData, getUserData } from '../../services/auth/actions';
 
 export default function ProfileForm() {
-  const user = useAppSelector((state) => state.auth.user);
-  const loading = useAppSelector((state) => state.auth.loading);
+  const { user, loading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const [form, setForm] = useState({ name: '', email: '', password: '' });
