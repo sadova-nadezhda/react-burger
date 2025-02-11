@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
-
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
@@ -8,7 +8,7 @@ import ConstructorCard from './parts/ConstructorCard';
 import OrderDetails from '../OrderDetails';
 import Modal from '../Modal';
 
-import { useModal } from '../../hooks/useModal';
+import { useOrderModal } from '../../hooks/useOrderModal';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { addIngredientToConstructor, removeIngredientFromConstructor, reorderIngredients } from '../../services/burger-constructor/slice';
 import { incrementIngredientCount, decrementIngredientCount } from '../../services/ingredients/slice';
@@ -19,8 +19,11 @@ import s from './BurgerConstructor.module.scss';
 
 export default function BurgerConstructor() {
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const ingredients = useAppSelector((state) => state.burgerConstructor.constructorIngredients);
-  const { isModalOpen, openModal, closeModal } = useModal<null>();
+  const isAuthenticated = useAppSelector((state) => !!state.auth.user);
+  const { isModalOpen, openModal, closeModal } = useOrderModal();
 
   const [{ isOver }, dropRef] = useDrop({
     accept: ['bun', 'ingredient'],
@@ -76,7 +79,7 @@ export default function BurgerConstructor() {
   return (
     <>
       {isModalOpen && (
-        <Modal onClose={closeModal}>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
           <OrderDetails ingredients={ingredients.map((item) => item._id)} />
         </Modal>
       )}
@@ -139,7 +142,13 @@ export default function BurgerConstructor() {
             {total}
             <CurrencyIcon type="primary" />
           </div>
-          <Button htmlType="button" type="primary" size="medium" onClick={openModal}>
+          <Button 
+            htmlType="button" 
+            type="primary" 
+            size="medium" 
+            onClick={isAuthenticated ? openModal : () => navigate('/login', { state: { from: location } })}
+            // disabled={!isAuthenticated}
+          >
             Оформить заказ
           </Button>
         </div>

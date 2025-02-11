@@ -50,6 +50,7 @@ export const {
   clearCurrentIngredient,
   incrementIngredientCount,
   decrementIngredientCount,
+  resetAllIngredientCounts
 } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

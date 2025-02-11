@@ -1,21 +1,24 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Ingredient } from '../types/IngredientTypes';
 
-export function useModal<T>() {
+export function useModal() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<T | null>(null);
 
-  const openModal = (item: T) => {
+  const openModal = (ingredient: Ingredient) => {
     setModalOpen(true);
+    navigate(`/ingredients/${ingredient._id}`, { state: { background: location } });
   };
 
   const closeModal = () => {
     setModalOpen(false);
-    setSelectedItem(null);
+    navigate("/", { replace: true });
   };
 
   return {
     isModalOpen,
-    selectedItem,
     openModal,
     closeModal,
   };

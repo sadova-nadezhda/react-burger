@@ -1,0 +1,41 @@
+.container {
+  max-width: 1312px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.login {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 480px;
+    min-height: calc(100vh - 176px);
+    margin: 0 auto;
+  }
+  &__title {
+    text-align: center;
+  }
+  &__wrap {
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+  }
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    button {
+      padding: 0;
+    }
+  }
+}

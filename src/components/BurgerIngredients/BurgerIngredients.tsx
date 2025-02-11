@@ -3,35 +3,24 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 
 import IngredientsCard from './parts/IngredientsCard';
-import Modal from '../Modal';
-import IngredientDetails from '../IngredientDetails';
-
-import { useModal } from '../../hooks/useModal';
-import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { fetchIngredients } from '../../services/ingredients/actions';
-import { setCurrentIngredient, clearCurrentIngredient } from '../../services/ingredients/slice';
-import { setCurrentTab } from '../../services/tabs/slice';
-
 import { Ingredient } from '../../types/IngredientTypes';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { setCurrentTab } from '../../services/tabs/slice';
+import { useModal } from '../../hooks/useModal';
 
 import s from './BurgerIngredients.module.scss';
 
 export default function BurgerIngredients(): JSX.Element {
   const dispatch = useAppDispatch();
+  const { openModal } = useModal();
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
-  const selectedIngredient = useAppSelector((state) => state.ingredients.currentIngredient);
   const currentTab = useAppSelector((state) => state.tabs.currentTab);
-
-  const { isModalOpen, openModal, closeModal } = useModal();
 
   const bunRef = useRef<HTMLElement>(null);
   const sauceRef = useRef<HTMLElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
 
   const handleTabClick = useCallback(
     (value: string) => {
@@ -71,13 +60,9 @@ export default function BurgerIngredients(): JSX.Element {
     return () => container?.removeEventListener('scroll', handleScroll);
   }, [currentTab, dispatch]);
 
-  const handleIngredientClick = useCallback(
-    (ingredient: Ingredient) => {
-      dispatch(setCurrentIngredient(ingredient));
-      openModal(ingredient);
-    },
-    [dispatch, openModal]
-  );
+  const handleIngredientClick = (ingredient: Ingredient) => {
+    openModal(ingredient);
+  };  
 
   const ingredientTypes = [
     { id: 'bun', title: 'Булки' },
@@ -108,17 +93,6 @@ export default function BurgerIngredients(): JSX.Element {
 
   return (
     <>
-      {isModalOpen && selectedIngredient && (
-        <Modal
-          onClose={() => {
-            closeModal();
-            dispatch(clearCurrentIngredient());
-          }}
-          title="Детали ингредиента"
-        >
-          <IngredientDetails />
-        </Modal>
-      )}
       <div className={s.ingredients__wrap}>
           <nav className={classNames(s.ingredients__nav, 'mb-10')}>
             {['bun', 'sauce', 'main'].map((tab) => (
