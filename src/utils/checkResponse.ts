@@ -1,3 +1,3 @@
-export function checkResponse(res) {
-  return res.ok ? res.json() : Promise.reject('Ошибка при обработке запроса');
+export function checkResponse<T>(res: Response): Promise<T> {
+  return res.ok ? res.json() as Promise<T> : Promise.reject(new Error('Ошибка при обработке запроса'));
 }

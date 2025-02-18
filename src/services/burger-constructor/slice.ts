@@ -2,8 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import { Ingredient } from '../../types/IngredientTypes';
 
+interface ConstructorIngredient extends Ingredient {
+  uuid: string;
+}
+
 interface ConstructorState {
-  constructorIngredients: Ingredient[];
+  constructorIngredients: ConstructorIngredient[];
 }
 
 const initialState: ConstructorState = {
@@ -15,7 +19,7 @@ const burgerConstructorSlice = createSlice({
   initialState,
   reducers: {
     addIngredientToConstructor: {
-      reducer: (state, action: PayloadAction<Ingredient>) => {
+      reducer: (state, action: PayloadAction<ConstructorIngredient>) => {
         const ingredient = action.payload;
 
         if (ingredient.type === 'bun') {
@@ -27,26 +31,20 @@ const burgerConstructorSlice = createSlice({
           state.constructorIngredients.push(ingredient);
         }
       },
-      prepare: (ingredient: Ingredient) => {
-        return {
-          payload: {
-            ...ingredient,
-            uuid: uuidv4(),
-          },
-        };
-      },
+      prepare: (ingredient: Ingredient) => ({
+        payload: {
+          ...ingredient,
+          uuid: uuidv4(),
+        },
+      }),
     },
-    reorderIngredients(state, action: PayloadAction<Ingredient[]>) {
+    reorderIngredients: (state, action: PayloadAction<ConstructorIngredient[]>) => {
       state.constructorIngredients = action.payload;
     },
     removeIngredientFromConstructor: (state, action: PayloadAction<string>) => {
-      const index = state.constructorIngredients.findIndex(
-        (ingredient) => ingredient._id === action.payload
+      state.constructorIngredients = state.constructorIngredients.filter(
+        (ingredient) => ingredient.uuid !== action.payload
       );
-    
-      if (index !== -1) {
-        state.constructorIngredients.splice(index, 1); 
-      }
     },
     resetConstructor: (state) => {
       state.constructorIngredients = [];

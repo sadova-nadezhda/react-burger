@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Ingredient } from '../../types/IngredientTypes';
 
 interface IngredientsState {
-  allIngredients: Ingredient[]; 
-  currentIngredient: Ingredient | null; 
+  allIngredients: Ingredient[];
+  currentIngredient: Ingredient | null;
 }
 
 const initialState: IngredientsState = {
@@ -21,21 +21,21 @@ const ingredientsSlice = createSlice({
     setCurrentIngredient: (state, action: PayloadAction<Ingredient | null>) => {
       state.currentIngredient = action.payload;
     },
-    clearCurrentIngredient(state) {
+    clearCurrentIngredient: (state) => {
       state.currentIngredient = null;
     },
     incrementIngredientCount: (state, action: PayloadAction<{ id: string; amount: number }>) => {
       const ingredient = state.allIngredients.find((ing) => ing._id === action.payload.id);
       if (ingredient) {
-        ingredient.count = (ingredient.count || 0) + action.payload.amount;
+        ingredient.count = (ingredient.count ?? 0) + action.payload.amount;
       }
     },
     decrementIngredientCount: (state, action: PayloadAction<{ id: string; amount: number }>) => {
       const ingredient = state.allIngredients.find((ing) => ing._id === action.payload.id);
       if (ingredient) {
-        ingredient.count = Math.max((ingredient.count || 0) - action.payload.amount, 0);
+        ingredient.count = Math.max((ingredient.count ?? 0) - action.payload.amount, 0);
       }
-    },    
+    },
     resetAllIngredientCounts: (state) => {
       state.allIngredients.forEach((ingredient) => {
         ingredient.count = 0;
@@ -50,7 +50,7 @@ export const {
   clearCurrentIngredient,
   incrementIngredientCount,
   decrementIngredientCount,
-  resetAllIngredientCounts
+  resetAllIngredientCounts,
 } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

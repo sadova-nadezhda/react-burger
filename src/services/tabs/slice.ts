@@ -1,14 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
-  currentTab: 'bun', // по умолчанию "булки"
+interface TabsState {
+  currentTab: string;
+}
+
+const initialState: TabsState = {
+  currentTab: 'bun',
 };
 
 const tabsSlice = createSlice({
   name: 'tabs',
   initialState,
   reducers: {
-    setCurrentTab: (state, action) => {
+    setCurrentTab: (state, action: PayloadAction<string>) => {
       state.currentTab = action.payload;
     },
   },
