@@ -6,7 +6,7 @@ import { Ingredient } from '../../../../types/IngredientTypes';
 
 import s from './ConstructorCard.module.scss';
 
-interface ConstructorCardProps {
+interface ConstructorCardTypes {
   ingredient: Ingredient;
   index: number;
   moveIngredient: (dragIndex: number, hoverIndex: number) => void;
@@ -18,7 +18,7 @@ export default function ConstructorCard({
   index,
   moveIngredient,
   handleClose,
-}: ConstructorCardProps) {
+}: ConstructorCardTypes) {
   const ref = React.useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag] = useDrag({
@@ -32,10 +32,16 @@ export default function ConstructorCard({
   const [, drop] = useDrop({
     accept: 'constructor-ingredient',
     hover: (item: { index: number }) => {
-      if (item.index !== index) {
-        moveIngredient(item.index, index);
-        item.index = index; 
-      }
+      if (!ref.current) return;
+  
+      const dragIndex = item.index;
+      const hoverIndex = index;
+  
+      if (dragIndex === hoverIndex) return;
+  
+      moveIngredient(dragIndex, hoverIndex);
+      
+      item.index = hoverIndex;
     },
   });
 

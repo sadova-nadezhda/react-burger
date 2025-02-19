@@ -189,11 +189,7 @@ export const getUserData = () => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true));
   try {
     const data = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
-    if (data.success) dispatch(setUser({
-      user: data.user!, ...localStorage,
-      accessToken: '',
-      refreshToken: ''
-    }));
+    if (data.success) dispatch(setUser({ user: data.user! }));
     else dispatch(setError(data.message || 'Ошибка получения данных'));
   } catch {
     dispatch(setError('Ошибка получения данных пользователя'));
@@ -206,11 +202,7 @@ export const updateUserData = (name: string, email: string, password: string) =>
   dispatch(setLoading(true));
   try {
     const data = await apiRequest(`${BASE_URL}/auth/user`, 'PATCH', { name, email, password }, dispatch);
-    if (data.success) dispatch(setUser({
-      user: data.user!, ...localStorage,
-      accessToken: '',
-      refreshToken: ''
-    }));
+    if (data.success) dispatch(setUser({ user: data.user! }));
     else dispatch(setError(data.message || 'Ошибка обновления данных'));
   } catch {
     dispatch(setError('Ошибка обновления данных пользователя'));
@@ -246,7 +238,7 @@ export const checkAuth = () => async (dispatch: AppDispatch) => {
     if (handleAuthResponse(tokenData, dispatch)) {
       const userData = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
       if (userData.success) {
-        dispatch(setUser({ user: userData.user!, accessToken: tokenData.accessToken, refreshToken }));
+        dispatch(setUser({ user: userData.user! }));
       }
     } else {
       dispatch(logout());

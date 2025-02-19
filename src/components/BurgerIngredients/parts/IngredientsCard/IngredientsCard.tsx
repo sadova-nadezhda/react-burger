@@ -9,7 +9,7 @@ import s from './IngredientsCard.module.scss';
 
 
 interface IngredientsCard {
-  ingredient: Ingredient[],
+  ingredient: Ingredient,
   onClick: () => void;
 }
 

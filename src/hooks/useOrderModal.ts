@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export function useOrderModal() {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const openModal = () => {
     setModalOpen(true);

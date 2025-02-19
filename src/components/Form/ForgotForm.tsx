@@ -13,10 +13,10 @@ export default function ForgotForm() {
   const dispatch = useAppDispatch();
   const { loading, error, success } = useAppSelector((state) => state.auth);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(forgotPassword(values.email));
-  };
+  };  
 
   useEffect(() => {
     if (success) {

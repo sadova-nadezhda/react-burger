@@ -11,7 +11,7 @@ import { useModal } from '../../hooks/useModal';
 
 import s from './BurgerIngredients.module.scss';
 
-export default function BurgerIngredients(): JSX.Element {
+export default function BurgerIngredients() {
   const dispatch = useAppDispatch();
   const { openModal } = useModal();
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
@@ -50,7 +50,7 @@ export default function BurgerIngredients(): JSX.Element {
         { key: '', offset: Infinity }
       ).key;
 
-      if (closestTab && closestTab !== currentTab) {
+      if (closestTab !== currentTab) {
         dispatch(setCurrentTab(closestTab));
       }
     };

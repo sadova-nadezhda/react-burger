@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector, useAppDispatch } from '../../hooks/store';
 import { updateUserData, getUserData } from '../../services/auth/actions';
+import { FormValues } from '../../types/FormTypes';
 
 export default function ProfileForm() {
   const { user, loading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState<FormValues>({ name: '', email: '', password: '' });
   const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
@@ -18,18 +19,19 @@ export default function ProfileForm() {
 
   useEffect(() => {
     if (user) {
-      setForm({ name: user.name, email: user.email, password: '' });
+      setForm({ name: user.name || '', email: user.email || '', password: '' });
     }
   }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
     setIsChanged(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(updateUserData(form.name, form.email, form.password));
+    await dispatch(updateUserData(form.name, form.email, form.password));
     setIsChanged(false);
     setForm((prev) => ({ ...prev, password: '' }));
   };
@@ -45,7 +47,7 @@ export default function ProfileForm() {
   if (!user) return <div>Пользователь не найден. Пожалуйста, войдите в систему.</div>;
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSave}>
       <Input
         value={form.name}
         onChange={handleChange}
@@ -68,10 +70,10 @@ export default function ProfileForm() {
       />
       {isChanged && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-          <Button htmlType="button" type="secondary" size="medium" onClick={handleCancel}>
+          <Button type="secondary" size="medium" onClick={handleCancel} htmlType="button">
             Отмена
           </Button>
-          <Button htmlType="submit" type="primary" size="medium" disabled={loading}>
+          <Button type="primary" size="medium" disabled={loading} htmlType="submit">
             Сохранить
           </Button>
         </div>

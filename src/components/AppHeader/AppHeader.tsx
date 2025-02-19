@@ -28,7 +28,7 @@ const NavItem = ({ id, IconComponent, label, activeId, setActiveId, to }: NavIte
 );
 
 function AppHeader() {
-  const [activeId, setActiveId] = useState(1);
+  const [activeId, setActiveId] = useState<number>(1);
   const isAuthenticated = useAppSelector((state) => !!state.auth.user);
   const location = useLocation();
 

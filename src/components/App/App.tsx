@@ -8,7 +8,6 @@ import {
   LoginPage,
   RegisterPage,
   ForgotPasswordPage,
-  ResetPasswordPage,
   NotFoundPage,
 } from "../../pages";
 import ProfileForm from "../Form/ProfileForm";

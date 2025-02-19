@@ -14,7 +14,7 @@ export default function LoginForm() {
 
   const from = location.state?.from?.pathname || '/profile';
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await dispatch(loginUser(values.email, values.password));
     navigate(from, { replace: true });

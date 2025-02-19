@@ -13,7 +13,7 @@ export default function RegisterForm() {
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state) => state.auth);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = await dispatch(registerUser(values.email, values.password, values.name));
 

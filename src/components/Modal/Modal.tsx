@@ -14,9 +14,8 @@ interface ModalProps {
   isOpen: boolean;
 }
 
-const modalRoot = document.getElementById('modals');
-
 export default function Modal({ title, onClose, children, isOpen }: ModalProps) {
+  const modalRoot = document.getElementById('modals');
 
   useEffect(() => {
     if (!isOpen) return;
@@ -33,7 +32,7 @@ export default function Modal({ title, onClose, children, isOpen }: ModalProps) 
     };
   }, [onClose, isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !modalRoot) return null;
 
   return ReactDOM.createPortal(
     <ModalOverlay onClick={onClose}>
@@ -47,6 +46,6 @@ export default function Modal({ title, onClose, children, isOpen }: ModalProps) 
         </div>
       </div>
     </ModalOverlay>,
-    modalRoot!
+    modalRoot
   );
 }

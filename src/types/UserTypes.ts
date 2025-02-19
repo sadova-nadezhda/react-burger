@@ -9,8 +9,8 @@ export interface UserData {
 export interface User {
   email: string;
   name: string;
-  accessToken: string;
-  refreshToken: string;
+  accessToken?: string;
+  refreshToken?: string;
 }
 
 export type AuthError = 'INVALID_CREDENTIALS' | 'TOKEN_EXPIRED' | 'NETWORK_ERROR' | 'UNKNOWN_ERROR' |string | null;
