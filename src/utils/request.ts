@@ -3,5 +3,14 @@ import { checkResponse } from './checkResponse';
 
 export function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${BASE_URL}${endpoint}`;
-  return fetch(url, options).then(checkResponse<T>);
+  const defaultOptions: RequestInit = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers, // Позволяет переопределить заголовки
+    },
+    ...options,
+  };
+
+  return fetch(url, defaultOptions).then(checkResponse<T>);
 }

@@ -9,7 +9,7 @@ import s from './IngredientPage.module.scss';
 
 
 export default function IngredientPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
@@ -18,7 +18,7 @@ export default function IngredientPage() {
     const ingredient = ingredients.find((item) => item._id === id);
     if(!ingredient) return 
     dispatch(setCurrentIngredient(ingredient));
-  }, [ingredients])
+  }, [ingredients, id, dispatch])
 
   if (!ingredients) {
     return <p className="text text_type_main-medium">Загрузка...</p>;
