@@ -32,6 +32,7 @@ export default function ProfileForm() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(updateUserData(form.name, form.email, form.password));
+  
     setIsChanged(false);
     setForm((prev) => ({ ...prev, password: '' }));
   };

@@ -147,7 +147,7 @@ export default function BurgerConstructor() {
             htmlType="button" 
             type="primary" 
             size="medium" 
-            onClick={isAuthenticated ? openModal : () => navigate('/login', { state: { from: location } })}
+            onClick={isAuthenticated ? openModal : () => navigate('/login', { state: { from: location.pathname } })}
           >
             Оформить заказ
           </Button>

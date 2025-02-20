@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NavLink, Outlet } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -9,9 +10,12 @@ import s from './ProfilePage.module.scss';
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
+
+  const handleLogout = async () => {
+    await dispatch(logoutUser());
+    navigate('/login', { replace: true });
   };
 
   return (
