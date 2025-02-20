@@ -14,6 +14,7 @@ const ProtectedRoute = ({ children, anonymous = false, redirectTo = "/login" }: 
   const location = useLocation();
   const from = location.state?.from || "/";
 
+  const authPages = ["/login", "/register", "/forgot-password", "/reset-password"];
 
   if (!isAuthChecked) {
     return <p>Загрузка...</p>;
@@ -25,6 +26,10 @@ const ProtectedRoute = ({ children, anonymous = false, redirectTo = "/login" }: 
 
   if (!anonymous && !isAuthenticated) {
     return <Navigate to={redirectTo} state={{ from: location }} />;
+  }
+
+  if (isAuthenticated && authPages.includes(location.pathname)) {
+    return <Navigate to="/" />;
   }
 
   return <>{children}</>;

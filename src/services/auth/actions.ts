@@ -38,7 +38,7 @@ const apiRequest = async (
 
     const data: ApiResponse = await response.json();
 
-    if (response.status === 401 && dispatch) {
+    if (response.status === 401 && data.message === "token expired" && dispatch) {
       await dispatch(refreshToken());
       return apiRequest(url, method, body, dispatch, retryCount + 1);
     }
