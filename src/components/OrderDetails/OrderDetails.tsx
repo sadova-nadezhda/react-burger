@@ -10,7 +10,11 @@ import done from '../../images/done.svg';
 
 import s from './OrderDetails.module.scss';
 
-export default function OrderDetails({ ingredients }) {
+interface OrderDetailsProps {
+  ingredients: string[];
+}
+
+export default function OrderDetails({ ingredients }: OrderDetailsProps ){
   const dispatch = useAppDispatch();
   const orderDetails = useAppSelector((state) => state.order.orderDetails);
   const orderError = useAppSelector((state) => state.order.error);

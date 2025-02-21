@@ -25,9 +25,9 @@ export default function BurgerConstructor() {
   const isAuthenticated = useAppSelector((state) => !!state.auth.user);
   const { isModalOpen, openModal, closeModal } = useOrderModal();
 
-  const [{ isOver }, dropRef] = useDrop({
+  const [{ isOver }, dropRef] = useDrop<Ingredient, void, { isOver: boolean }>({
     accept: ['bun', 'ingredient'],
-    drop: (ingredient: Ingredient) => {
+    drop: (ingredient) => {
       if (ingredient.type === 'bun') {
         const existingBun = ingredients.find((item) => item.type === 'bun');
         if (existingBun) {
@@ -50,31 +50,32 @@ export default function BurgerConstructor() {
   const mainIngredients = ingredients.filter((ingredient) => ingredient.type !== 'bun');
 
   const handleRemove = (ingredient: Ingredient) => {
-    dispatch(removeIngredientFromConstructor(ingredient._id));
+    dispatch(removeIngredientFromConstructor(ingredient.uuid));
     const amount = ingredient.type === 'bun' ? 2 : 1;
     dispatch(decrementIngredientCount({ id: ingredient._id, amount }));
   };
 
-  const handleReorder = useCallback((dragIndex: number, hoverIndex: number) => {
-    const updatedMainIngredients = [...mainIngredients];
-    const [draggedItem] = updatedMainIngredients.splice(dragIndex, 1);
-    updatedMainIngredients.splice(hoverIndex, 0, draggedItem);
-  
-    const updatedIngredients = [
-      ...updatedMainIngredients,
-      bunIngredient ? { ...bunIngredient, type: 'bun' } : null
-    ].filter(Boolean); 
-  
-    dispatch(reorderIngredients(updatedIngredients));
-  }, [dispatch, mainIngredients, bunIngredient]);
+  const handleReorder = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const updatedMainIngredients = [...mainIngredients];
+      const [draggedItem] = updatedMainIngredients.splice(dragIndex, 1);
+      updatedMainIngredients.splice(hoverIndex, 0, draggedItem);
+
+      const updatedIngredients = [
+        ...updatedMainIngredients,
+        bunIngredient ? { ...bunIngredient, type: 'bun' } : null,
+      ].filter(Boolean) as Ingredient[];
+
+      dispatch(reorderIngredients(updatedIngredients));
+    },
+    [dispatch, mainIngredients, bunIngredient]
+  );
 
   const total = useMemo(() => {
-    const bunPrice = ingredients.find((ingredient) => ingredient.type === 'bun')?.price || 0;
-    const mainIngredientsPrice = ingredients
-      .filter((ingredient) => ingredient.type !== 'bun')
-      .reduce((sum, ingredient) => sum + ingredient.price, 0);
+    const bunPrice: number = bunIngredient?.price ?? 0;
+    const mainIngredientsPrice: number = mainIngredients.reduce((sum, ingredient) => sum + (ingredient.price ?? 0), 0);
     return bunPrice * 2 + mainIngredientsPrice;
-  }, [ingredients]);
+  }, [bunIngredient, mainIngredients]);
 
   return (
     <>
@@ -146,8 +147,7 @@ export default function BurgerConstructor() {
             htmlType="button" 
             type="primary" 
             size="medium" 
-            onClick={isAuthenticated ? openModal : () => navigate('/login', { state: { from: location } })}
-            // disabled={!isAuthenticated}
+            onClick={isAuthenticated ? openModal : () => navigate('/login', { state: { from: location.pathname } })}
           >
             Оформить заказ
           </Button>

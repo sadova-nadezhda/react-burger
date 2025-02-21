@@ -9,5 +9,5 @@ export interface Ingredient {
   price: number;
   image: string;
   count?: number;
-  uuid?: string;
+  uuid: string;
 }

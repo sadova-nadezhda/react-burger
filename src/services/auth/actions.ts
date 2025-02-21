@@ -38,8 +38,14 @@ const apiRequest = async (
 
     const data: ApiResponse = await response.json();
 
-    if (response.status === 401 && dispatch) {
-      await dispatch(refreshToken());
+    if (response.status === 401 && data.message === "token expired" && dispatch) {
+      console.warn("Токен истек, обновляем...");
+      const refreshSuccess = await dispatch(refreshToken());
+
+      if (!refreshSuccess) {
+        dispatch(logout());
+        throw new Error("Ошибка авторизации: не удалось обновить токен");
+      }
       return apiRequest(url, method, body, dispatch, retryCount + 1);
     }
 
@@ -51,14 +57,14 @@ const apiRequest = async (
 };
 
 const handleAuthResponse = (data: ApiResponse, dispatch: AppDispatch) => {
-  if (!data.success) {
+  if (!data.success || !data.accessToken || !data.refreshToken) {
     dispatch(setError(data.message || 'Ошибка'));
     return false;
   }
 
-  const accessToken = data.accessToken!.replace('Bearer ', '');
-  const refreshToken = data.refreshToken!;
-  
+  const accessToken = data.accessToken.replace('Bearer ', '');
+  const refreshToken = data.refreshToken;
+
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('refreshToken', refreshToken);
   localStorage.setItem('user', JSON.stringify(data.user));
@@ -104,9 +110,11 @@ export const logoutUser = () => async (dispatch: AppDispatch) => {
     if (!refreshToken) throw new Error('Токен отсутствует');
 
     const data = await apiRequest(`${BASE_URL}/auth/logout`, 'POST', { token: refreshToken });
+    
     if (data.success) {
       localStorage.clear();
       dispatch(logout());
+      dispatch(setAuthChecked(true));
     } else {
       dispatch(setError(data.message || 'Выход не удался'));
     }
@@ -121,17 +129,26 @@ export const refreshToken = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (!refreshToken) {
     dispatch(setError('Токен обновления не найден'));
-    return dispatch(logout());
+    dispatch(logout());
+    return false;
   }
 
   dispatch(setLoading(true));
   try {
-    const data = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken }, dispatch);
-    if (handleAuthResponse(data, dispatch)) return;
+    const data = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken });
+
+    if (data.success && data.accessToken && data.refreshToken) {
+      localStorage.setItem('accessToken', data.accessToken.replace('Bearer ', ''));
+      localStorage.setItem('refreshToken', data.refreshToken);
+      return true;
+    }
+
     dispatch(logout());
+    return false;
   } catch {
     dispatch(setError('Ошибка при обновлении токена'));
     dispatch(logout());
+    return false;
   } finally {
     dispatch(setLoading(false));
   }
@@ -189,7 +206,7 @@ export const getUserData = () => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true));
   try {
     const data = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
-    if (data.success) dispatch(setUser({ user: data.user!, ...localStorage }));
+    if (data.success) dispatch(setUser({ user: data.user! }));
     else dispatch(setError(data.message || 'Ошибка получения данных'));
   } catch {
     dispatch(setError('Ошибка получения данных пользователя'));
@@ -202,8 +219,20 @@ export const updateUserData = (name: string, email: string, password: string) =>
   dispatch(setLoading(true));
   try {
     const data = await apiRequest(`${BASE_URL}/auth/user`, 'PATCH', { name, email, password }, dispatch);
-    if (data.success) dispatch(setUser({ user: data.user!, ...localStorage }));
-    else dispatch(setError(data.message || 'Ошибка обновления данных'));
+
+    if (data.success) {
+      const newAccessToken = data.accessToken ? data.accessToken.replace("Bearer ", "") : localStorage.getItem("accessToken");
+      const newRefreshToken = data.refreshToken || localStorage.getItem("refreshToken");
+
+      if (newAccessToken) localStorage.setItem("accessToken", newAccessToken);
+      if (newRefreshToken) localStorage.setItem("refreshToken", newRefreshToken);
+
+      dispatch(setUser({ user: data.user!, accessToken: newAccessToken!, refreshToken: newRefreshToken! }));
+
+      await dispatch(checkAuth());
+    } else {
+      dispatch(setError(data.message || 'Ошибка обновления данных'));
+    }
   } catch {
     dispatch(setError('Ошибка обновления данных пользователя'));
   } finally {
@@ -218,6 +247,7 @@ export const checkAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem("refreshToken");
 
   if (!refreshToken) {
+    console.warn("Нет refreshToken, разлогиниваем...");
     dispatch(logout());
     dispatch(setAuthChecked(true));
     dispatch(setLoading(false));
@@ -225,25 +255,34 @@ export const checkAuth = () => async (dispatch: AppDispatch) => {
   }
 
   try {
-    if (accessToken) {
-      const data = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
-      if (data.success) {
-        dispatch(setUser({ user: data.user!, accessToken, refreshToken }));
-        dispatch(setAuthChecked(true));
+    let newAccessToken = accessToken;
+
+    if (!accessToken) {
+      console.warn("AccessToken отсутствует, обновляем...");
+      const tokenData = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken }, dispatch);
+      
+      if (!tokenData.success || !tokenData.accessToken) {
+        console.error("Ошибка обновления токена, разлогиниваем...");
+        dispatch(logout());
         return;
       }
-    } 
 
-    const tokenData = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken }, dispatch);
-    if (handleAuthResponse(tokenData, dispatch)) {
-      const userData = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
-      if (userData.success) {
-        dispatch(setUser({ user: userData.user!, accessToken: tokenData.accessToken, refreshToken }));
-      }
+      newAccessToken = tokenData.accessToken.replace('Bearer ', '');
+      localStorage.setItem("accessToken", newAccessToken);
+      localStorage.setItem("refreshToken", tokenData.refreshToken!);
+    }
+
+    console.warn("Запрашиваем данные пользователя...");
+    const userData = await apiRequest(`${BASE_URL}/auth/user`, 'GET', undefined, dispatch);
+
+    if (userData.success) {
+      dispatch(setUser({ user: userData.user!, accessToken: newAccessToken!, refreshToken: refreshToken! }));
     } else {
+      console.error("Ошибка получения данных пользователя, разлогиниваем...");
       dispatch(logout());
     }
   } catch (error) {
+    console.error("Ошибка при проверке авторизации:", error);
     dispatch(setError("Ошибка при проверке авторизации"));
     dispatch(logout());
   } finally {

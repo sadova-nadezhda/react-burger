@@ -1,6 +1,85 @@
-@import '~/src/styles/mixins';
-@import '~/src/styles/default';
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+
+ul,
+ol {
+  padding: 0;
+  list-style-position: inside;
+}
+
+ul[class],
+ol[class] {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:not([class]) {
+  -webkit-text-decoration-skip: ink;
+  text-decoration-skip-ink: auto;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+// article>*+* {
+//   margin-top: 1em;
+// }
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: none;
+}
+
+input::-moz-placeholder,
+select::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: inherit;
+  font-size: inherit;
+}
+
+input::placeholder,
+select::placeholder,
+textarea::placeholder {
+  color: inherit;
+  font-size: inherit;
+}
+
+// Container
 .container {
   max-width: 1312px;
   margin: 0 auto;

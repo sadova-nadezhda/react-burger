@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/store";
 
 interface ProtectedRouteProps {
@@ -12,19 +12,21 @@ const ProtectedRoute = ({ children, anonymous = false, redirectTo = "/login" }: 
   const { user, isAuthChecked } = useAppSelector((state) => state.auth);
   const isAuthenticated = !!user;
   const location = useLocation();
-  const from = location.state?.from || "/";
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (isAuthChecked && !isAuthenticated) {
+      navigate(redirectTo, { replace: true, state: { from: location.pathname } });
+    }
+  }, [isAuthChecked, isAuthenticated, navigate, redirectTo, location.pathname]);
 
   if (!isAuthChecked) {
     return <p>Загрузка...</p>;
   }
 
   if (anonymous && isAuthenticated) {
-    return <Navigate to={from} />;
-  }
-
-  if (!anonymous && !isAuthenticated) {
-    return <Navigate to={redirectTo} state={{ from: location }} />;
+    const from = location.state?.from || "/";
+    return <Navigate to={from} replace />;
   }
 
   return <>{children}</>;

@@ -20,7 +20,7 @@ export default function RecoveryForm() {
     }
   }, [location, navigate]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const action = await dispatch(resetPassword(values));
 

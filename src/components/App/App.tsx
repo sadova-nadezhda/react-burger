@@ -8,7 +8,6 @@ import {
   LoginPage,
   RegisterPage,
   ForgotPasswordPage,
-  ResetPasswordPage,
   NotFoundPage,
 } from "../../pages";
 import ProfileForm from "../Form/ProfileForm";
@@ -38,31 +37,17 @@ const App = () => {
       <Routes location={background || location}>
         <Route path="/" element={<ConstructorPage />} />
 
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/login" element={<ProtectedRoute anonymous><LoginPage /></ProtectedRoute>} />
+        <Route path="/register" element={<ProtectedRoute anonymous><RegisterPage /></ProtectedRoute>} />
+        <Route path="/forgot-password" element={<ProtectedRoute anonymous><ForgotPasswordPage /></ProtectedRoute>} />
+        <Route path="/reset-password" element={<ProtectedRoute anonymous><ResetPasswordRoute /></ProtectedRoute>} />
 
-        <Route
-          path="/reset-password"
-          element={
-            <ResetPasswordRoute />
-          }
-        />
-
-        <Route
-          path="/profile/*"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        >
+        <Route path="/profile/*" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}>
           <Route index element={<ProfileForm />} />
           <Route path="orders" element={<OrdersHistory />} />
         </Route>
 
         <Route path="/ingredients/:id" element={<IngredientPage />} />
-
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 

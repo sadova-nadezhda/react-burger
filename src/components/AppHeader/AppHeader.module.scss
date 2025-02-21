@@ -1,5 +1,8 @@
 .header {
   background: var(--background);
+  &__container {
+    position: relative;
+  }
   &__menu {
     display: flex;
     align-items: center;
@@ -19,9 +22,15 @@
         cursor: pointer;
       }
     }
+    &:last-of-type {
+      margin-left: auto;
+    }
   }
   &__logo {
-    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 

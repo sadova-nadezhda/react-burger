@@ -5,7 +5,7 @@ import { Ingredient } from '../types/IngredientTypes';
 export function useModal() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const openModal = (ingredient: Ingredient) => {
     setModalOpen(true);
