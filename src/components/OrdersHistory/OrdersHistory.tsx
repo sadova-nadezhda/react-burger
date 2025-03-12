@@ -33,6 +33,7 @@ export default function OrdersHistory() {
           price: calculateOrderPrice(order),
           images: order.ingredients.map(id => ingredientsMap[id]?.image).filter(Boolean),
         }))}
+        isProfile
       />
     </div>
   )
