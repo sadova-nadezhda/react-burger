@@ -5,60 +5,31 @@ import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burge
 
 import OrderCard from './parts/OrderCard';
 
-import s from './OrderInfo.module.scss';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
-const WS_URL = 'wss://norma.nomoreparties.space/orders/all';
-const API_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients';
+import s from './OrderInfo.module.scss';
 
 export default function OrderInfo() {
   const { id } = useParams();
-  const [orders, setOrders] = useState([]);
-  const [ingredients, setIngredients] = useState({});
-  const [ws, setWs] = useState(null);
+  const dispatch = useAppDispatch();
+  const { orders } = useAppSelector((state) => state.orders);
+  const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
+  const ingredientsMap = useMemo(() => {
+    return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));
+  }, [ingredients]);
+  
   useEffect(() => {
-    fetch(API_INGREDIENTS)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setIngredients(
-            data.data.reduce((acc, item) => {
-              acc[item._id] = item;
-              return acc;
-            }, {})
-          );
-        }
-      })
-      .catch((error) => console.error('Ошибка загрузки ингредиентов:', error));
-  }, []);
-
-  useEffect(() => {
-    const socket = new WebSocket(WS_URL);
-    setWs(socket);
-
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.success) {
-          setOrders(data.orders);
-        }
-      } catch (error) {
-        console.error('Ошибка обработки WebSocket:', error);
-      }
-    };
-
-    socket.onerror = (error) => console.error('Ошибка WebSocket:', error);
-    socket.onclose = () => console.log('WebSocket закрыт');
-
-    return () => socket.close();
-  }, []);
+    dispatch({ type: 'websocket/start' });
+    return () => dispatch({ type: 'websocket/stop' });
+  }, [dispatch]);
 
   const order = useMemo(() => orders.find((o) => o._id === id), [orders, id]);
 
   const total = useMemo(() => {
     if (!order || !order.ingredients) return 0;
-    return order.ingredients.reduce((sum, ingredientId) => sum + (ingredients[ingredientId]?.price || 0), 0);
-  }, [order, ingredients]);
+    return order.ingredients.reduce((sum, ingredientId) => sum + (ingredientsMap[ingredientId]?.price || 0), 0);
+  }, [order, ingredientsMap]);
 
   if (!order) return <p>Загрузка заказа...</p>;
 
@@ -77,9 +48,9 @@ export default function OrderInfo() {
       <div className={s.order__compound}>
         <h4 className={classNames(s.order__caption, 'mb-6 text_type_main-medium')}>Состав:</h4>
         <div className={classNames(s.order__cards, 'mb-10')}>
-          {order.ingredients.map((ingredientId) => {
-            const ingredient = ingredients[ingredientId];
-            return ingredient ? <OrderCard key={ingredientId} ingredient={ingredient} /> : null;
+          {order.ingredients.map((id, index) => {
+            const ingredient = ingredientsMap[id];
+            return ingredient ? <OrderCard key={id + index} ingredient={ingredient} /> : null;
           })}
         </div>
       </div>
