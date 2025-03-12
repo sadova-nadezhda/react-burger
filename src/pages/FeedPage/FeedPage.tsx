@@ -1,8 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import s from './FeedPage.module.scss';
 import FeedCards from '../../components/FeedCards';
+import FeedWrap from '../../components/FeedWrap';
+
+import s from './FeedPage.module.scss';
 
 export default function FeedPage() {
   return (
@@ -13,6 +15,7 @@ export default function FeedPage() {
             <h1 className='mb-5 text text_type_main-large'>Лента заказов</h1>
             <div className={s.feed__wrap}>
               <FeedCards />
+              <FeedWrap />
             </div>
           </div>
         </div>
