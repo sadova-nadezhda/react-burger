@@ -1,13 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {fetchOrder} from './actions'
+import {fetchOrder} from './actions';
+import { Order } from '../../types/OrderTypes';
+
+interface OrderState {
+  orders: Order[];
+  orderDetails: Order | null;
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: OrderState = {
+  orders: [],
+  orderDetails: null,
+  loading: false,
+  error: null,
+};
 
 const orderSlice = createSlice({
   name: 'order',
-  initialState: {
-    orderDetails: null,
-    loading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {
     setOrderDetails(state, action) {
       state.orderDetails = action.payload;
@@ -28,7 +39,7 @@ const orderSlice = createSlice({
       })
       .addCase(fetchOrder.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       });
   },
 });

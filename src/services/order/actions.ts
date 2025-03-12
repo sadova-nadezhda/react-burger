@@ -3,7 +3,7 @@ import { request } from '../../utils/request';
 
 export const fetchOrder = createAsyncThunk(
   'order/fetchOrder',
-  async ({ ingredients }, { rejectWithValue }) => {
+  async ({ ingredients }: { ingredients: string[] }, { rejectWithValue }) => {
     try {
       const data = await request('/orders', {
         method: 'POST',
