@@ -12,6 +12,9 @@ const orderSlice = createSlice({
     setOrderDetails(state, action) {
       state.orderDetails = action.payload;
     },
+    clearOrders(state) {
+      state.orderDetails = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -30,6 +33,6 @@ const orderSlice = createSlice({
   },
 });
 
-export const { setOrderDetails } = orderSlice.actions;
+export const { setOrderDetails, clearOrders } = orderSlice.actions;
 
 export default orderSlice.reducer;
