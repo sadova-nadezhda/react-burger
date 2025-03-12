@@ -1,5 +1,6 @@
 import React from 'react';
 import FeedCard from './parts/FeedCard';
+
 import s from './FeedCards.module.scss';
 
 interface Order {

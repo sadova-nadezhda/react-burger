@@ -1,46 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 
 import FeedCards from '../../components/FeedCards';
 import FeedWrap from '../../components/FeedWrap';
 
-import { useAppSelector } from '../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { Order } from '../../types/OrderTypes';
 
 import s from './FeedPage.module.scss';
 
-const WS_URL = 'wss://norma.nomoreparties.space/orders/all';
-
 export default function FeedPage() {
-  const [orders, setOrders] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [totalToday, setTotalToday] = useState(0);
+  const dispatch = useAppDispatch();
+  const { orders, total, totalToday } = useAppSelector((state) => state.order);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
-  const ingredientsMap = Object.fromEntries(ingredients.map(ing => [ing._id, ing]));
-
+  
+  const ingredientsMap = useMemo(() => {
+    return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));
+  }, [ingredients]);
 
   useEffect(() => {
-    const ws = new WebSocket(WS_URL);
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.success) {
-        setOrders(data.orders);
-        setTotal(data.total);
-        setTotalToday(data.totalToday);
-      }
-    };
-    return () => ws.close();
-  }, []);
+    dispatch({ type: 'websocket/start' });
+    return () => dispatch({ type: 'websocket/stop' });
+  }, [dispatch]);
 
-  const calculateOrderPrice = (order) => {
-    if (!ingredientsMap) return 0;
+  const calculateOrderPrice = (order: Order) => {
     return order.ingredients.reduce((sum, id) => {
       const ingredient = ingredientsMap?.[id];
       return sum + (ingredient?.price || 0);
     }, 0);
   };
 
-  const doneOrders = orders.filter(order => order.status === 'done').slice(0, 10);
-  const inProgressOrders = orders.filter(order => order.status !== 'done').slice(0, 10);
+  const doneOrders = orders.filter((order) => order.status === 'done').slice(0, 10);
+  const inProgressOrders = orders.filter((order) => order.status !== 'done').slice(0, 10);
 
   return (
     <main>
@@ -50,18 +41,18 @@ export default function FeedPage() {
             <h1 className='mb-5 text text_type_main-large'>Лента заказов</h1>
             <div className={s.feed__wrap}>
               <FeedCards
-                orders={orders.map(order => ({
+                orders={orders.map((order) => ({
                   orderNumber: order.number,
                   title: `Заказ №${order.number}`,
                   price: calculateOrderPrice(order),
                   images: order.ingredients
-                    .map(id => ingredientsMap?.[id]?.image || '')
-                    .filter(image => image), 
+                    .map((id) => ingredientsMap?.[id]?.image || '')
+                    .filter((image) => image),
                 }))}
               />
-              <FeedWrap 
-                doneOrders={doneOrders.map(order => order.number.toString())}
-                inProgressOrders={inProgressOrders.map(order => order.number.toString())}
+              <FeedWrap
+                doneOrders={doneOrders.map((order) => order.number.toString())}
+                inProgressOrders={inProgressOrders.map((order) => order.number.toString())}
                 total={total}
                 today={totalToday}
               />

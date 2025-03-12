@@ -4,6 +4,7 @@ import burgerConstructorReducer from './burger-constructor/slice';
 import orderReducer from './order/slice';
 import tabsReducer from './tabs/slice';
 import authReducer from './auth/slice';
+import { wsMiddleware } from './order/actions';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     tabs: tabsReducer,
     auth: authReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(wsMiddleware),
 });
 
 export type AppDispatch = typeof store.dispatch; 
