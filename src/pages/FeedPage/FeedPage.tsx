@@ -14,7 +14,6 @@ export default function FeedPage() {
   const [totalToday, setTotalToday] = useState(0);
 
   useEffect(() => {
-    // Получение ингредиентов
     fetch(API_INGREDIENTS)
       .then((res) => res.json())
       .then((data) => {
@@ -39,12 +38,10 @@ export default function FeedPage() {
     return () => ws.close();
   }, []);
 
-  // Функция для вычисления стоимости заказа
   const calculateOrderPrice = (order) => {
     return order.ingredients.reduce((sum, id) => sum + (ingredients[id]?.price || 0), 0);
   };
 
-  // Разделение заказов по статусу
   const doneOrders = orders.filter(order => order.status === 'done').slice(0, 10);
   const inProgressOrders = orders.filter(order => order.status !== 'done').slice(0, 10);
 

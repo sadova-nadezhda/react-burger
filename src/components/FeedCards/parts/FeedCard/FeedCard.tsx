@@ -16,6 +16,11 @@ export default function FeedCard({ orderNumber, title, price, images }: FeedCard
     const now = new Date();
     return new Date(now.setMinutes(now.getMinutes() - 1));
   }, []);
+
+  const MAX_IMAGES = 6;
+  const displayedImages = images.slice(0, MAX_IMAGES);
+  const remainingCount = images.length - MAX_IMAGES;
+
   return (
     <div className={classNames(s.card, 'text text_type_main-default')}>
       <div className={`${s.card__top} ${s.card__row}`}>
@@ -27,11 +32,14 @@ export default function FeedCard({ orderNumber, title, price, images }: FeedCard
       <h4 className={classNames(s.card__caption, 'text_type_main-medium')}>{title}</h4>
       <div className={`${s.card__bottom} ${s.card__row}`}>
         <div className={s.card__ingredients}>
-          {images.map((src, index) => (
+          {displayedImages.map((src, index) => (
             <div key={index} className={s.card__item}>
               <img src={src} alt="ingredient" />
             </div>
           ))}
+          {remainingCount > 0 && (
+            <span className={s.card__more}>+{remainingCount}</span>
+          )}
         </div>
         <div className={`${s.card__total} ${s.card__row} text_type_digits-default`}>
           {price} <CurrencyIcon type="primary" />
