@@ -1,43 +1,42 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import s from './FeedCard.module.scss';
 import classNames from 'classnames';
 
-export default function FeedCard() {
-  const today = new Date()
+interface FeedCardProps {
+  orderNumber: string;
+  title: string;
+  price: number;
+  ingredients: string[];
+}
+
+export default function FeedCard({ orderNumber, title, price, ingredients }: FeedCardProps) {
+  const formattedDate = useMemo(() => {
+    const now = new Date();
+    return new Date(now.setMinutes(now.getMinutes() - 1));
+  }, []);
   return (
     <div className={classNames(s.card, 'text text_type_main-default')}>
-      <div className={classNames(s.card__top, s.card__row)}>
-        <div className={classNames(s.card__order, 'text_type_digits-default')}>#034535</div>
+      <div className={`${s.card__top} ${s.card__row}`}>
+        <div className={classNames(s.card__order, 'text_type_digits-default')}>#{orderNumber}</div>
         <div className={classNames(s.card__datetime, 'text_color_inactive')}>
-          <FormattedDate
-            date={
-              new Date(
-                today.getFullYear(),
-                today.getMonth(),
-                today.getDate(),
-                today.getHours(),
-                today.getMinutes() - 1,
-                0,
-              )
-            }
-          />
+          <FormattedDate date={formattedDate} />
         </div>
       </div>
-      <h4 className={classNames(s.card__caption, 'text_type_main-medium')}>Death Star Starship Main бургер</h4>
-      <div className={classNames(s.card__bottom, s.card__row)}>
+      <h4 className={classNames(s.card__caption, 'text_type_main-medium')}>{title}</h4>
+      <div className={`${s.card__bottom} ${s.card__row}`}>
         <div className={s.card__ingredients}>
-          <div className={s.card__item}><img src="https://code.s3.yandex.net/react/code/sauce-02.png" alt="" /></div>
-          <div className={s.card__item}><img src="https://code.s3.yandex.net/react/code/sauce-02.png" alt="" /></div>
-          <div className={s.card__item}><img src="https://code.s3.yandex.net/react/code/sauce-02.png" alt="" /></div>
-          <div className={s.card__item}><img src="https://code.s3.yandex.net/react/code/sauce-02.png" alt="" /></div>
+          {ingredients.map((src, index) => (
+            <div key={index} className={s.card__item}>
+              <img src={src} alt="ingredient" />
+            </div>
+          ))}
         </div>
-        <div className={classNames(s.card__total, s.card__row, 'text_type_digits-default')}>
-          480
-          <CurrencyIcon type="primary" />
+        <div className={`${s.card__total} ${s.card__row} text_type_digits-default`}>
+          {price} <CurrencyIcon type="primary" />
         </div>
       </div>
     </div>
-  )
+  );
 }
