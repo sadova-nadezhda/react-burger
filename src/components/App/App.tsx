@@ -8,11 +8,7 @@ import {
   LoginPage,
   RegisterPage,
   ForgotPasswordPage,
-<<<<<<< Updated upstream
-  ResetPasswordPage,
-=======
   FeedPage,
->>>>>>> Stashed changes
   NotFoundPage,
 } from "../../pages";
 import ProfileForm from "../Form/ProfileForm";
@@ -67,12 +63,9 @@ const App = () => {
         </Route>
 
         <Route path="/ingredients/:id" element={<IngredientPage />} />
-<<<<<<< Updated upstream
 
-=======
         <Route path="/feed" element={<FeedPage />} />
         {/* <Route path="/feed/:id" element={<FeedPage />} /> */}
->>>>>>> Stashed changes
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
