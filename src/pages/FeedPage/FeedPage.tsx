@@ -11,7 +11,7 @@ import s from './FeedPage.module.scss';
 
 export default function FeedPage() {
   const dispatch = useAppDispatch();
-  const { orders, total, totalToday } = useAppSelector((state) => state.order);
+  const { orders, total, totalToday } = useAppSelector((state) => state.orders);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
   
   const ingredientsMap = useMemo(() => {

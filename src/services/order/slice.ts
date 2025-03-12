@@ -22,8 +22,8 @@ const initialState: OrderState = {
   error: null,
 };
 
-const orderSlice = createSlice({
-  name: 'order',
+const ordersSlice = createSlice({
+  name: 'orders',
   initialState: initialState,
   reducers: {
     setOrderDetails(state, action) {
@@ -69,6 +69,6 @@ const orderSlice = createSlice({
   },
 });
 
-export const { setOrderDetails, clearOrders, wsConnect, wsDisconnect, wsError, wsMessage } = orderSlice.actions;
+export const { setOrderDetails, clearOrders, wsConnect, wsDisconnect, wsError, wsMessage } = ordersSlice.actions;
 
-export default orderSlice.reducer;
+export default ordersSlice.reducer;

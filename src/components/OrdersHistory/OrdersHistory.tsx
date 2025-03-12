@@ -1,45 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import FeedCards from '../FeedCards';
 
 import s from './OrdersHistory.module.scss';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
-const WS_URL = 'wss://norma.nomoreparties.space/orders/all';
-const API_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients';
 
 export default function OrdersHistory() {
-  const [orders, setOrders] = useState([]);
-  const [ingredients, setIngredients] = useState({});
-  const [total, setTotal] = useState(0);
-  const [totalToday, setTotalToday] = useState(0);
+  const dispatch = useAppDispatch();
+  const { orders } = useAppSelector((state) => state.orders);
+  const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
+
+  const ingredientsMap = useMemo(() => {
+    return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));
+  }, [ingredients]);
 
   useEffect(() => {
-    fetch(API_INGREDIENTS)
-      .then((res) => res.json())
-      .then((data) => {
-        const ingredientsMap = data.data.reduce((acc, item) => {
-          acc[item._id] = item;
-          return acc;
-        }, {});
-        setIngredients(ingredientsMap);
-      });
-  }, []);
-
-  useEffect(() => {
-    const ws = new WebSocket(WS_URL);
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.success) {
-        setOrders(data.orders);
-        setTotal(data.total);
-        setTotalToday(data.totalToday);
-      }
-    };
-    return () => ws.close();
-  }, []);
+    dispatch({ type: 'websocket/start' });
+    return () => dispatch({ type: 'websocket/stop' });
+  }, [dispatch]);
 
   const calculateOrderPrice = (order) => {
-    return order.ingredients.reduce((sum, id) => sum + (ingredients[id]?.price || 0), 0);
+    return order.ingredients.reduce((sum, id) => sum + (ingredientsMap[id]?.price || 0), 0);
   };
 
   return (
@@ -49,7 +31,7 @@ export default function OrdersHistory() {
           orderNumber: order.number,
           title: `Заказ №${order.number}`,
           price: calculateOrderPrice(order),
-          images: order.ingredients.map(id => ingredients[id]?.image).filter(Boolean),
+          images: order.ingredients.map(id => ingredientsMap[id]?.image).filter(Boolean),
         }))}
       />
     </div>
