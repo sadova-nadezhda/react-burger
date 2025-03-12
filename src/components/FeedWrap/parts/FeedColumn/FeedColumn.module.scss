@@ -1,0 +1,10 @@
+.feed {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    &_done {
+      color: rgba(0, 204, 204, 1);
+    }
+  }
+}

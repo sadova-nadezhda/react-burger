@@ -15,7 +15,12 @@ export default function FeedPage() {
             <h1 className='mb-5 text text_type_main-large'>Лента заказов</h1>
             <div className={s.feed__wrap}>
               <FeedCards />
-              <FeedWrap />
+              <FeedWrap 
+                 doneOrders={['034533', '034532', '034530', '034527', '034525']}
+                 inProgressOrders={['034538', '034541', '034542']}
+                 total={28752}
+                 today={138}
+              />
             </div>
           </div>
         </div>
