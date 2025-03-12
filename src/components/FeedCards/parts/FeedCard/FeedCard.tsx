@@ -9,9 +9,10 @@ interface FeedCardProps {
   title: string;
   price: number;
   images: string[];
+  onClick: () => void;
 }
 
-export default function FeedCard({ orderNumber, title, price, images }: FeedCardProps) {
+export default function FeedCard({ orderNumber, title, price, images, onClick }: FeedCardProps) {
   const formattedDate = useMemo(() => {
     const now = new Date();
     return new Date(now.setMinutes(now.getMinutes() - 1));
@@ -22,7 +23,7 @@ export default function FeedCard({ orderNumber, title, price, images }: FeedCard
   const remainingCount = images.length - MAX_IMAGES;
 
   return (
-    <div className={classNames(s.card, 'text text_type_main-default')}>
+    <div className={classNames(s.card, 'text text_type_main-default')} onClick={onClick}>
       <div className={`${s.card__top} ${s.card__row}`}>
         <div className={classNames(s.card__order, 'text_type_digits-default')}>#{orderNumber}</div>
         <div className={classNames(s.card__datetime, 'text_color_inactive')}>

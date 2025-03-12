@@ -5,6 +5,7 @@ import { Order } from '../../types/OrderTypes';
 interface OrderState {
   orders: Order[];
   orderDetails: Order | null;
+  currentOrder: Order | null;
   total: number;
   totalToday: number;
   connected: boolean;
@@ -18,6 +19,7 @@ const initialState: OrderState = {
   totalToday: 0,
   connected: false,
   orderDetails: null,
+  currentOrder: null,
   loading: false,
   error: null,
 };
@@ -28,6 +30,12 @@ const ordersSlice = createSlice({
   reducers: {
     setOrderDetails(state, action) {
       state.orderDetails = action.payload;
+    },
+    setCurrentOrder: (state, action: PayloadAction<Order | null>) => {
+      state.currentOrder = action.payload;
+    },
+    clearCurrentOrder(state) {
+      state.currentOrder = null;
     },
     clearOrders(state) {
       state.orderDetails = null;
@@ -69,6 +77,6 @@ const ordersSlice = createSlice({
   },
 });
 
-export const { setOrderDetails, clearOrders, wsConnect, wsDisconnect, wsError, wsMessage } = ordersSlice.actions;
+export const { setOrderDetails, setCurrentOrder, clearCurrentOrder, clearOrders, wsConnect, wsDisconnect, wsError, wsMessage } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

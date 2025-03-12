@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+
 import AppHeader from "../AppHeader";
 import {
   ConstructorPage,
@@ -17,6 +18,8 @@ import OrdersHistory from "../OrdersHistory";
 import ProtectedRoute from "./ProtectedRoute";
 import ResetPasswordRoute from "./ResetPasswordRoute";
 import IngredientModal from "../Modal/IngredientModal";
+import OrderModal from "../Modal/OrderModal";
+
 import { useAppDispatch } from "../../hooks/store";
 import { checkAuth } from "../../services/auth/actions";
 import { fetchIngredients } from "../../services/ingredients/actions";
@@ -70,11 +73,13 @@ const App = () => {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {background && (
+      { background && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
+          <Route path="/feed/:id" element={<OrderModal />} />
+          <Route path="/profile/orders/:id" element={<OrderModal />} />
         </Routes>
-      )}
+      ) }
     </>
   );
 };

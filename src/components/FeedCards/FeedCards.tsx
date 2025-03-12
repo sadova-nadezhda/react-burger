@@ -1,6 +1,8 @@
 import React from 'react';
 import FeedCard from './parts/FeedCard';
 
+import { useModal } from '../../hooks/useModal';
+
 import s from './FeedCards.module.scss';
 
 interface Order {
@@ -12,9 +14,12 @@ interface Order {
 
 interface FeedCardsProps {
   orders: Order[];
+  isProfile?: boolean;
 }
 
-export default function FeedCards({ orders }: FeedCardsProps) {
+export default function FeedCards({ orders, isProfile = false }: FeedCardsProps) {
+  const { openOrderModal } = useModal();
+
   return (
     <div className={s.cards}>
       {orders.map((order) => (
@@ -24,6 +29,7 @@ export default function FeedCards({ orders }: FeedCardsProps) {
           title={order.title}
           price={order.price}
           images={order.images}
+          onClick={() => openOrderModal(order, isProfile)}
         />
       ))}
     </div>

@@ -2,9 +2,9 @@ import React, { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import FeedCards from '../FeedCards';
 
-import s from './OrdersHistory.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
+import s from './OrdersHistory.module.scss';
 
 export default function OrdersHistory() {
   const dispatch = useAppDispatch();
