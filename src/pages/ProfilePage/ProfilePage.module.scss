@@ -30,6 +30,7 @@
     opacity: 0.4;
   }
   &__content {
+    flex-grow: 1;
     form {
       display: flex;
       flex-direction: column;

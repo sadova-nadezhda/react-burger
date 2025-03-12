@@ -37,7 +37,8 @@ function AppHeader() {
       case '/':
         setActiveId(1);
         break;
-      case '/orders':
+      case '/feed':
+      case '/feed/:id':
         setActiveId(2);
         break;
       case '/login':
@@ -48,7 +49,7 @@ function AppHeader() {
         break;
       case '/profile':
       case '/profile/orders':
-      case '/profile/orders/:number':
+      case '/profile/orders/:id':
         setActiveId(4);
         break;
       default:
@@ -76,7 +77,7 @@ function AppHeader() {
               label="Лента заказов"
               activeId={activeId}
               setActiveId={setActiveId}
-              to="/orders"
+              to="/feed"
             />
             <li className={s.header__logo}>
               <Link to="/" className={s.header__link}>
