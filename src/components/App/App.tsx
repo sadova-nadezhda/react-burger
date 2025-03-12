@@ -10,6 +10,7 @@ import {
   ForgotPasswordPage,
   FeedPage,
   NotFoundPage,
+  OrderPage,
 } from "../../pages";
 import ProfileForm from "../Form/ProfileForm";
 import OrdersHistory from "../OrdersHistory";
@@ -59,13 +60,13 @@ const App = () => {
         >
           <Route index element={<ProfileForm />} />
           <Route path="orders" element={<OrdersHistory />} />
-          {/* <Route path="orders/:id" element={<OrdersHistory />} /> */}
+          <Route path="orders/:id" element={<OrderPage />} />
         </Route>
 
         <Route path="/ingredients/:id" element={<IngredientPage />} />
 
         <Route path="/feed" element={<FeedPage />} />
-        {/* <Route path="/feed/:id" element={<FeedPage />} /> */}
+        <Route path="/feed/:id" element={<OrderPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
