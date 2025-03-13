@@ -9,23 +9,22 @@ import s from './FeedCard.module.scss';
 interface FeedCardProps {
   orderNumber: string;
   status: string;
+  isProfile: boolean;
   title: string;
   price: number;
   images: string[];
   onClick: () => void;
 }
 
-export default function FeedCard({ orderNumber, title, price, images, status, onClick }: FeedCardProps) {
-  const isAuthenticated = useAppSelector((state) => !!state.auth.user);
-
+export default function FeedCard({ orderNumber, title, price, images, status, isProfile, onClick }: FeedCardProps) {
+  const MAX_IMAGES = 6;
+  const displayedImages = images.slice(0, MAX_IMAGES);
+  const remainingCount = images.length - MAX_IMAGES;
+  
   const formattedDate = useMemo(() => {
     const now = new Date();
     return new Date(now.setMinutes(now.getMinutes() - 1));
   }, []);
-
-  const MAX_IMAGES = 6;
-  const displayedImages = images.slice(0, MAX_IMAGES);
-  const remainingCount = images.length - MAX_IMAGES;
 
   return (
     <div className={classNames(s.card, 'text text_type_main-default')} onClick={onClick}>
@@ -37,7 +36,7 @@ export default function FeedCard({ orderNumber, title, price, images, status, on
       </div>
       <div className={s.card__main}>
         <h4 className={classNames(s.card__caption, 'text_type_main-medium')}>Заказ №{title}</h4>
-        { isAuthenticated ?
+        { isProfile ?
         ( <div className={classNames(s.card__status, 'mt-2')}>
           { status === 'done' ? 
           ( <span className={s.card__done}>Выполнен</span> ) 
