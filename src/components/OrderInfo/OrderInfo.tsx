@@ -1,29 +1,20 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import OrderCard from './parts/OrderCard';
 
-import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { useAppSelector } from '../../hooks/store';
 
 import s from './OrderInfo.module.scss';
 
 export default function OrderInfo() {
-  const dispatch = useAppDispatch();
   const selectedOrder = useAppSelector((state) => state.orders.currentOrder);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
   const ingredientsMap = useMemo(() => {
     return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));
   }, [ingredients]);
-  
-  useEffect(() => {
-    dispatch({ type: 'websocket/start' });
-  
-    return () => {
-      dispatch({ type: 'websocket/stop' });
-    };
-  }, [dispatch]);
 
   const total = useMemo(() => {
     if (!selectedOrder || !selectedOrder.ingredients) return 0;

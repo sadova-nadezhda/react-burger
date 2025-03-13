@@ -22,16 +22,23 @@ export default function FeedCards({ orders, isProfile = false }: FeedCardsProps)
 
   return (
     <div className={s.cards}>
-      {orders.map((order) => (
-        <FeedCard 
-          key={order.originalOrder.number}
-          orderNumber={order.originalOrder.number.toString()}
-          title={order.originalOrder.number.toString()}
-          price={order.price}
-          images={order.images}
-          onClick={() => openOrderModal(order.originalOrder, isProfile)}
-        />
-      ))}
+      {orders.map((order, index) => {
+        if (!order.originalOrder) {
+          console.warn(`Заказ по индексу ${index} отсутствует originalOrder`, order);
+          return null;
+        }
+        
+        return (
+          <FeedCard
+            key={order.originalOrder.number}
+            orderNumber={order.originalOrder.number.toString()}
+            title={order.originalOrder.number.toString()}
+            price={order.price}
+            images={order.images}
+            onClick={() => openOrderModal(order.originalOrder, isProfile)}
+          />
+        );
+      })}
     </div>
   );
 }

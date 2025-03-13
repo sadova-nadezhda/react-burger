@@ -33,8 +33,12 @@ export const wsMiddleware: Middleware = (store) => {
 
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        if (data.success) {
+        console.log("WebSocket received:", data); 
+      
+        if (data.success && Array.isArray(data.orders)) {
           store.dispatch(wsMessage(data));
+        } else {
+          console.warn("Некорректный формат данных WebSocket", data);
         }
       };
     }

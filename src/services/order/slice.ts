@@ -28,7 +28,7 @@ const ordersSlice = createSlice({
   name: 'orders',
   initialState: initialState,
   reducers: {
-    setOrderDetails(state, action) {
+    setOrderDetails(state, action: PayloadAction<Order | null>) {
       state.orderDetails = action.payload;
     },
     setCurrentOrder: (state, action: PayloadAction<Order | null>) => {
@@ -55,9 +55,13 @@ const ordersSlice = createSlice({
       state,
       action: PayloadAction<{ orders: Order[]; total: number; totalToday: number }>
     ) {
-      state.orders = action.payload.orders;
-      state.total = action.payload.total;
-      state.totalToday = action.payload.totalToday;
+      if (Array.isArray(action.payload.orders)) {
+        state.orders = action.payload.orders;
+        state.total = action.payload.total;
+        state.totalToday = action.payload.totalToday;
+      } else {
+        console.warn("wsMessage получил некорректные данные", action.payload);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -77,6 +81,14 @@ const ordersSlice = createSlice({
   },
 });
 
-export const { setOrderDetails, setCurrentOrder, clearCurrentOrder, clearOrders, wsConnect, wsDisconnect, wsError, wsMessage } = ordersSlice.actions;
+export const { 
+  setOrderDetails, 
+  setCurrentOrder, 
+  clearCurrentOrder, 
+  clearOrders, 
+  wsConnect, 
+  wsDisconnect, 
+  wsError, 
+  wsMessage } = ordersSlice.actions;
 
 export default ordersSlice.reducer;
