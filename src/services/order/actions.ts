@@ -20,6 +20,18 @@ export const fetchOrder = createAsyncThunk(
   }
 );
 
+export const fetchOrderById = createAsyncThunk(
+  "orders/fetchOrderById",
+  async (orderId: string, { rejectWithValue }) => {
+    try {
+      const response = await request(`/orders/${orderId}`);
+      return response.orders[0];
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const wsMiddleware: Middleware = (store) => {
   let socket: WebSocket | null = null;
 
