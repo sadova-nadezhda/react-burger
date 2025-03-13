@@ -33,7 +33,7 @@ export const wsMiddleware: Middleware = (store) => {
 
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        console.log("WebSocket received:", data); 
+        // console.log("WebSocket received:", data); 
       
         if (data.success && Array.isArray(data.orders)) {
           store.dispatch(wsMessage(data));

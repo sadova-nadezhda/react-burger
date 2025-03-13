@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
+
 import FeedCards from '../FeedCards';
 
 import { useAppSelector } from '../../hooks/store';
