@@ -33,28 +33,21 @@ function AppHeader() {
   const location = useLocation();
 
   useEffect(() => {
-    switch (location.pathname) {
-      case '/':
-        setActiveId(1);
-        break;
-      case '/feed':
-      case '/feed/:id':
-        setActiveId(2);
-        break;
-      case '/login':
-      case '/register':
-      case '/forgot-password':
-      case '/reset-password':
-        setActiveId(4);
-        break;
-      case '/profile':
-      case '/profile/orders':
-      case '/profile/orders/:id':
-        setActiveId(4);
-        break;
-      default:
-        setActiveId(1);
-        break;
+    if (location.pathname === '/') {
+      setActiveId(1);
+    } else if (location.pathname.startsWith('/feed')) {
+      setActiveId(2);
+    } else if (
+      location.pathname.startsWith('/login') ||
+      location.pathname.startsWith('/register') ||
+      location.pathname.startsWith('/forgot-password') ||
+      location.pathname.startsWith('/reset-password') ||
+      location.pathname.startsWith('/profile') || 
+      location.pathname.startsWith('/profile/orders')
+    ) {
+      setActiveId(4);
+    } else {
+      setActiveId(1);
     }
   }, [location.pathname]);
 

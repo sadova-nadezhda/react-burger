@@ -68,8 +68,9 @@ const App = () => {
         >
           <Route index element={<ProfileForm />} />
           <Route path="orders" element={<OrdersHistory />} />
-          <Route path="orders/:id" element={<OrderPage />} />
         </Route>
+
+        <Route path="/profile/orders/:id" element={<ProtectedRoute><OrderPage /></ProtectedRoute>} />
 
         <Route path="/ingredients/:id" element={<IngredientPage />} />
 
