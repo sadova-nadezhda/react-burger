@@ -1,6 +1,7 @@
 .header {
   background: var(--background);
   &__menu {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -19,9 +20,15 @@
         cursor: pointer;
       }
     }
+    &:last-child {
+      margin-left: auto;
+    }
   }
   &__logo {
-    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 
