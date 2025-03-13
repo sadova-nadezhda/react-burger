@@ -20,7 +20,10 @@ export default function FeedPage() {
 
   useEffect(() => {
     dispatch({ type: 'websocket/start' });
-    return () => dispatch({ type: 'websocket/stop' });
+  
+    return () => {
+      dispatch({ type: 'websocket/stop' });
+    };
   }, [dispatch]);
 
   const calculateOrderPrice = (order: Order) => {
@@ -42,12 +45,11 @@ export default function FeedPage() {
             <div className={s.feed__wrap}>
               <FeedCards
                 orders={orders.map((order) => ({
-                  orderNumber: order.number,
-                  title: `Заказ №${order.number}`,
                   price: calculateOrderPrice(order),
                   images: order.ingredients
                     .map((id) => ingredientsMap?.[id]?.image || '')
                     .filter((image) => image),
+                  originalOrder: order,
                 }))}
               />
               <FeedWrap

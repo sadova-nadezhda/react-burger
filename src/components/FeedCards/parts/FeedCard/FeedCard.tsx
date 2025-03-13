@@ -30,7 +30,7 @@ export default function FeedCard({ orderNumber, title, price, images, onClick }:
           <FormattedDate date={formattedDate} />
         </div>
       </div>
-      <h4 className={classNames(s.card__caption, 'text_type_main-medium')}>{title}</h4>
+      <h4 className={classNames(s.card__caption, 'text_type_main-medium')}>Заказ №{title}</h4>
       <div className={`${s.card__bottom} ${s.card__row}`}>
         <div className={s.card__ingredients}>
           {displayedImages.map((src, index) => (

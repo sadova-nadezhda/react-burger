@@ -17,7 +17,10 @@ export default function OrdersHistory() {
 
   useEffect(() => {
     dispatch({ type: 'websocket/start' });
-    return () => dispatch({ type: 'websocket/stop' });
+  
+    return () => {
+      dispatch({ type: 'websocket/stop' });
+    };
   }, [dispatch]);
 
   const calculateOrderPrice = (order) => {

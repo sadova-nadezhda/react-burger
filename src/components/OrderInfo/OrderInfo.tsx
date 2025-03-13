@@ -19,7 +19,10 @@ export default function OrderInfo() {
   
   useEffect(() => {
     dispatch({ type: 'websocket/start' });
-    return () => dispatch({ type: 'websocket/stop' });
+  
+    return () => {
+      dispatch({ type: 'websocket/stop' });
+    };
   }, [dispatch]);
 
   const total = useMemo(() => {

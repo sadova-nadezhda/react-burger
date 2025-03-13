@@ -2,18 +2,18 @@ import React from 'react';
 import FeedCard from './parts/FeedCard';
 
 import { useModal } from '../../hooks/useModal';
+import { Order } from '../../types/OrderTypes';
 
 import s from './FeedCards.module.scss';
 
-interface Order {
-  orderNumber: string;
-  title: string;
+interface FeedOrder {
   price: number;
   images: string[];
+  originalOrder: Order;
 }
 
 interface FeedCardsProps {
-  orders: Order[];
+  orders: FeedOrder[];
   isProfile?: boolean;
 }
 
@@ -24,12 +24,12 @@ export default function FeedCards({ orders, isProfile = false }: FeedCardsProps)
     <div className={s.cards}>
       {orders.map((order) => (
         <FeedCard 
-          key={order.orderNumber}
-          orderNumber={order.orderNumber}
-          title={order.title}
+          key={order.originalOrder.number}
+          orderNumber={order.originalOrder.number.toString()}
+          title={order.originalOrder.number.toString()}
           price={order.price}
           images={order.images}
-          onClick={() => openOrderModal(order, isProfile)}
+          onClick={() => openOrderModal(order.originalOrder, isProfile)}
         />
       ))}
     </div>
