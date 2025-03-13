@@ -35,6 +35,7 @@ export default function FeedCards({ orders, isProfile = false }: FeedCardsProps)
             title={order.originalOrder.number.toString()}
             price={order.price}
             images={order.images}
+            status={order.originalOrder.status}
             onClick={() => openOrderModal(order.originalOrder, isProfile)}
           />
         );

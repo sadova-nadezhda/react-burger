@@ -59,6 +59,9 @@
       z-index: 1;
     }
   }
+  &__done {
+    color: rgba(0, 204, 204, 1);
+  }
   &__more {
     position: absolute;
     right: 0;
