@@ -1,15 +1,24 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 
 import FeedCards from '../FeedCards';
 
-import { useAppSelector } from '../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
 import s from './OrdersHistory.module.scss';
 
 export default function OrdersHistory() {
+  const dispatch = useAppDispatch();
   const { orders } = useAppSelector((state) => state.orders);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
+
+  useEffect(() => {
+    dispatch({ type: "websocket/start", payload: { isProfile: true } });
+
+    return () => {
+      dispatch({ type: "websocket/stop" });
+    };
+  }, [dispatch]);
 
   const ingredientsMap = useMemo(() => {
     return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));
