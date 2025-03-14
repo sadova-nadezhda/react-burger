@@ -8,29 +8,21 @@ const WS_USER_URL = "wss://norma.nomoreparties.space/orders?token=";
 
 export const fetchOrder = createAsyncThunk(
   'order/fetchOrder',
-  async ({ ingredients }: { ingredients: string[] }, { rejectWithValue }) => {
-    try {
-      const data = await request('/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ingredients }),
-      });
-      return data.order;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async ({ ingredients }: { ingredients: string[] }) => {
+    const data = await request('/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ingredients }),
+    });
+    return data.order;
   }
 );
 
 export const fetchOrderById = createAsyncThunk(
   "orders/fetchOrderById",
-  async (orderId: string, { rejectWithValue }) => {
-    try {
-      const response = await request(`/orders/${orderId}`);
-      return response.orders[0];
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (orderId: string) => {
+    const response = await request(`/orders/${orderId}`);
+    return response.orders[0];
   }
 );
 
