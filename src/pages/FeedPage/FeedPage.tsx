@@ -10,7 +10,10 @@ import { Order } from '../../types/OrderTypes';
 import s from './FeedPage.module.scss';
 
 export default function FeedPage() {
-  const { orders, total, totalToday } = useAppSelector((state) => state.orders);
+  const { total, totalToday } = useAppSelector((state) => state.orders);
+  const orders = useAppSelector((state) => state.orders.orders).slice().sort((a, b) => 
+    new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  );
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
   
   const ingredientsMap = useMemo(() => {
@@ -40,8 +43,8 @@ export default function FeedPage() {
     return processedOrder;
   });
 
-  const doneOrders = orders.filter((order) => order.status === 'done').slice(0, 10);
-  const inProgressOrders = orders.filter((order) => order.status !== 'done').slice(0, 10);
+  const doneOrders = orders.filter((order) => order.status === 'done');
+  const inProgressOrders = orders.filter((order) => order.status !== 'done');
 
   return (
     <main>

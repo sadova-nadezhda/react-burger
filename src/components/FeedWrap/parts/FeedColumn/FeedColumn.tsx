@@ -9,15 +9,26 @@ interface FeedColumnProps {
   isDone?: boolean;
 }
 
+const splitOrdersIntoColumns = (orders: string[], itemsPerColumn = 10) => {
+  const columns = [];
+  for (let i = 0; i < orders.length; i += itemsPerColumn) {
+    columns.push(orders.slice(i, i + itemsPerColumn));
+  }
+  return columns;
+};
+
 export default function FeedColumn({ title, items, isDone = false }: FeedColumnProps) {
+  const list = splitOrdersIntoColumns(items);
   return (
-    <div className={s.feed__col}>
-    <h4 className={classNames(s.feed__caption, 'mb-6 text_type_main-medium')}>{title}:</h4>
-    <ul className={classNames(s.feed__list, { [s.feed__list_done]: isDone }, 'text_type_digits-default')}>
-      {items.map((item) => (
-        <li key={item}>{item}</li>
+    <div className={classNames(s.feed__col, { [s.feed__col_done]: isDone })}>
+      <h4 className={classNames(s.feed__caption, 'mb-2 text_type_main-medium')}>{title}:</h4>
+      {list.map((column, index) => (
+        <ul key={index} className={classNames(s.feed__list, 'text_type_digits-default')}>
+          {column.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
       ))}
-    </ul>
-  </div>
+    </div>
   )
 }
