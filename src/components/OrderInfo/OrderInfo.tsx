@@ -5,7 +5,6 @@ import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burge
 import OrderCard from './parts/OrderCard';
 
 import { useAppSelector } from '../../hooks/store';
-import { Order } from '../../types/OrderTypes';
 
 import s from './OrderInfo.module.scss';
 
@@ -17,10 +16,26 @@ export default function OrderInfo() {
     return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));
   }, [ingredients]);
 
-  const total = useMemo(() => {
-    if (!order || !order.ingredients) return 0;
-    return order.ingredients.reduce((sum, ingredientId) => sum + (ingredientsMap[ingredientId]?.price || 0), 0);
-  }, [order, ingredientsMap]);
+    const groupedIngredients = useMemo(() => {
+      if (!order || !order.ingredients) return {};
+  
+      return order.ingredients.reduce((acc, id) => {
+        if (!ingredientsMap[id]) return acc;
+        if (!acc[id]) {
+          acc[id] = { ingredient: ingredientsMap[id], count: 1 };
+        } else {
+          acc[id].count += 1;
+        }
+        return acc;
+      }, {} as Record<string, { ingredient: typeof ingredientsMap[string]; count: number }>);
+    }, [order, ingredientsMap]);
+  
+    const total = useMemo(() => {
+      return Object.values(groupedIngredients).reduce(
+        (sum, { ingredient, count }) => sum + ingredient.price * count,
+        0
+      );
+    }, [groupedIngredients]);
 
   if (!order) return <p>Загрузка заказа...</p>;
 
@@ -39,10 +54,9 @@ export default function OrderInfo() {
       <div className={s.order__compound}>
         <h4 className={classNames(s.order__caption, 'mb-6 text_type_main-medium')}>Состав:</h4>
         <div className={classNames(s.order__cards, 'mb-10')}>
-          {order.ingredients.map((id, index) => {
-            const ingredient = ingredientsMap[id];
-            return ingredient ? <OrderCard key={id + index} ingredient={ingredient} /> : null;
-          })}
+          { Object.values(groupedIngredients).map(({ ingredient, count }) => (
+            <OrderCard key={ingredient._id} ingredient={ingredient} count={count} />
+          )) }
         </div>
       </div>
       <div className={s.order__bottom}>
