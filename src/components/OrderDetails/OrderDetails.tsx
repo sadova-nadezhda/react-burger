@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
-import { fetchOrder } from '../../services/order/actions'; 
+import { fetchOrder } from '../../services/orders/actions'; 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { resetConstructor } from '../../services/burger-constructor/slice';
 import { resetAllIngredientCounts } from '../../services/ingredients/slice';

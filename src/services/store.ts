@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import ingredientsReducer from './ingredients/slice';
 import burgerConstructorReducer from './burger-constructor/slice';
-import ordersReducer from './order/slice';
+import ordersReducer from './orders/slice';
 import tabsReducer from './tabs/slice';
 import authReducer from './auth/slice';
-import { wsMiddleware } from './order/actions';
+import { wsMiddleware } from './orders/actions';
 
 export const store = configureStore({
   reducer: {

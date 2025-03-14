@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { useModal } from '../../hooks/useModal';
-import { clearCurrentOrder, setCurrentOrder } from '../../services/order/slice';
+import { clearCurrentOrder, setCurrentOrder } from '../../services/orders/slice';
 
 import Modal from './Modal';
 import OrderInfo from '../OrderInfo';

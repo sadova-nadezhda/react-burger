@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import OrderInfo from '../../components/OrderInfo';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { setCurrentOrder } from '../../services/order/slice';
+import { setCurrentOrder } from '../../services/orders/slice';
 
 import s from './OrderPage.module.scss';
 
