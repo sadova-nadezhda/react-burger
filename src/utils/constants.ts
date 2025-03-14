@@ -8,3 +8,6 @@ export const wsActions = {
   wsError: "WS/ERROR",
   wsMessage: "WS/MESSAGE",
 };
+
+export const WS_URL = "wss://norma.nomoreparties.space/orders/all";
+export const WS_USER_URL = "wss://norma.nomoreparties.space/orders?token=";

@@ -6,6 +6,7 @@ import FeedWrap from '../../components/FeedWrap';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { Order } from '../../types/OrderTypes';
+import { WS_URL } from '../../utils/constants';
 
 import s from './FeedPage.module.scss';
 
@@ -18,7 +19,7 @@ export default function FeedPage() {
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
   useEffect(() => {
-    dispatch({ type: "websocket/start"});
+    dispatch({ type: "websocket/start", payload: { url: WS_URL } });
 
     return () => {
       dispatch({ type: "websocket/stop" });

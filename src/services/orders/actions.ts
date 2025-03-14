@@ -2,9 +2,7 @@ import { createAsyncThunk, Middleware } from "@reduxjs/toolkit";
 import { request } from '../../utils/request';
 import { wsConnect, wsDisconnect, wsError, wsMessage } from "./slice";
 import { refreshToken } from "../../services/auth/actions";
-
-const WS_URL = "wss://norma.nomoreparties.space/orders/all";
-const WS_USER_URL = "wss://norma.nomoreparties.space/orders?token=";
+import { TWsInitAction } from "../../types/wsActionsTypes";
 
 export const fetchOrder = createAsyncThunk(
   'order/fetchOrder',
@@ -86,11 +84,10 @@ export const fetchOrderById = createAsyncThunk(
 export const wsMiddleware: Middleware = (store) => {
   let socket: WebSocket | null = null;
 
-  return (next) => async (action) => {
+  return (next) => async (action ) => {
     if (action.type === "websocket/start") {
       let token = store.getState().auth.accessToken;
-      const isProfile = action.payload?.isProfile;
-      const wsUrl = isProfile ? `${WS_USER_URL}${token}` : WS_URL;
+      const wsUrl = token ? `${action.payload?.url}${token}` : action.payload?.url;
 
       socket = new WebSocket(wsUrl);
 
@@ -98,7 +95,7 @@ export const wsMiddleware: Middleware = (store) => {
 
       socket.onclose = () => {
         store.dispatch(wsDisconnect());
-        setTimeout(() => store.dispatch({ type: "websocket/start", payload: { isProfile } }), 5000);
+        setTimeout(() => store.dispatch({ type: "websocket/start", payload: { url: action.payload?.url } }), 5000);
       };
 
       socket.onerror = () => store.dispatch(wsError("Ошибка WebSocket"));
@@ -141,12 +138,10 @@ export const wsMiddleware: Middleware = (store) => {
         }
       };
     }
-
     if (action.type === "websocket/stop" && socket) {
       socket.close();
       socket = null;
     }
-
     return next(action);
   };
 };

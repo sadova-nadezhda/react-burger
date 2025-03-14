@@ -4,8 +4,10 @@ import classNames from 'classnames';
 import FeedCards from '../FeedCards';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { WS_USER_URL } from '../../utils/constants';
 
 import s from './OrdersHistory.module.scss';
+
 
 export default function OrdersHistory() {
   const dispatch = useAppDispatch();
@@ -13,7 +15,7 @@ export default function OrdersHistory() {
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
   useEffect(() => {
-    dispatch({ type: "websocket/start", payload: { isProfile: true } });
+    dispatch({ type: "websocket/start", payload: { url: WS_USER_URL } });
 
     return () => {
       dispatch({ type: "websocket/stop" });
