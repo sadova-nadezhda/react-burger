@@ -13,25 +13,21 @@ interface FeedCardProps {
   title: string;
   price: number;
   images: string[];
+  createdAt: string;
   onClick: () => void;
 }
 
-export default function FeedCard({ orderNumber, title, price, images, status, isProfile, onClick }: FeedCardProps) {
+export default function FeedCard({ orderNumber, title, price, images, status, isProfile, createdAt, onClick }: FeedCardProps) {
   const MAX_IMAGES = 6;
   const displayedImages = images.slice(0, MAX_IMAGES);
   const remainingCount = images.length - MAX_IMAGES;
-  
-  const formattedDate = useMemo(() => {
-    const now = new Date();
-    return new Date(now.setMinutes(now.getMinutes() - 1));
-  }, []);
 
   return (
     <div className={classNames(s.card, 'text text_type_main-default')} onClick={onClick}>
       <div className={`${s.card__top} ${s.card__row}`}>
         <div className={classNames(s.card__order, 'text_type_digits-default')}>#{orderNumber}</div>
         <div className={classNames(s.card__datetime, 'text_color_inactive')}>
-          <FormattedDate date={formattedDate} />
+          <FormattedDate date={new Date(createdAt)} />
         </div>
       </div>
       <div className={s.card__main}>
