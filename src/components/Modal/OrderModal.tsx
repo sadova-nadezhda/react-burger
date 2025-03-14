@@ -14,14 +14,10 @@ export default function OrderModal() {
   const { closeOrderModal, isModalOpen } = useModal();
   const { orders } = useAppSelector((state) => state.orders);
 
-  useEffect(() => {
-    console.log("Orders in store:", orders);
-    console.log("Order ID from URL:", id);
-  
+  useEffect(() => {  
     if (!orders.length) return;
-  
+
     const foundOrder = orders.find((o) => o._id === id);
-    console.log("Found order:", foundOrder);
   
     if (foundOrder) {
       dispatch(setCurrentOrder(foundOrder));
