@@ -34,11 +34,6 @@ const App = () => {
   useEffect(() => {
     dispatch(checkAuth());
     dispatch(fetchIngredients());
-    dispatch({ type: "websocket/start" });
-  
-    return () => {
-      dispatch({ type: "websocket/stop" });
-    };
   }, [dispatch]);
 
   return (

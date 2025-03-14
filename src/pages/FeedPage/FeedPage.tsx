@@ -1,20 +1,29 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 
 import FeedCards from '../../components/FeedCards';
 import FeedWrap from '../../components/FeedWrap';
 
-import { useAppSelector } from '../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { Order } from '../../types/OrderTypes';
 
 import s from './FeedPage.module.scss';
 
 export default function FeedPage() {
+  const dispatch = useAppDispatch();
   const { total, totalToday } = useAppSelector((state) => state.orders);
   const orders = useAppSelector((state) => state.orders.orders).slice().sort((a, b) => 
     new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   );
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
+
+  useEffect(() => {
+    dispatch({ type: "websocket/start"});
+
+    return () => {
+      dispatch({ type: "websocket/stop" });
+    };
+  }, [dispatch]);
   
   const ingredientsMap = useMemo(() => {
     return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));
