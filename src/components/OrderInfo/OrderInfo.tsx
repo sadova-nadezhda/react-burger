@@ -1,26 +1,16 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import OrderCard from './parts/OrderCard';
 
-import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { WS_URL, wsActions } from '../../utils/constants';
+import { useAppSelector } from '../../hooks/store';
 
 import s from './OrderInfo.module.scss';
 
 export default function OrderInfo() {
-  const dispatch = useAppDispatch();
   const order = useAppSelector((state) => state.orders.currentOrder);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
-
-  useEffect(() => {
-    dispatch({ type: wsActions.wsInit, payload: { url: WS_URL } });
-  
-    return () => {
-      dispatch({ type: wsActions.wsClose });
-    };
-  }, [dispatch]);
 
   const ingredientsMap = useMemo(() => {
       return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));

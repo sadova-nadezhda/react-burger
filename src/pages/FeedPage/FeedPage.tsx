@@ -50,8 +50,8 @@ export default function FeedPage() {
     return processedOrder;
   });
 
-  const doneOrders = orders.filter((order) => order.status === 'done');
-  const inProgressOrders = orders.filter((order) => order.status !== 'done');
+  const doneOrders = orders.filter((order) => order.status === 'done').slice(0, 14);
+  const inProgressOrders = orders.filter((order) => order.status !== 'done').slice(0, 14);
 
   return (
     <main>

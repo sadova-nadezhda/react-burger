@@ -65,20 +65,20 @@ const App = () => {
           <Route path="orders" element={<OrdersHistory />} />
         </Route>
 
-        <Route path="/profile/orders/:id" element={<ProtectedRoute><OrderPage /></ProtectedRoute>} />
+        <Route path="/profile/orders/:number" element={<ProtectedRoute><OrderPage /></ProtectedRoute>} />
 
         <Route path="/ingredients/:id" element={<IngredientPage />} />
 
         <Route path="/feed" element={<FeedPage />} />
-        <Route path="/feed/:id" element={<OrderPage />} />
+        <Route path="/feed/:number" element={<OrderPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       { background && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
-          <Route path="/feed/:id" element={<OrderModal />} />
-          <Route path="/profile/orders/:id" element={<OrderModal />} />
+          <Route path="/feed/:number" element={<OrderModal />} />
+          <Route path="/profile/orders/:number" element={<OrderModal />} />
         </Routes>
       ) }
     </>

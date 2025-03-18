@@ -15,7 +15,7 @@ export function useModal() {
 
   const openOrderModal = (order: Order, isProfile: boolean = false) => {
     setModalOpen(true);
-    const route = isProfile ? `/profile/orders/${order._id}` : `/feed/${order._id}`;
+    const route = isProfile ? `/profile/orders/${order.number}` : `/feed/${order.number}`;
     navigate(route, { state: { background: location } });
   };
 

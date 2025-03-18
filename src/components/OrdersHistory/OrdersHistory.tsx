@@ -15,7 +15,13 @@ export default function OrdersHistory() {
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
   useEffect(() => {
-    dispatch({ type: wsActions.wsInit, payload: { url: WS_USER_URL } });
+    const token = localStorage.getItem('accessToken');
+    
+    if (token) { 
+      dispatch({ type: wsActions.wsInit, payload: { url: WS_USER_URL, token } });
+    } else {
+      console.warn("WebSocket: accessToken отсутствует, соединение не установлено");
+    }
   
     return () => {
       dispatch({ type: wsActions.wsClose });

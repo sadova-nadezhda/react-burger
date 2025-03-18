@@ -22,12 +22,8 @@ export default function FeedCards({ orders, isProfile = false }: FeedCardsProps)
 
   return (
     <div className={s.cards}>
-      {orders.map((order, index) => {
-        if (!order.originalOrder) {
-          console.warn(`Заказ по индексу ${index} отсутствует originalOrder`, order);
-          return null;
-        }
-        
+      {orders.map((order) => {
+
         return (
           <FeedCard
             key={order.originalOrder.number}

@@ -39,7 +39,7 @@ const apiRequest = async (
     const data: ApiResponse = await response.json();
 
     if (response.status === 401 && dispatch) {
-      await dispatch(refreshToken());
+      await refreshToken();
       return apiRequest(url, method, body, dispatch, retryCount + 1);
     }
 
@@ -50,13 +50,11 @@ const apiRequest = async (
   }
 };
 
-const handleAuthResponse = (data: ApiResponse, dispatch: AppDispatch) => {
+const handleAuthResponse = (data: ApiResponse, dispatch?: AppDispatch) => {
   if (!data.success) {
-    dispatch(setError(data.message || 'Ошибка'));
+    dispatch?.(setError(data.message || 'Ошибка'));
     return false;
   }
-
-  console.log('login', data)
 
   const accessToken = data.accessToken!.replace('Bearer ', '');
   const refreshToken = data.refreshToken!;
@@ -65,7 +63,7 @@ const handleAuthResponse = (data: ApiResponse, dispatch: AppDispatch) => {
   localStorage.setItem('refreshToken', refreshToken);
   localStorage.setItem('user', JSON.stringify(data.user));
 
-  dispatch(setUser({ user: data.user!, accessToken, refreshToken }));
+  dispatch?.(setUser({ user: data.user!, accessToken, refreshToken }));
   return true;
 };
 
@@ -119,25 +117,21 @@ export const logoutUser = () => async (dispatch: AppDispatch) => {
   }
 };
 
-export const refreshToken = () => async (dispatch: AppDispatch) => {
+export const refreshToken = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (!refreshToken) {
-    dispatch(setError('Токен обновления не найден'));
-    dispatch(logout());
-    return
+    console.warn("Токен обновления не найден");
+    return null;
   }
 
-  dispatch(setLoading(true));
   try {
-    const data = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken }, dispatch);
-    if (handleAuthResponse(data, dispatch)) return;
-    dispatch(logout());
+    const data = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken });
+    if (handleAuthResponse(data)) return localStorage.getItem('accessToken');
   } catch {
-    dispatch(setError('Ошибка при обновлении токена'));
-    dispatch(logout());
-  } finally {
-    dispatch(setLoading(false));
+    console.error("Ошибка при обновлении токена");
   }
+
+  return null;
 };
 
 export const forgotPassword = (email: string) => async (dispatch: AppDispatch) => {

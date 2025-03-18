@@ -8,19 +8,23 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { setCurrentOrder } from '../../services/orders/slice';
 
 import s from './OrderPage.module.scss';
+import { fetchOrderById } from '../../services/orders/actions';
 
 
 export default function OrderPage() {
-  const { id } = useParams();
+  const { number } = useParams();
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.orders);
 
   useEffect(()=>{
-    if(!orders) return
-    const order = orders.find((item) => item._id === id);
-    if(!order) return 
+    if(!orders || !number) return
+    const order = orders.find((item) => item.number === +number);
+    if(!order) {
+      dispatch(fetchOrderById(number))
+      return
+    }
     dispatch(setCurrentOrder(order));
-  }, [orders])
+  }, [orders, number, dispatch])
   
   return (
     <section className={classNames(s.order, 'pt-30 pb-30')}>

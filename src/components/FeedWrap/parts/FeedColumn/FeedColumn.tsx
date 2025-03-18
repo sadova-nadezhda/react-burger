@@ -9,7 +9,7 @@ interface FeedColumnProps {
   isDone?: boolean;
 }
 
-const splitOrdersIntoColumns = (orders: string[], itemsPerColumn = 10) => {
+const splitOrdersIntoColumns = (orders: string[], itemsPerColumn = 7) => {
   const columns = [];
   for (let i = 0; i < orders.length; i += itemsPerColumn) {
     columns.push(orders.slice(i, i + itemsPerColumn));
