@@ -11,14 +11,17 @@ import s from './OrdersHistory.module.scss';
 
 export default function OrdersHistory() {
   const dispatch = useAppDispatch();
-  const { orders } = useAppSelector((state) => state.orders);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
+
+  const orders = useAppSelector((state) => state.orders.orders).slice().sort((a, b) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     
     if (token) { 
-      dispatch({ type: wsActions.wsInit, payload: { url: WS_USER_URL, token } });
+      dispatch({ type: wsActions.wsInit, payload: { url: `${WS_USER_URL}${token}` } });
     } else {
       console.warn("WebSocket: accessToken отсутствует, соединение не установлено");
     }

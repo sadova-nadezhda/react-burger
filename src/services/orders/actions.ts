@@ -112,7 +112,7 @@ export const wsMiddleware = (wsActions: TWsActions): Middleware => {
       if (type === wsActions.wsInit) {
         if (!socket) {
           shouldReconnect = true;
-          connect(payload?.token ? `${payload.url}${payload.token}` : payload.url);
+          connect(payload.url);
         } else {
           console.warn("WebSocket уже открыт, пропускаем инициализацию");
         }

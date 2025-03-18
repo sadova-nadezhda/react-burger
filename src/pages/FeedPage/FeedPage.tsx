@@ -12,8 +12,12 @@ import s from './FeedPage.module.scss';
 
 export default function FeedPage() {
   const dispatch = useAppDispatch();
-  const { orders, total, totalToday } = useAppSelector((state) => state.orders);
+  const { total, totalToday } = useAppSelector((state) => state.orders);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
+
+  const orders = useAppSelector((state) => state.orders.orders).slice().sort((a, b) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   useEffect(() => {
     dispatch({ type: wsActions.wsInit, payload: { url: WS_URL } });
