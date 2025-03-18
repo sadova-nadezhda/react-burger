@@ -107,7 +107,7 @@ export const wsMiddleware = (wsActions: TWsActions): Middleware => {
 
 
     return (next) => (action) => {
-      const { type, payload } = action;
+      const { type, payload } = action as {type: string, payload:{ url: string }};
 
       if (type === wsActions.wsInit) {
         if (!socket) {
