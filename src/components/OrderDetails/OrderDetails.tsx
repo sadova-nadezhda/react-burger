@@ -21,9 +21,9 @@ export default function OrderDetails({ ingredients } : OrderDetailsProps) {
 
   useEffect(() => {
     if (ingredients && ingredients.length > 0) {
-      console.log("Отправка запроса на сервер с ингредиентами:", ingredients);
+      // console.log("Отправка запроса на сервер с ингредиентами:", ingredients);
       dispatch(fetchOrder({ ingredients })).then((res) => {
-        console.log("Ответ от сервера:", res);
+        // console.log("Ответ от сервера:", res);
         dispatch(resetConstructor());
         dispatch(resetAllIngredientCounts());
       });

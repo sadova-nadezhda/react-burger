@@ -54,7 +54,6 @@ export const wsMiddleware = (wsActions: TWsActions): Middleware => {
         }
 
         let token = localStorage.getItem('accessToken');
-        console.log('token', token)
         const wsUrl = token ? `${payload.url}?token=${token}` : payload.url;
 
         socket = new WebSocket(wsUrl);

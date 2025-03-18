@@ -15,8 +15,6 @@ export default function FeedPage() {
   const { orders, total, totalToday } = useAppSelector((state) => state.orders);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
-  console.log(orders)
-
   useEffect(() => {
     dispatch({ type: wsActions.wsInit, payload: { url: WS_URL } });
   

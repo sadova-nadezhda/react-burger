@@ -2,6 +2,7 @@
   &__row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    align-items: start;
     gap: 36px;
   }
 }
