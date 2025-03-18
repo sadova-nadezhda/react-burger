@@ -6,8 +6,3 @@ export interface TWsActions {
   wsError: string;
   wsMessage: string;
 }
-
-export interface TWsInitAction {
-  type: string;
-  payload: {isProfile:boolean, url: string};
-}

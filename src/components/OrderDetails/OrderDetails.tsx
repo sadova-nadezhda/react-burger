@@ -21,12 +21,15 @@ export default function OrderDetails({ ingredients } : OrderDetailsProps) {
 
   useEffect(() => {
     if (ingredients && ingredients.length > 0) {
-      dispatch(fetchOrder({ ingredients })).then(() => {
+      console.log("Отправка запроса на сервер с ингредиентами:", ingredients);
+      dispatch(fetchOrder({ ingredients })).then((res) => {
+        console.log("Ответ от сервера:", res);
         dispatch(resetConstructor());
         dispatch(resetAllIngredientCounts());
       });
     }
   }, [dispatch, ingredients]);
+  
 
   if (!orderDetails) {
     return <div>Загрузка...</div>; 

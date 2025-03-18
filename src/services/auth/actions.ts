@@ -56,6 +56,8 @@ const handleAuthResponse = (data: ApiResponse, dispatch: AppDispatch) => {
     return false;
   }
 
+  console.log('login', data)
+
   const accessToken = data.accessToken!.replace('Bearer ', '');
   const refreshToken = data.refreshToken!;
   
@@ -121,7 +123,8 @@ export const refreshToken = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (!refreshToken) {
     dispatch(setError('Токен обновления не найден'));
-    return dispatch(logout());
+    dispatch(logout());
+    return
   }
 
   dispatch(setLoading(true));
@@ -232,6 +235,7 @@ export const checkAuth = () => async (dispatch: AppDispatch) => {
         dispatch(setAuthChecked(true));
         return;
       }
+      return;
     } 
 
     const tokenData = await apiRequest(`${BASE_URL}/auth/token`, 'POST', { token: refreshToken }, dispatch);

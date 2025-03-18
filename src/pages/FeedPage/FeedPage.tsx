@@ -6,23 +6,22 @@ import FeedWrap from '../../components/FeedWrap';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { Order } from '../../types/OrderTypes';
-import { WS_URL } from '../../utils/constants';
+import { WS_URL, wsActions } from '../../utils/constants';
 
 import s from './FeedPage.module.scss';
 
 export default function FeedPage() {
   const dispatch = useAppDispatch();
-  const { total, totalToday } = useAppSelector((state) => state.orders);
-  const orders = useAppSelector((state) => state.orders.orders).slice().sort((a, b) => 
-    new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-  );
+  const { orders, total, totalToday } = useAppSelector((state) => state.orders);
   const ingredients = useAppSelector((state) => state.ingredients.allIngredients);
 
-  useEffect(() => {
-    dispatch({ type: "websocket/start", payload: { url: WS_URL } });
+  console.log(orders)
 
+  useEffect(() => {
+    dispatch({ type: wsActions.wsInit, payload: { url: WS_URL } });
+  
     return () => {
-      dispatch({ type: "websocket/stop" });
+      dispatch({ type: wsActions.wsClose });
     };
   }, [dispatch]);
   

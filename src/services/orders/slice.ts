@@ -26,18 +26,19 @@ const initialState: OrderState = {
 
 const ordersSlice = createSlice({
   name: 'orders',
-  initialState: initialState,
+  initialState,
   reducers: {
     setOrderDetails(state, action: PayloadAction<Order | null>) {
       state.orderDetails = action.payload;
     },
-    setCurrentOrder: (state, action: PayloadAction<Order | null>) => {
+    setCurrentOrder(state, action: PayloadAction<Order | null>) {
       state.currentOrder = action.payload;
     },
     clearCurrentOrder(state) {
       state.currentOrder = null;
     },
     clearOrders(state) {
+      state.orders = [];
       state.orderDetails = null;
     },
     wsConnect(state) {
@@ -62,7 +63,7 @@ const ordersSlice = createSlice({
       } else {
         console.warn("wsMessage получил некорректные данные", action.payload);
       }
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -76,7 +77,7 @@ const ordersSlice = createSlice({
       })
       .addCase(fetchOrder.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.error.message ?? "Неизвестная ошибка";
       })
       .addCase(fetchOrderById.pending, (state) => {
         state.loading = true;
@@ -88,7 +89,7 @@ const ordersSlice = createSlice({
       })
       .addCase(fetchOrderById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.error.message ?? "Неизвестная ошибка";
       });
   },
 });
@@ -101,6 +102,7 @@ export const {
   wsConnect, 
   wsDisconnect, 
   wsError, 
-  wsMessage } = ordersSlice.actions;
+  wsMessage 
+} = ordersSlice.actions;
 
 export default ordersSlice.reducer;
