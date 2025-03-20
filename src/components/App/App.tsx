@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+
 import AppHeader from "../AppHeader";
 import {
   ConstructorPage,
@@ -8,13 +9,17 @@ import {
   LoginPage,
   RegisterPage,
   ForgotPasswordPage,
+  FeedPage,
   NotFoundPage,
+  OrderPage,
 } from "../../pages";
 import ProfileForm from "../Form/ProfileForm";
 import OrdersHistory from "../OrdersHistory";
 import ProtectedRoute from "./ProtectedRoute";
 import ResetPasswordRoute from "./ResetPasswordRoute";
 import IngredientModal from "../Modal/IngredientModal";
+import OrderModal from "../Modal/OrderModal";
+
 import { useAppDispatch } from "../../hooks/store";
 import { checkAuth } from "../../services/auth/actions";
 import { fetchIngredients } from "../../services/ingredients/actions";
@@ -47,15 +52,22 @@ const App = () => {
           <Route path="orders" element={<OrdersHistory />} />
         </Route>
 
+        <Route path="/profile/orders/:number" element={<ProtectedRoute><OrderPage /></ProtectedRoute>} />
+
         <Route path="/ingredients/:id" element={<IngredientPage />} />
+
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:number" element={<OrderPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {background && (
+      { background && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
+          <Route path="/feed/:number" element={<OrderModal />} />
+          <Route path="/profile/orders/:number" element={<OrderModal />} />
         </Routes>
-      )}
+      ) }
     </>
   );
 };

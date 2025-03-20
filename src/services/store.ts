@@ -1,18 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
 import ingredientsReducer from './ingredients/slice';
 import burgerConstructorReducer from './burger-constructor/slice';
-import orderReducer from './order/slice';
+import ordersReducer from './orders/slice';
 import tabsReducer from './tabs/slice';
 import authReducer from './auth/slice';
+import { wsMiddleware } from './orders/actions';
+import { wsActions } from '../utils/constants';
 
 export const store = configureStore({
   reducer: {
     ingredients: ingredientsReducer,
     burgerConstructor: burgerConstructorReducer,
-    order: orderReducer,
+    orders: ordersReducer,
     tabs: tabsReducer,
     auth: authReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(wsMiddleware(wsActions)),
 });
 
 export type AppDispatch = typeof store.dispatch; 

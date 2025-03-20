@@ -1,0 +1,20 @@
+.feed {
+  &__col{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    &_done {
+      ul {
+        color: rgba(0, 204, 204, 1);
+      }
+    }
+  }
+  &__caption {
+    grid-column: span 2;
+  }
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

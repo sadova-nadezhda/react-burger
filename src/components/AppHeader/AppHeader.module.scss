@@ -4,6 +4,7 @@
     position: relative;
   }
   &__menu {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -22,7 +23,7 @@
         cursor: pointer;
       }
     }
-    &:last-of-type {
+    &:last-child {
       margin-left: auto;
     }
   }

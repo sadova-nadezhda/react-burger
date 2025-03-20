@@ -1,0 +1,9 @@
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 812px;
+  padding-right: 8px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}

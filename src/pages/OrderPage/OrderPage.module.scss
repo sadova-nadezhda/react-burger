@@ -1,0 +1,12 @@
+.container {
+  max-width: 1312px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.order {
+  &__container {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+}

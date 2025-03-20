@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
-import { fetchOrder } from '../../services/order/actions'; 
+import { fetchOrder } from '../../services/orders/actions'; 
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { resetConstructor } from '../../services/burger-constructor/slice';
 import { resetAllIngredientCounts } from '../../services/ingredients/slice';
@@ -11,22 +11,23 @@ import done from '../../images/done.svg';
 import s from './OrderDetails.module.scss';
 
 interface OrderDetailsProps {
-  ingredients: string[];
+  ingredients : string[];
 }
 
-export default function OrderDetails({ ingredients }: OrderDetailsProps ){
+export default function OrderDetails({ ingredients } : OrderDetailsProps) {
   const dispatch = useAppDispatch();
-  const orderDetails = useAppSelector((state) => state.order.orderDetails);
-  const orderError = useAppSelector((state) => state.order.error);
+  const orderDetails = useAppSelector((state) => state.orders.orderDetails);
+  const orderError = useAppSelector((state) => state.orders.error);
 
   useEffect(() => {
     if (ingredients && ingredients.length > 0) {
-      dispatch(fetchOrder({ ingredients })).then(() => {
+      dispatch(fetchOrder({ ingredients })).then((res) => {
         dispatch(resetConstructor());
         dispatch(resetAllIngredientCounts());
       });
     }
   }, [dispatch, ingredients]);
+  
 
   if (!orderDetails) {
     return <div>Загрузка...</div>; 

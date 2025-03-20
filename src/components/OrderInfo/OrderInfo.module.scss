@@ -1,0 +1,35 @@
+.order {
+  &__number {
+    text-align: center;
+  }
+  &__done {
+    color: rgba(0, 204, 204, 1);
+  }
+  &__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 312px;
+    padding: 2px;
+    padding-right: 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  &__total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    svg {
+      width: 24px;
+      min-width: 24px;
+      height: 24px;
+    }
+  }
+}
