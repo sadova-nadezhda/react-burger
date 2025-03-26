@@ -1,22 +1,24 @@
+import { SELECTORS } from '../../src/utils/constants';
+
 describe('Ingredient modal', () => {
   beforeEach(() => {
     cy.visit('/');
   });
 
   it('should open modal', () => {
-    cy.get('[data-test="ingredient"]').first().click();
-    cy.get('[data-test="modal"]').should('exist');
+    cy.get(SELECTORS.ingredient).first().click();
+    cy.get(SELECTORS.modal).should('exist');
   });
 
   it('should close modal on button click', () => {
-    cy.get('[data-test="ingredient"]').first().click();
-    cy.get('[data-test="modal-close"]').click();
-    cy.get('[data-test="modal"]').should('not.exist');
+    cy.get(SELECTORS.ingredient).first().click();
+    cy.get(SELECTORS.modalClose).click();
+    cy.get(SELECTORS.modal).should('not.exist');
   });
 
   it('should close modal on overlay click', () => {
-    cy.get('[data-test="ingredient"]').first().click();
-    cy.get('[data-test="modal-overlay"]').click({ force: true });
-    cy.get('[data-test="modal"]').should('not.exist');
+    cy.get(SELECTORS.ingredient).first().click();
+    cy.get(SELECTORS.modalOverlay).click({ force: true });
+    cy.get(SELECTORS.modal).should('not.exist');
   });
 });

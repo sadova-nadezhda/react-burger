@@ -1,3 +1,5 @@
+import { SELECTORS } from '../../src/utils/constants';
+
 describe('Order modal', () => {
   beforeEach(() => {
     cy.intercept('GET', '**/api/auth/user', (req) => {
@@ -12,15 +14,16 @@ describe('Order modal', () => {
   });
 
   it('should open order modal on successful order', () => {
-    cy.get('[data-test="ingredient"]').contains('булка').trigger('dragstart');
-    cy.get('[data-test="constructor"]').trigger('drop');
-    cy.get('[data-test="ingredient"]').contains('Соус').trigger('dragstart');
-    cy.get('[data-test="constructor"]').trigger('drop');
+    cy.get(SELECTORS.ingredient).contains('булка').trigger('dragstart');
+    cy.get(SELECTORS.constructor).trigger('drop');
+    cy.get(SELECTORS.ingredient).contains('Соус').trigger('dragstart');
+    cy.get(SELECTORS.constructor).trigger('drop');
 
-    cy.get('[data-test="order-button"]').click();
-    cy.get('[data-test="modal"]').should('exist');
+    cy.get(SELECTORS.orderButton).click();
+    cy.get(SELECTORS.modal).should('exist');
   });
 });
+
 
 // describe('Order modal', () => {
 //   beforeEach(() => {
