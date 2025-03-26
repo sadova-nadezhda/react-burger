@@ -6,7 +6,7 @@ describe('Order modal', () => {
 
     cy.login().then(() => {
       cy.refreshToken();
-      cy.visit('http://localhost:5173/');
+      cy.visit('/');
       cy.wait('@getUser', { timeout: 10000 }).its('response.statusCode').should('eq', 200);
     });
   });

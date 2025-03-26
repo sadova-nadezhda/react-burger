@@ -1,6 +1,6 @@
 describe('Drag ingredients to constructor', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('/');
   });
 
   it('should drag bun', () => {
