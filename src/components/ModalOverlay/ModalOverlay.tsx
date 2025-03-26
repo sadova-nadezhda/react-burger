@@ -8,5 +8,5 @@ interface ModalOverlayProps {
 }
 
 export default function ModalOverlay({ onClick, children }: ModalOverlayProps ) {
-  return <div className={s.overlay} onClick={onClick}>{children}</div>;
+  return <div className={s.overlay} onClick={onClick} data-test="modal-overlay">{children}</div>;
 }

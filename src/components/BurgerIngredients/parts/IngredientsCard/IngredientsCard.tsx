@@ -22,7 +22,7 @@ export default function IngredientsCard({ingredient, onClick}: IngredientsCard) 
     (state) => state.ingredients.allIngredients.find((ing) => ing._id === ingredient._id)?.count || 0
   );
   return (
-    <div className={s.card} onClick={onClick} ref={dragRef}>
+    <div className={s.card} onClick={onClick} ref={dragRef} data-test="ingredient">
       {ingredientCount > 0 && <Counter count={ingredientCount} size="default" extraClass="m-1" />}
       <div className={classNames(s.card__img)}><img src={ingredient.image} alt="Ingredient Image" /></div>
       <div className={classNames(s.card__price, 'text text_type_digits-default')}>

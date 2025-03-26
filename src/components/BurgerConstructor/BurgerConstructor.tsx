@@ -37,6 +37,8 @@ export default function BurgerConstructor() {
         dispatch(addIngredientToConstructor(ingredient));
         dispatch(incrementIngredientCount({ id: ingredient._id, amount: 2 }));
       } else {
+        console.log('Dropped ingredient:', ingredient);
+        console.log('Current state:', ingredients);
         dispatch(addIngredientToConstructor(ingredient));
         dispatch(incrementIngredientCount({ id: ingredient._id, amount: 1 }));
       }
@@ -84,15 +86,15 @@ export default function BurgerConstructor() {
           <OrderDetails ingredients={ingredients.map((item) => item._id)} />
         </Modal>
       )}
-      <div className={classNames(s.constructor__wrap, 'pb-10')}>
-        <div className={classNames(s.constructor__cards, 'mb-10', { [s.over]: isOver })} ref={dropRef}>
+      <div className={classNames(s.constructor__wrap, 'pb-10')} >
+        <div className={classNames(s.constructor__cards, 'mb-10', { [s.over]: isOver })} ref={dropRef} data-test="constructor">
           <div className={s.constructor__top}>
             {!bunIngredient ? (
               <div className={s.constructor__card}>
                 <p className={classNames(s.constructor__tmp, 'text_type_main-default constructor-element')}>Выберите булку</p>
               </div>
             ) : (
-              <div className={s.constructor__card}>
+              <div className={s.constructor__card} data-test="constructor-bun">
                 <ConstructorElement
                   type="top"
                   isLocked={true}
@@ -126,7 +128,7 @@ export default function BurgerConstructor() {
                 <p className={classNames(s.constructor__tmp, 'text_type_main-default constructor-element')}>Выберите булку</p>
               </div>
             ) : (
-              <div className={s.constructor__card}>
+              <div className={s.constructor__card} data-test="constructor-bun">
                 <ConstructorElement
                   type="bottom"
                   isLocked={true}
@@ -147,6 +149,7 @@ export default function BurgerConstructor() {
             htmlType="button" 
             type="primary" 
             size="medium" 
+            data-test="order-button"
             onClick={isAuthenticated ? openModal : () => navigate('/login', { state: { from: location.pathname } })}
           >
             Оформить заказ

@@ -52,6 +52,7 @@ export default function ConstructorCard({
       ref={ref}
       className={s.constructor__card}
       style={{ opacity: isDragging ? 0.5 : 1 }} 
+      data-test="constructor-item"
     >
       <DragIcon type="primary" />
       <ConstructorElement

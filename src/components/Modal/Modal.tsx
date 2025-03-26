@@ -36,9 +36,9 @@ export default function Modal({ title, onClose, children, isOpen }: ModalProps) 
 
   return ReactDOM.createPortal(
     <ModalOverlay onClick={onClose}>
-      <div className={classNames(s.modal, 'p-10')} onClick={(e) => e.stopPropagation()}>
+      <div className={classNames(s.modal, 'p-10')} onClick={(e) => e.stopPropagation()} data-test="modal">
         <div className={s.modal__content}>
-          <button className={s.modal__close} onClick={onClose}>
+          <button className={s.modal__close} onClick={onClose} data-test="modal-close">
             <CloseIcon type="primary" />
           </button>
           {title && <h2 className={classNames(s.modal__title, 'mb-5 text text_type_main-large')}>{title}</h2>}
