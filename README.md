@@ -31,4 +31,4 @@ export default {
 
 ## Deploy URL
 
-https://yandex-burgers.netlify.app/
+https://stellar-burgs.netlify.app/
