@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 
 import FeedCards from '../../components/FeedCards';

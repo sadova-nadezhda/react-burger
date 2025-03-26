@@ -1,4 +1,3 @@
-import React from 'react';
 import classNames from 'classnames';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
