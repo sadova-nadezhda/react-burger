@@ -2,22 +2,12 @@ import { SELECTORS } from '../../src/utils/constants';
 
 describe('Order modal', () => {
   beforeEach(() => {
-    cy.intercept('GET', '**/api/auth/user', (req) => {
-      req.headers['Authorization'] = `Bearer ${Cypress.env('authHeader')}`;
-    }).as('getUser');
-
-    cy.login().then(() => {
-      cy.refreshToken();
-      cy.visit('/');
-      cy.wait('@getUser', { timeout: 10000 }).its('response.statusCode').should('eq', 200);
-    });
+    cy.loginAndVisit();
   });
 
   it('should open order modal on successful order', () => {
-    cy.get(SELECTORS.ingredient).contains('булка').trigger('dragstart');
-    cy.get(SELECTORS.constructor).trigger('drop');
-    cy.get(SELECTORS.ingredient).contains('Соус').trigger('dragstart');
-    cy.get(SELECTORS.constructor).trigger('drop');
+    cy.dragToConstructor('булка');
+    cy.dragToConstructor('Соус');
 
     cy.get(SELECTORS.orderButton).click();
     cy.get(SELECTORS.modal).should('exist');

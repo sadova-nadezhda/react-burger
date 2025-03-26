@@ -1,3 +1,5 @@
+import { SELECTORS } from '../../src/utils/constants';
+
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to
@@ -36,6 +38,12 @@
 //   }
 // }
 
+Cypress.Commands.add('dragToConstructor', (ingredientName) => {
+  cy.get(SELECTORS.ingredient).contains(ingredientName).as('ingredient');
+  cy.get('@ingredient').trigger('dragstart');
+  cy.get(SELECTORS.constructor).trigger('drop');
+});
+
 Cypress.Commands.add('login', () => {
   cy.request({
     method: 'POST',
@@ -63,6 +71,19 @@ Cypress.Commands.add('refreshToken', () => {
     Cypress.env('authHeader', token);
   });
 });
+
+Cypress.Commands.add('loginAndVisit', () => {
+  cy.intercept('GET', '**/api/auth/user', (req) => {
+    req.headers['Authorization'] = `Bearer ${Cypress.env('authHeader')}`;
+  }).as('getUser');
+
+  cy.login().then(() => {
+    cy.refreshToken();
+    cy.visit('/');
+    cy.wait('@getUser', { timeout: 10000 }).its('response.statusCode').should('eq', 200);
+  });
+});
+
 
 // Cypress.Commands.add('mockApi', () => {
 //   cy.intercept('GET', '**/api/auth/user', { fixture: 'user.json' }).as('getUser');

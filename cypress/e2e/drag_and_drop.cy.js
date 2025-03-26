@@ -6,14 +6,12 @@ describe('Drag ingredients to constructor', () => {
   });
 
   it('should drag bun', () => {
-    cy.get(SELECTORS.ingredient).contains('булка').trigger('dragstart');
-    cy.get(SELECTORS.constructor).trigger('drop');
+    cy.dragToConstructor('булка');
     cy.get(SELECTORS.constructorBun).should('exist');
   });
 
   it('should drag ingredient', () => {
-    cy.get(SELECTORS.ingredient).contains('Соус').trigger('dragstart');
-    cy.get(SELECTORS.constructor).trigger('drop');
+    cy.dragToConstructor('Соус');
     cy.get(SELECTORS.constructorItem).should('exist');
   });
 });
