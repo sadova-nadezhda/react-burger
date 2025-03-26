@@ -10,7 +10,7 @@ interface ConstructorState {
   constructorIngredients: ConstructorIngredient[];
 }
 
-const initialState: ConstructorState = {
+export const initialState: ConstructorState = {
   constructorIngredients: [],
 };
 

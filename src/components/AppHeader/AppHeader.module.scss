@@ -8,6 +8,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    list-style: none;
   }
   &__item {
     color: var(--text-inactive-color);
@@ -19,6 +20,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      text-decoration: none;
       &:hover {
         cursor: pointer;
       }

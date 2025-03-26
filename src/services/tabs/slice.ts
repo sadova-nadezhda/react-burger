@@ -4,7 +4,7 @@ interface TabsState {
   currentTab: string;
 }
 
-const initialState: TabsState = {
+export const initialState: TabsState = {
   currentTab: 'bun',
 };
 

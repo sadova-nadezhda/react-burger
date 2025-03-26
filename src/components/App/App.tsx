@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import AppHeader from "../AppHeader";
