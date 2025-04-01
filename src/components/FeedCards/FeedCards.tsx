@@ -1,4 +1,3 @@
-import React from 'react';
 import FeedCard from './parts/FeedCard';
 
 import { useModal } from '../../hooks/useModal';

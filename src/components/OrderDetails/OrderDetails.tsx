@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames';
 
 import { fetchOrder } from '../../services/orders/actions'; 
@@ -21,7 +21,7 @@ export default function OrderDetails({ ingredients } : OrderDetailsProps) {
 
   useEffect(() => {
     if (ingredients && ingredients.length > 0) {
-      dispatch(fetchOrder({ ingredients })).then((res) => {
+      dispatch(fetchOrder({ ingredients })).then(() => {
         dispatch(resetConstructor());
         dispatch(resetAllIngredientCounts());
       });

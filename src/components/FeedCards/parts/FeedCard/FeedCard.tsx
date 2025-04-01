@@ -1,8 +1,5 @@
-import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-
-import { useAppSelector } from '../../../../hooks/store';
 
 import s from './FeedCard.module.scss';
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 
 import FeedCards from '../FeedCards';
@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { WS_USER_URL, wsActions } from '../../utils/constants';
 
 import s from './OrdersHistory.module.scss';
+import { Order } from '../../types/OrderTypes';
 
 
 export default function OrdersHistory() {
@@ -35,8 +36,8 @@ export default function OrdersHistory() {
     return Object.fromEntries(ingredients.map((ing) => [ing._id, ing]));
   }, [ingredients]);
 
-  const calculateOrderPrice = (order) => {
-    return order.ingredients.reduce((sum, id) => sum + (ingredientsMap[id]?.price || 0), 0);
+  const calculateOrderPrice = (order: Order) => {
+    return order.ingredients.reduce((sum: number, id: string) => sum + (ingredientsMap[id]?.price || 0), 0);
   };
 
   const mappedOrders = orders.map((order) => {
